@@ -2,9 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>NSUserAppleIDUsageDescription</key>
+	<string>نحتاج للوصول لاسمك للترحيب بك داخل التطبيق.</string>
+	<key>Privacy - User Discoverability Usage Description</key>
+	<string></string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
+		<string>fetch</string>
 	</array>
 </dict>
 </plist>
