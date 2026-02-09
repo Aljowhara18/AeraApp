@@ -8,6 +8,7 @@ import Foundation
 struct StatModel: Identifiable {
     let id = UUID()
     let title: String
-    let value: String
+    var value: String
     var isFlipped: Bool = false
 }
+

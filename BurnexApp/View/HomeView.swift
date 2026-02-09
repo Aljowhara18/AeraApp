@@ -403,9 +403,7 @@ struct HomeView: View {
                         viewModel.flipCard(at: 2)
                     }
                     
-                    StatFlipButton(stat: viewModel.stats[3], pos: CGPoint(x: -60, y: 150)) {
-                        viewModel.flipCard(at: 3)
-                    }
+                
                 }
                 .frame(maxWidth: .infinity)
                 
