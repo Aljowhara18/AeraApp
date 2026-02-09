@@ -10,22 +10,9 @@
 		EBDA9CF32F37C92200A4264F /* BurnexApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BurnexApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		EBDA9D002F37C92300A4264F /* Exceptions for "BurnexApp" folder in "BurnexApp" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = EBDA9CF22F37C92200A4264F /* BurnexApp */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		EBDA9CF52F37C92200A4264F /* BurnexApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				EBDA9D002F37C92300A4264F /* Exceptions for "BurnexApp" folder in "BurnexApp" target */,
-			);
 			path = BurnexApp;
 			sourceTree = "<group>";
 		};
@@ -149,7 +136,7 @@
 				DEVELOPMENT_TEAM = 4C88H9734X;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BurnexApp/Info.plist;
+				INFOPLIST_FILE = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -183,7 +170,7 @@
 				DEVELOPMENT_TEAM = 4C88H9734X;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = BurnexApp/Info.plist;
+				INFOPLIST_FILE = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
