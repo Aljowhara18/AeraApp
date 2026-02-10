@@ -765,8 +765,9 @@ struct AnalysisView: View {
 import SwiftUI
 import Charts
 import HealthKit
-
-
+import SwiftUI
+import Charts
+import HealthKit
 
 // MARK: - 1. Models
 struct HealthDataPoint: Identifiable {
@@ -787,12 +788,26 @@ class AnalysisViewModel: ObservableObject {
     @Published var selectedOption: String = "All"
     @Published var selectedTimeRange: String = "W"
     @Published var scrollPosition: Date = Date()
+    @Published var rawSelectedDate: Date? = nil
     
     @Published var sleepSummary = SummaryData()
     @Published var hrvSummary = SummaryData()
     @Published var rhrSummary = SummaryData()
 
     private let healthManager = HealthManager()
+
+    // دالة لتحديد بداية النطاق الزمني بناءً على الاختيار
+    var chartStartDate: Date {
+        let calendar = Calendar.current
+        let now = Date()
+        switch selectedTimeRange {
+        case "D": return calendar.startOfDay(for: now)
+        case "W": return calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: now))!
+        case "M": return calendar.date(byAdding: .day, value: -29, to: calendar.startOfDay(for: now))!
+        case "Y": return calendar.date(byAdding: .month, value: -11, to: calendar.startOfDay(for: now))!
+        default: return now
+        }
+    }
 
     func fetchChartData() {
         healthManager.requestAuthorization { success in
@@ -804,18 +819,7 @@ class AnalysisViewModel: ObservableObject {
     }
 
     private func loadHealthDataForChart() {
-        let calendar = Calendar.current
-        let now = Date()
-        let startDate: Date
-        
-        switch selectedTimeRange {
-        case "D": startDate = calendar.date(byAdding: .hour, value: -24, to: now)!
-        case "W": startDate = calendar.date(byAdding: .day, value: -7, to: now)!
-        case "M": startDate = calendar.date(byAdding: .month, value: -1, to: now)!
-        case "Y": startDate = calendar.date(byAdding: .year, value: -1, to: now)!
-        default: startDate = calendar.date(byAdding: .day, value: -7, to: now)!
-        }
-
+        let startDate = chartStartDate
         DispatchQueue.main.async { self.chartData = [] }
 
         if selectedOption == "All" || selectedOption == "Sleep" {
@@ -832,13 +836,10 @@ class AnalysisViewModel: ObservableObject {
     private func fetchQuantityData(identifier: HKQuantityTypeIdentifier, label: String, unit: HKUnit, start: Date) {
         let type = HKQuantityType.quantityType(forIdentifier: identifier)!
         let predicate = HKQuery.predicateForSamples(withStart: start, end: Date(), options: .strictStartDate)
-        
         let query = HKSampleQuery(sampleType: type, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)]) { _, samples, _ in
             if let samples = samples as? [HKQuantitySample], !samples.isEmpty {
                 let points = samples.map { HealthDataPoint(date: $0.endDate, value: $0.quantity.doubleValue(for: unit), type: label) }
                 DispatchQueue.main.async { self.updateChart(with: points) }
-            } else {
-                DispatchQueue.main.async { self.updateChart(with: [HealthDataPoint(date: Date(), value: 0, type: label)]) }
             }
         }
         healthManager.healthStore.execute(query)
@@ -847,13 +848,10 @@ class AnalysisViewModel: ObservableObject {
     private func fetchSleepData(start: Date) {
         let type = HKObjectType.categoryType(forIdentifier: .sleepAnalysis)!
         let predicate = HKQuery.predicateForSamples(withStart: start, end: Date(), options: .strictStartDate)
-        
         let query = HKSampleQuery(sampleType: type, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: nil) { _, samples, _ in
             if let samples = samples as? [HKCategorySample], !samples.isEmpty {
                 let points = samples.map { HealthDataPoint(date: $0.endDate, value: $0.endDate.timeIntervalSince($0.startDate) / 3600, type: "Sleep") }
                 DispatchQueue.main.async { self.updateChart(with: points) }
-            } else {
-                DispatchQueue.main.async { self.updateChart(with: [HealthDataPoint(date: Date(), value: 0, type: "Sleep")]) }
             }
         }
         healthManager.healthStore.execute(query)
@@ -879,19 +877,10 @@ struct AnalysisView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                
-               // Color.black.ignoresSafeArea()
-              
-                
                 VStack(alignment: .leading, spacing: 0) {
-                    // العنوان (مطابق للهوم تماماً)
                     headerView
-                    
-                    // اختيار الفترة الزمنية
-                    pickerView
-                        .padding(.top, 15)
+                    pickerView.padding(.top, 15)
 
-                    // منطقة الشارت
                     VStack(alignment: .leading, spacing: 5) {
                         dateHeader
                         legendView
@@ -906,10 +895,19 @@ struct AnalysisView: View {
                                     .foregroundStyle(by: .value("Type", d.type))
                                     .opacity(0.1)
                             }
+                            
+                            if let selectedDate = viewModel.rawSelectedDate {
+                                RuleMark(x: .value("Selected", selectedDate))
+                                    .foregroundStyle(.white.opacity(0.5))
+                                    .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+                            }
                         }
                         .chartForegroundStyleScale(chartColors)
+                        // تحديد المدى الثابت للمحور X ليبدأ دائماً من بداية الفترة المختارة وينتهي الآن
+                        .chartXScale(domain: viewModel.chartStartDate...Date())
                         .chartXAxis { configureXAxis() }
                         .chartYAxis { AxisMarks(position: .leading) }
+                        .chartXSelection(value: $viewModel.rawSelectedDate)
                         .chartScrollableAxes(.horizontal)
                         .chartXVisibleDomain(length: getVisibleLength())
                         .chartScrollPosition(x: $viewModel.scrollPosition)
@@ -921,7 +919,6 @@ struct AnalysisView: View {
                     .padding(.horizontal)
                     .padding(.top, 25)
 
-                    // منطقة الملخصات
                     VStack(alignment: .leading, spacing: 25) {
                         summaryRow(title: "HRV", data: viewModel.hrvSummary)
                         summaryRow(title: "RHR", data: viewModel.rhrSummary)
@@ -939,13 +936,10 @@ struct AnalysisView: View {
 
     private var headerView: some View {
         HStack {
-            Text("Analysis")
-                .font(.system(size: 34, weight: .bold)) // نفس حجم "Welcome"
-                .foregroundColor(.white)
+            Text("Analysis").font(.system(size: 34, weight: .bold)).foregroundColor(.white)
             Spacer()
         }
-        .padding(.horizontal, 20) // نفس الـ padding في الهوم
-        .padding(.top, 30)         // نفس المسافة العلوية في الهوم
+        .padding(.horizontal, 20).padding(.top, 60)
     }
 
     private var pickerView: some View {
@@ -959,20 +953,12 @@ struct AnalysisView: View {
 
     private func summaryRow(title: String, data: SummaryData) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(title)
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(.gray)
-            
+            Text(title).font(.system(size: 16, weight: .semibold)).foregroundColor(.gray)
             HStack(alignment: .center, spacing: 8) {
-                Text(data.status)
-                    .font(.system(size: 28, weight: .bold))
-                    .foregroundColor(.white)
-                
+                Text(data.status).font(.system(size: 28, weight: .bold)).foregroundColor(.white)
                 HStack(spacing: 3) {
-                    Image(systemName: "arrow.up.forward")
-                        .font(.system(size: 14, weight: .bold))
-                    Text(data.percentageText)
-                        .font(.system(size: 15, weight: .medium))
+                    Image(systemName: "arrow.up.forward").font(.system(size: 14, weight: .bold))
+                    Text(data.percentageText).font(.system(size: 15, weight: .medium))
                 }
                 .foregroundColor(Color.purple)
             }
@@ -982,11 +968,24 @@ struct AnalysisView: View {
     @AxisContentBuilder
     private func configureXAxis() -> some AxisContent {
         switch viewModel.selectedTimeRange {
-        case "D": AxisMarks(values: .stride(by: .hour, count: 6)) { _ in AxisValueLabel(format: .dateTime.hour()) }
-        case "W": AxisMarks(values: .stride(by: .day, count: 1)) { _ in AxisValueLabel(format: .dateTime.weekday(.narrow)) }
-        case "M": AxisMarks(values: .stride(by: .day, count: 7)) { _ in AxisValueLabel(format: .dateTime.day()) }
-        case "Y": AxisMarks(values: .stride(by: .month, count: 1)) { _ in AxisValueLabel(format: .dateTime.month(.narrow)) }
-        default: AxisMarks()
+        case "D":
+            AxisMarks(values: .stride(by: .hour, count: 6)) { _ in
+                AxisValueLabel(format: .dateTime.hour())
+            }
+        case "W":
+            AxisMarks(values: .stride(by: .day, count: 1)) { _ in
+                AxisValueLabel(format: .dateTime.weekday(.narrow))
+            }
+        case "M":
+            AxisMarks(values: .stride(by: .day, count: 7)) { _ in
+                AxisValueLabel(format: .dateTime.day())
+            }
+        case "Y":
+            AxisMarks(values: .stride(by: .month, count: 1)) { _ in
+                AxisValueLabel(format: .dateTime.month(.narrow))
+            }
+        default:
+            AxisMarks()
         }
     }
 
