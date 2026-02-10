@@ -332,8 +332,8 @@ struct HomeView: View {
     
     var body: some View {
         NavigationStack {
-            ZStack(alignment: .bottom) { // التاب بار مثبت في الأسفل هنا
-                // 1. الخلفية الموحدة لكل التطبيق
+            ZStack(alignment: .bottom) {
+                // 1. خلفية التطبيق
                 Image("Background")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
@@ -341,84 +341,74 @@ struct HomeView: View {
                     .clipped()
                     .ignoresSafeArea()
 
-                // 2. محتوى الصفحات
+                // 2. محتوى الصفحات بناءً على التاب المختار
                 Group {
                     if selectedTab == 0 {
                         homeContent
                     } else if selectedTab == 1 {
                         AnalysisView()
-                    } else {
-                        Color.clear.overlay(Text("Test Screen").foregroundColor(.white))
+                    } else if selectedTab == 2 {
+                        TestView() // تأكدي من وجود ملف بهذا الاسم في مشروعك
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 
-                // 3. التاب بار (ثابت دائماً في الأسفل)
+                // 3. التاب بار المخصص
                 customTabBar
-                    .padding(.bottom, 5) // تعديل بسيط لرفعه عن حافة الشاشة السفلية
+                    .padding(.bottom, 5)
             }
             .navigationBarHidden(true)
         }
     }
     
     var homeContent: some View {
-        ZStack {
-            Image("Background")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-                .clipped()
-                .ignoresSafeArea()
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Welcome")
+                .font(.system(size: 34, weight: .bold))
+                .foregroundColor(.white)
+                .padding(.horizontal, 20)
+                .padding(.top, 60)
 
-            VStack(alignment: .leading, spacing: 0) {
-                // تعديل المحاذاة لتطابق صفحة التحليل
-                Text("Welcome")
-                    .font(.system(size: 34, weight: .bold))
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 20) // مطابقة لصفحة التحليل
-                    .padding(.top, 60)         // مطابقة لصفحة التحليل
-
-                Text("Your Status Right Now")
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundColor(.gray)
-                    .padding(.horizontal, 30)
-                    .padding(.top, 25)
+            Text("Your Status Right Now")
+                .font(.system(size: 18, weight: .medium))
+                .foregroundColor(.gray)
+                .padding(.horizontal, 30)
+                .padding(.top, 25)
+            
+            glassyAlert
+                .padding(.horizontal, 30)
+                .padding(.top, 20)
+            
+            Spacer()
+            
+            // منطقة الكرة التفاعلية والأزرار (Stats)
+            ZStack {
+                Circle()
+                    .fill(Color("ball"))
+                    .frame(width: 240, height: 240)
                 
-                glassyAlert
-                    .padding(.horizontal, 30)
-                    .padding(.top, 20)
+                VideoLoopPlayer(fileName: "Ball")
+                    .opacity(0.20)
+                    .blendMode(.luminosity)
+                    .frame(width: 400, height: 400)
+                    .clipShape(Circle())
                 
-                Spacer()
-                
-                ZStack {
-                    Circle()
-                        .fill(Color("ball"))
-                        .frame(width: 240, height: 240)
-                    
-                    VideoLoopPlayer(fileName: "Ball")
-                        .opacity(0.20)
-                        .blendMode(.luminosity)
-                        .frame(width: 400, height: 400)
-                        .clipShape(Circle())
-                    
-                    StatFlipButton(stat: viewModel.stats[0], pos: CGPoint(x: 90, y: -100)) {
-                        viewModel.flipCard(at: 0)
-                    }
-                    
-                    StatFlipButton(stat: viewModel.stats[1], pos: CGPoint(x: -90, y: -40)) {
-                        viewModel.flipCard(at: 1)
-                    }
-                    
-                    StatFlipButton(stat: viewModel.stats[2], pos: CGPoint(x: 90, y: 80)) {
-                        viewModel.flipCard(at: 2)
-                    }
+                StatFlipButton(stat: viewModel.stats[0], pos: CGPoint(x: 90, y: -100)) {
+                    viewModel.flipCard(at: 0)
                 }
-                .frame(maxWidth: UIScreen.main.bounds.width)
-                .offset(y: -50)
                 
-                Spacer(minLength: 120)
+                StatFlipButton(stat: viewModel.stats[1], pos: CGPoint(x: -90, y: -40)) {
+                    viewModel.flipCard(at: 1)
+                }
+                
+                StatFlipButton(stat: viewModel.stats[2], pos: CGPoint(x: 90, y: 80)) {
+                    viewModel.flipCard(at: 2)
+                }
             }
-            .frame(width: UIScreen.main.bounds.width)
+            .frame(maxWidth: UIScreen.main.bounds.width)
+            .offset(y: -50)
+            
+            Spacer(minLength: 120)
         }
     }
 
@@ -428,7 +418,7 @@ struct HomeView: View {
             Spacer()
             LocalTabBarButton(icon: "chart.xyaxis.line", label: "Analysis", isSelected: selectedTab == 1) { selectedTab = 1 }
             Spacer()
-            LocalTabBarButton(icon: "doc.text.clipboard", label: "Test", isSelected: selectedTab == 2) { selectedTab = 2 }
+            LocalTabBarButton(icon: "clipboard", label: "Test", isSelected: selectedTab == 2) { selectedTab = 2 }
         }
         .padding(.horizontal, 4)
         .frame(width: 350, height: 85)
@@ -445,7 +435,6 @@ struct HomeView: View {
             Text("Elevated Stress Detected Take a quick check in?")
                 .font(.system(size: 14))
                 .foregroundColor(.white)
-                .multilineTextAlignment(.leading)
         }
         .padding(.horizontal, 15)
         .frame(width: 330, height: 71)
@@ -454,6 +443,8 @@ struct HomeView: View {
         .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.white.opacity(0.2), lineWidth: 0.5))
     }
 }
+
+// MARK: - Subviews (التعريفات المفقودة التي سببت الأخطاء)
 
 struct LocalTabBarButton: View {
     let icon: String
@@ -469,7 +460,7 @@ struct LocalTabBarButton: View {
                 Text(label)
                     .font(.system(size: 12, weight: .medium))
             }
-            .foregroundColor(isSelected ? Color("Text") : Color.gray)
+            .foregroundColor(isSelected ? .white : .gray)
             .frame(maxWidth: .infinity)
         }
     }
@@ -489,13 +480,8 @@ struct StatFlipButton: View {
                 .background(BlurView(style: .systemThinMaterialDark))
                 .cornerRadius(20)
                 .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white.opacity(0.1)))
-                .rotation3DEffect(.degrees(stat.isFlipped ? -180 : 0), axis: (x: 0, y: 1, z: 0))
         }
-        .rotation3DEffect(.degrees(stat.isFlipped ? 180 : 0), axis: (x: 0, y: 1, z: 0))
         .offset(x: pos.x, y: pos.y)
     }
 }
 
-#Preview {
-    HomeView()
-}

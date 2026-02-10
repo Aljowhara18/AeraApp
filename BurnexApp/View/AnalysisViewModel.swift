@@ -762,9 +762,7 @@ struct AnalysisView: View {
     }
 }
 */
-import SwiftUI
-import Charts
-import HealthKit
+
 import SwiftUI
 import Charts
 import HealthKit
@@ -796,7 +794,6 @@ class AnalysisViewModel: ObservableObject {
 
     private let healthManager = HealthManager()
 
-    // دالة لتحديد بداية النطاق الزمني بناءً على الاختيار
     var chartStartDate: Date {
         let calendar = Calendar.current
         let now = Date()
@@ -883,7 +880,8 @@ struct AnalysisView: View {
 
                     VStack(alignment: .leading, spacing: 5) {
                         dateHeader
-                        legendView
+                        
+                        // تم حذف legendView من هنا كما طلبتِ ليبقى اللي بالأسفل فقط
                         
                         Chart {
                             ForEach(viewModel.chartData) { d in
@@ -903,16 +901,18 @@ struct AnalysisView: View {
                             }
                         }
                         .chartForegroundStyleScale(chartColors)
-                        // تحديد المدى الثابت للمحور X ليبدأ دائماً من بداية الفترة المختارة وينتهي الآن
                         .chartXScale(domain: viewModel.chartStartDate...Date())
                         .chartXAxis { configureXAxis() }
                         .chartYAxis { AxisMarks(position: .leading) }
+                        // تخصيص الـ Legend السفلي ليظهر بشكل أجمل (اختياري)
+                        .chartLegend(position: .bottom, alignment: .leading)
                         .chartXSelection(value: $viewModel.rawSelectedDate)
                         .chartScrollableAxes(.horizontal)
                         .chartXVisibleDomain(length: getVisibleLength())
                         .chartScrollPosition(x: $viewModel.scrollPosition)
-                        .frame(height: geometry.size.height * 0.28)
+                        .frame(height: geometry.size.height * 0.32)
                         .padding(.horizontal)
+                        .padding(.bottom, 10)
                     }
                     .background(Color.white.opacity(0.05))
                     .clipShape(RoundedRectangle(cornerRadius: 24))
@@ -1008,40 +1008,8 @@ struct AnalysisView: View {
     private func getFormattedDate(for date: Date) -> String {
         let f = DateFormatter(); f.dateFormat = "MMMM yyyy"; return f.string(from: date)
     }
-
-    private var legendView: some View {
-        HStack {
-            if viewModel.selectedOption == "All" {
-                HStack(spacing: 12) {
-                    indicator(color: .blue, text: "Sleep")
-                    indicator(color: .purple, text: "HRV")
-                    indicator(color: .orange, text: "RHR")
-                }
-            }
-            Spacer()
-            Menu {
-                Picker("", selection: $viewModel.selectedOption) {
-                    ForEach(["All", "Sleep", "HRV", "RHR"], id: \.self) { Text($0).tag($0) }
-                }
-            } label: {
-                HStack {
-                    Text(viewModel.selectedOption)
-                    Image(systemName: "chevron.down")
-                }
-                .font(.caption2).bold().padding(6)
-                .background(Capsule().fill(.white.opacity(0.1))).foregroundColor(.white)
-            }
-            .onChange(of: viewModel.selectedOption) { _ in viewModel.fetchChartData() }
-        }.padding(.horizontal, 16)
-    }
-
-    private func indicator(color: Color, text: String) -> some View {
-        HStack(spacing: 4) {
-            Circle().fill(color).frame(width: 6, height: 6)
-            Text(text).font(.caption2).foregroundColor(.gray)
-        }
-    }
 }
+
 #Preview {
     HomeView()
 }
