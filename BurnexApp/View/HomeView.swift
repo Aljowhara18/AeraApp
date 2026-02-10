@@ -325,6 +325,7 @@ struct StatFlipButton: View {
 import SwiftUI
 import AVKit
 
+
 struct HomeView: View {
     @State private var selectedTab = 0
     @StateObject private var viewModel = HomeViewModel()
@@ -336,7 +337,7 @@ struct HomeView: View {
                     if selectedTab == 0 {
                         homeContent
                     } else if selectedTab == 1 {
-                        // إزالة استدعاء التاب بار من داخل AnalysisView
+                        // استدعاء شاشة التحليل
                         AnalysisView()
                     } else {
                         Color.black.overlay(Text("Test Screen").foregroundColor(.white)).ignoresSafeArea()
@@ -344,15 +345,17 @@ struct HomeView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 
-                // التاب بار موجود هنا مرة واحدة فقط
+                // التاب بار المخصص
                 customTabBar
             }
             .ignoresSafeArea(.keyboard)
             .navigationBarHidden(true)
         }
+        // تحديث البيانات فور ظهور الشاشة لضمان اختفاء Loading
+        .onAppear {
+            viewModel.fetchAllHealthData()
+        }
     }
-    // ... باقي الكود الخاص بـ homeContent و customTabBar كما هو لديكِ ...
-
     
     // المحتوى الرئيسي لصفحة الهوم
     var homeContent: some View {
@@ -391,6 +394,7 @@ struct HomeView: View {
                         .frame(width: 400, height: 400)
                         .clipShape(Circle())
                     
+                    // أزرار البيانات الصحية مع تصحيح الفليب
                     StatFlipButton(stat: viewModel.stats[0], pos: CGPoint(x: 90, y: -100)) {
                         viewModel.flipCard(at: 0)
                     }
@@ -443,9 +447,8 @@ struct HomeView: View {
         .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.white.opacity(0.2), lineWidth: 0.5))
     }
 }
-//الsync ضابط من هيلث لكن لا يوجد بيانات لقراءتها
 
-// MARK: - StatFlipButton (active definition)
+// MARK: - StatFlipButton (تعديل النص ليكون غير مقلوب)
 struct StatFlipButton: View {
     let stat: StatModel
     let pos: CGPoint
@@ -460,11 +463,19 @@ struct StatFlipButton: View {
                 .background(BlurView(style: .systemThinMaterialDark))
                 .cornerRadius(20)
                 .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white.opacity(0.1)))
-                .rotation3DEffect(.degrees(stat.isFlipped ? 180 : 0), axis: (x: 0, y: 1, z: 0))
+                // تصحيح: تدوير النص داخلياً بعكس اتجاه البطاقة ليعتدل أمام المستخدم
+                .rotation3DEffect(.degrees(stat.isFlipped ? -180 : 0), axis: (x: 0, y: 1, z: 0))
         }
+        // تدوير الزر بالكامل
+        .rotation3DEffect(.degrees(stat.isFlipped ? 180 : 0), axis: (x: 0, y: 1, z: 0))
         .offset(x: pos.x, y: pos.y)
     }
 }
+
+#Preview {
+    HomeView()
+}
+
 #Preview {
     HomeView()
 }
