@@ -766,8 +766,9 @@ import SwiftUI
 import Charts
 import HealthKit
 
+
+
 // MARK: - 1. Models
-// القوالب الخاصة بالبيانات
 struct HealthDataPoint: Identifiable {
     let id = UUID()
     var date: Date
@@ -781,7 +782,6 @@ struct SummaryData {
 }
 
 // MARK: - 2. AnalysisViewModel
-// المسؤول عن جلب البيانات ومنطق العمل
 class AnalysisViewModel: ObservableObject {
     @Published var chartData: [HealthDataPoint] = []
     @Published var selectedOption: String = "All"
@@ -838,7 +838,6 @@ class AnalysisViewModel: ObservableObject {
                 let points = samples.map { HealthDataPoint(date: $0.endDate, value: $0.quantity.doubleValue(for: unit), type: label) }
                 DispatchQueue.main.async { self.updateChart(with: points) }
             } else {
-                // إذا لم توجد بيانات، نضع قيمة صفر ليظهر ذلك في الشارت
                 DispatchQueue.main.async { self.updateChart(with: [HealthDataPoint(date: Date(), value: 0, type: label)]) }
             }
         }
@@ -873,21 +872,25 @@ class AnalysisViewModel: ObservableObject {
 }
 
 // MARK: - 3. AnalysisView
-// واجهة الشاشة
 struct AnalysisView: View {
     @StateObject private var viewModel = AnalysisViewModel()
-    
     let chartColors: KeyValuePairs<String, Color> = ["Sleep": .blue, "HRV": .purple, "RHR": .orange]
     
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                Color.black.ignoresSafeArea()
                 
-                VStack(spacing: 15) {
+               // Color.black.ignoresSafeArea()
+              
+                
+                VStack(alignment: .leading, spacing: 0) {
+                    // العنوان (مطابق للهوم تماماً)
                     headerView
-                    pickerView
                     
+                    // اختيار الفترة الزمنية
+                    pickerView
+                        .padding(.top, 15)
+
                     // منطقة الشارت
                     VStack(alignment: .leading, spacing: 5) {
                         dateHeader
@@ -916,8 +919,9 @@ struct AnalysisView: View {
                     .background(Color.white.opacity(0.05))
                     .clipShape(RoundedRectangle(cornerRadius: 24))
                     .padding(.horizontal)
-                    
-                    // منطقة التوستات (الملخصات)
+                    .padding(.top, 25)
+
+                    // منطقة الملخصات
                     VStack(alignment: .leading, spacing: 25) {
                         summaryRow(title: "HRV", data: viewModel.hrvSummary)
                         summaryRow(title: "RHR", data: viewModel.rhrSummary)
@@ -926,14 +930,33 @@ struct AnalysisView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 25)
-                    .padding(.top, 10)
+                    .padding(.top, 25)
                 }
             }
         }
         .onAppear { viewModel.fetchChartData() }
     }
 
-    // تصميم الصف الخاص بالملخص
+    private var headerView: some View {
+        HStack {
+            Text("Analysis")
+                .font(.system(size: 34, weight: .bold)) // نفس حجم "Welcome"
+                .foregroundColor(.white)
+            Spacer()
+        }
+        .padding(.horizontal, 20) // نفس الـ padding في الهوم
+        .padding(.top, 30)         // نفس المسافة العلوية في الهوم
+    }
+
+    private var pickerView: some View {
+        Picker("", selection: $viewModel.selectedTimeRange) {
+            ForEach(["D", "W", "M", "Y"], id: \.self) { Text($0).tag($0) }
+        }
+        .pickerStyle(.segmented)
+        .padding(.horizontal, 20)
+        .onChange(of: viewModel.selectedTimeRange) { _ in viewModel.fetchChartData() }
+    }
+
     private func summaryRow(title: String, data: SummaryData) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title)
@@ -948,16 +971,14 @@ struct AnalysisView: View {
                 HStack(spacing: 3) {
                     Image(systemName: "arrow.up.forward")
                         .font(.system(size: 14, weight: .bold))
-                    
                     Text(data.percentageText)
                         .font(.system(size: 15, weight: .medium))
                 }
-                .foregroundColor(Color.purple) // اللون البنفسجي المطلب
+                .foregroundColor(Color.purple)
             }
         }
     }
 
-    // MARK: - Helpers & UI Components
     @AxisContentBuilder
     private func configureXAxis() -> some AxisContent {
         switch viewModel.selectedTimeRange {
@@ -987,21 +1008,6 @@ struct AnalysisView: View {
 
     private func getFormattedDate(for date: Date) -> String {
         let f = DateFormatter(); f.dateFormat = "MMMM yyyy"; return f.string(from: date)
-    }
-
-    private var headerView: some View {
-        HStack {
-            Text("Analysis").font(.largeTitle).bold().foregroundColor(.white)
-            Spacer()
-        }.padding(.horizontal, 20).padding(.top, 10)
-    }
-
-    private var pickerView: some View {
-        Picker("", selection: $viewModel.selectedTimeRange) {
-            ForEach(["D", "W", "M", "Y"], id: \.self) { Text($0).tag($0) }
-        }
-        .pickerStyle(.segmented).padding(.horizontal, 20)
-        .onChange(of: viewModel.selectedTimeRange) { _ in viewModel.fetchChartData() }
     }
 
     private var legendView: some View {
@@ -1036,4 +1042,7 @@ struct AnalysisView: View {
             Text(text).font(.caption2).foregroundColor(.gray)
         }
     }
+}
+#Preview {
+    HomeView()
 }

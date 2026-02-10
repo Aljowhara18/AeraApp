@@ -322,9 +322,9 @@ struct StatFlipButton: View {
 
 */
 // ضابط ع الدارك مود فقط
+
 import SwiftUI
 import AVKit
-
 
 struct HomeView: View {
     @State private var selectedTab = 0
@@ -332,43 +332,52 @@ struct HomeView: View {
     
     var body: some View {
         NavigationStack {
-            ZStack(alignment: .bottom) {
+            ZStack(alignment: .bottom) { // التاب بار مثبت في الأسفل هنا
+                // 1. الخلفية الموحدة لكل التطبيق
+                Image("Background")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                    .clipped()
+                    .ignoresSafeArea()
+
+                // 2. محتوى الصفحات
                 Group {
                     if selectedTab == 0 {
                         homeContent
                     } else if selectedTab == 1 {
-                        // استدعاء شاشة التحليل
                         AnalysisView()
                     } else {
-                        Color.black.overlay(Text("Test Screen").foregroundColor(.white)).ignoresSafeArea()
+                        Color.clear.overlay(Text("Test Screen").foregroundColor(.white))
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 
-                // التاب بار المخصص
+                // 3. التاب بار (ثابت دائماً في الأسفل)
                 customTabBar
+                    .padding(.bottom, 5) // تعديل بسيط لرفعه عن حافة الشاشة السفلية
             }
-            .ignoresSafeArea(.keyboard)
             .navigationBarHidden(true)
-        }
-        // تحديث البيانات فور ظهور الشاشة لضمان اختفاء Loading
-        .onAppear {
-            viewModel.fetchAllHealthData()
         }
     }
     
-    // المحتوى الرئيسي لصفحة الهوم
     var homeContent: some View {
         ZStack {
-            Color("Background").ignoresSafeArea()
+            Image("Background")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                .clipped()
+                .ignoresSafeArea()
 
             VStack(alignment: .leading, spacing: 0) {
+                // تعديل المحاذاة لتطابق صفحة التحليل
                 Text("Welcome")
                     .font(.system(size: 34, weight: .bold))
                     .foregroundColor(.white)
-                    .padding(.horizontal, 30)
-                    .padding(.top, 60)
-                
+                    .padding(.horizontal, 20) // مطابقة لصفحة التحليل
+                    .padding(.top, 60)         // مطابقة لصفحة التحليل
+
                 Text("Your Status Right Now")
                     .font(.system(size: 18, weight: .medium))
                     .foregroundColor(.gray)
@@ -382,19 +391,16 @@ struct HomeView: View {
                 Spacer()
                 
                 ZStack {
-                    // الدائرة بالخلف
                     Circle()
                         .fill(Color("ball"))
                         .frame(width: 240, height: 240)
-
-                    // فيديو الكرة
+                    
                     VideoLoopPlayer(fileName: "Ball")
                         .opacity(0.20)
                         .blendMode(.luminosity)
                         .frame(width: 400, height: 400)
                         .clipShape(Circle())
                     
-                    // أزرار البيانات الصحية مع تصحيح الفليب
                     StatFlipButton(stat: viewModel.stats[0], pos: CGPoint(x: 90, y: -100)) {
                         viewModel.flipCard(at: 0)
                     }
@@ -407,24 +413,25 @@ struct HomeView: View {
                         viewModel.flipCard(at: 2)
                     }
                 }
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: UIScreen.main.bounds.width)
+                .offset(y: -50)
                 
                 Spacer(minLength: 120)
             }
+            .frame(width: UIScreen.main.bounds.width)
         }
     }
 
-    // تصميم التاب بار المخصص
     var customTabBar: some View {
         HStack {
-            TabBarButton(icon: "house.fill", label: "Home", isSelected: selectedTab == 0) { selectedTab = 0 }
+            LocalTabBarButton(icon: "house", label: "Rhythm", isSelected: selectedTab == 0) { selectedTab = 0 }
             Spacer()
-            TabBarButton(icon: "paperplane.fill", label: "Analysis", isSelected: selectedTab == 1) { selectedTab = 1 }
+            LocalTabBarButton(icon: "chart.xyaxis.line", label: "Analysis", isSelected: selectedTab == 1) { selectedTab = 1 }
             Spacer()
-            TabBarButton(icon: "pills.fill", label: "Test", isSelected: selectedTab == 2) { selectedTab = 2 }
+            LocalTabBarButton(icon: "doc.text.clipboard", label: "Test", isSelected: selectedTab == 2) { selectedTab = 2 }
         }
-        .padding(.horizontal, 40)
-        .frame(width: 350, height: 75)
+        .padding(.horizontal, 4)
+        .frame(width: 350, height: 85)
         .background(BlurView(style: .systemUltraThinMaterialDark))
         .clipShape(Capsule())
         .padding(.bottom, 25)
@@ -448,7 +455,26 @@ struct HomeView: View {
     }
 }
 
-// MARK: - StatFlipButton (تعديل النص ليكون غير مقلوب)
+struct LocalTabBarButton: View {
+    let icon: String
+    let label: String
+    let isSelected: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 6) {
+                Image(systemName: icon)
+                    .font(.system(size: 24))
+                Text(label)
+                    .font(.system(size: 12, weight: .medium))
+            }
+            .foregroundColor(isSelected ? Color("Text") : Color.gray)
+            .frame(maxWidth: .infinity)
+        }
+    }
+}
+
 struct StatFlipButton: View {
     let stat: StatModel
     let pos: CGPoint
@@ -463,17 +489,11 @@ struct StatFlipButton: View {
                 .background(BlurView(style: .systemThinMaterialDark))
                 .cornerRadius(20)
                 .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white.opacity(0.1)))
-                // تصحيح: تدوير النص داخلياً بعكس اتجاه البطاقة ليعتدل أمام المستخدم
                 .rotation3DEffect(.degrees(stat.isFlipped ? -180 : 0), axis: (x: 0, y: 1, z: 0))
         }
-        // تدوير الزر بالكامل
         .rotation3DEffect(.degrees(stat.isFlipped ? 180 : 0), axis: (x: 0, y: 1, z: 0))
         .offset(x: pos.x, y: pos.y)
     }
-}
-
-#Preview {
-    HomeView()
 }
 
 #Preview {
