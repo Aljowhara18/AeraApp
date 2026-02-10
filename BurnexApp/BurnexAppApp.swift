@@ -10,7 +10,8 @@ import SwiftUI
 struct AeraApp: App {
     var body: some Scene {
         WindowGroup {
-            HomeView()  
+            HomeView()
+        
         }
     }
 }

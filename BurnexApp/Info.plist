@@ -2,8 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleGetInfoString</key>
 	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>حتاج الوصول لبيانات نبضات القلب وتحليل النوم لعرضها في التطبيق.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>نحتاج معلوماتك</string>
 	<key>NSUserAppleIDUsageDescription</key>
 	<string>نحتاج للوصول لاسمك للترحيب بك داخل التطبيق.</string>
 	<key>Privacy - User Discoverability Usage Description</key>

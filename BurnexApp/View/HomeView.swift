@@ -326,37 +326,38 @@ import SwiftUI
 import AVKit
 
 struct HomeView: View {
-    // نستخدم State للتحكم في التبويب المختار حالياً
     @State private var selectedTab = 0
     @StateObject private var viewModel = HomeViewModel()
     
     var body: some View {
-        ZStack(alignment: .bottom) { // جعل التاب بار في الأسفل
-            
-            // محتوى الصفحات بناءً على التبويب المختار
-            Group {
-                if selectedTab == 0 {
-                    homeContent
-                } else if selectedTab == 1 {
-                    Color.black.overlay(Text("Analysis Screen").foregroundColor(.white)).ignoresSafeArea()
-                } else {
-                    Color.black.overlay(Text("Test Screen").foregroundColor(.white)).ignoresSafeArea()
+        NavigationStack {
+            ZStack(alignment: .bottom) {
+                Group {
+                    if selectedTab == 0 {
+                        homeContent
+                    } else if selectedTab == 1 {
+                        // إزالة استدعاء التاب بار من داخل AnalysisView
+                        AnalysisView()
+                    } else {
+                        Color.black.overlay(Text("Test Screen").foregroundColor(.white)).ignoresSafeArea()
+                    }
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                
+                // التاب بار موجود هنا مرة واحدة فقط
+                customTabBar
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
-            // التاب بار المخصص
-            customTabBar
+            .ignoresSafeArea(.keyboard)
+            .navigationBarHidden(true)
         }
-        .ignoresSafeArea(.keyboard)
     }
+    // ... باقي الكود الخاص بـ homeContent و customTabBar كما هو لديكِ ...
+
     
     // المحتوى الرئيسي لصفحة الهوم
     var homeContent: some View {
         ZStack {
-//Color.black.ignoresSafeArea()
             Color("Background").ignoresSafeArea()
-
 
             VStack(alignment: .leading, spacing: 0) {
                 Text("Welcome")
@@ -378,7 +379,6 @@ struct HomeView: View {
                 Spacer()
                 
                 ZStack {
-
                     // الدائرة بالخلف
                     Circle()
                         .fill(Color("ball"))
@@ -402,20 +402,12 @@ struct HomeView: View {
                     StatFlipButton(stat: viewModel.stats[2], pos: CGPoint(x: 90, y: 80)) {
                         viewModel.flipCard(at: 2)
                     }
-                    
-                
                 }
                 .frame(maxWidth: .infinity)
                 
                 Spacer(minLength: 120)
             }
-
         }
-        .background(
-            Image("Background")
-                .resizable()
-                .scaledToFill()
-        )
     }
 
     // تصميم التاب بار المخصص
@@ -431,7 +423,7 @@ struct HomeView: View {
         .frame(width: 350, height: 75)
         .background(BlurView(style: .systemUltraThinMaterialDark))
         .clipShape(Capsule())
-        .padding(.bottom, 25) // رفعة بسيطة عن أسفل الشاشة
+        .padding(.bottom, 25)
     }
 
     var glassyAlert: some View {
@@ -451,8 +443,9 @@ struct HomeView: View {
         .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.white.opacity(0.2), lineWidth: 0.5))
     }
 }
+//الsync ضابط من هيلث لكن لا يوجد بيانات لقراءتها
 
-// مكون زر الـ Flip
+// MARK: - StatFlipButton (active definition)
 struct StatFlipButton: View {
     let stat: StatModel
     let pos: CGPoint
@@ -472,4 +465,6 @@ struct StatFlipButton: View {
         .offset(x: pos.x, y: pos.y)
     }
 }
-
+#Preview {
+    HomeView()
+}
