@@ -3,22 +3,24 @@
 //  BurnexApp
 //
 //  Created by Jojo on 10/02/2026.
-//
 import SwiftUI
 
+// MARK: - Main View
 struct TestView: View {
     @StateObject private var viewModel = TestViewModel()
     
     var body: some View {
         ZStack {
-            // المحتوى الرئيسي
+            // هنا الخلفية - تأكد أن اللون متوفر في Assets أو غيره للونك المفضل
+            Color("Background")
+                .ignoresSafeArea()
+            
             VStack(alignment: .leading, spacing: 20) {
                 Text("Test")
                     .font(.system(size: 34, weight: .bold))
                     .foregroundColor(.white)
                     .padding(.top, 60)
                 
-                // بانر Start New Test
                 startTestBanner
                 
                 HStack {
@@ -32,7 +34,6 @@ struct TestView: View {
                 }
                 .padding(.top, 20)
                 
-                // عرض الكروت
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 20) {
                         ForEach(viewModel.reflections) { reflection in
@@ -46,7 +47,7 @@ struct TestView: View {
                 Spacer()
             }
             .padding(.horizontal, 25)
-            .blur(radius: viewModel.reflections.contains(where: { $0.isExpanded }) ? 10 : 0) // تغبيش الخلفية عند التكبير
+            .blur(radius: viewModel.reflections.contains(where: { $0.isExpanded }) ? 10 : 0)
             
             // الطبقة العلوية عند تكبير الكارد
             if let expandedItem = viewModel.reflections.first(where: { $0.isExpanded }) {
@@ -63,7 +64,6 @@ struct TestView: View {
         }
     }
     
-    // تصميم البانر العلوي
     private var startTestBanner: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
@@ -93,7 +93,7 @@ struct TestView: View {
     }
 }
 
-// تصميم الكارد الصغير
+// MARK: - ReflectionCard
 struct ReflectionCard: View {
     let reflection: ReflectionModel
     let action: () -> Void
@@ -102,7 +102,7 @@ struct ReflectionCard: View {
         Button(action: action) {
             ZStack {
                 RoundedRectangle(cornerRadius: 15)
-                    .stroke(Color("Text").opacity(0.3), lineWidth: 1)
+                    .stroke(Color.white.opacity(0.3), lineWidth: 1)
                     .background(Color.white.opacity(0.05))
                 
                 Text(reflection.title)
@@ -110,48 +110,66 @@ struct ReflectionCard: View {
                     .foregroundColor(.white)
             }
             .frame(width: 130, height: 160)
-            .cornerRadius(15)
         }
     }
 }
 
-// تصميم الكارد المكبر مع تأثير القلب
+// MARK: - ExpandedCardView (تعديل الخطوط والنقاط مع الحفاظ على الشفافية)
 struct ExpandedCardView: View {
     let reflection: ReflectionModel
     let action: () -> Void
     
     var body: some View {
         ZStack {
-            // الوجه الأول: العنوان
-            VStack {
-                Text(reflection.title)
-                    .font(.system(size: 32, weight: .medium))
-                    .foregroundColor(.white)
+            ZStack {
+                // الخلفية الشفافة
+                RoundedRectangle(cornerRadius: 25)
+                    .fill(Color.white.opacity(0.1))
+                
+                // البرواز الداخلي المزدوج
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                    .padding(10)
+                
+                // البرواز الخارجي
+                RoundedRectangle(cornerRadius: 25)
+                    .stroke(Color.white.opacity(0.3), lineWidth: 1.5)
+                
+                // النقاط في الزوايا (تظهر فقط عند القلب)
+                if reflection.isFlipped {
+                    VStack {
+                        HStack { dot; Spacer(); dot }
+                        Spacer()
+                        HStack { dot; Spacer(); dot }
+                    }
+                    .padding(30)
+                }
+                
+                // النصوص مع مراعاة حالة القلب
+                if !reflection.isFlipped {
+                    Text(reflection.title)
+                        .font(.system(size: 32, weight: .medium))
+                        .foregroundColor(.white)
+                } else {
+                    Text(reflection.content)
+                        .font(.system(size: 18))
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.white)
+                        .padding(40)
+                        .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+                }
             }
-            .frame(width: 280, height: 320)
-            .background(Color.white.opacity(0.1))
-            .cornerRadius(25)
-            .overlay(RoundedRectangle(cornerRadius: 25).stroke(Color("Text"), lineWidth: 2))
-            .opacity(reflection.isFlipped ? 0 : 1)
-            
-            // الوجه الثاني: المحتوى (بعد القلب)
-            VStack {
-                Text(reflection.content)
-                    .font(.system(size: 18))
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.white)
-                    .padding()
-                    .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+            .frame(width: 300, height: 320)
+            .rotation3DEffect(.degrees(reflection.isFlipped ? 180 : 0), axis: (x: 0, y: 1, z: 0))
+            .onTapGesture {
+                action()
             }
-            .frame(width: 280, height: 320)
-            .background(Color.white.opacity(0.1))
-            .cornerRadius(25)
-            .overlay(RoundedRectangle(cornerRadius: 25).stroke(Color("Text"), lineWidth: 2))
-            .opacity(reflection.isFlipped ? 1 : 0)
         }
-        .rotation3DEffect(.degrees(reflection.isFlipped ? 180 : 0), axis: (x: 0, y: 1, z: 0))
-        .onTapGesture {
-            action()
-        }
+    }
+    
+    private var dot: some View {
+        Circle()
+            .fill(Color.white.opacity(0.6))
+            .frame(width: 5, height: 5)
     }
 }
