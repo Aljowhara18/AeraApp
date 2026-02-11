@@ -414,7 +414,7 @@ struct HomeView: View {
 
     var customTabBar: some View {
         HStack {
-            LocalTabBarButton(icon: "house", label: "Rhythm", isSelected: selectedTab == 0) { selectedTab = 0 }
+            LocalTabBarButton(icon: "timelapse", label: "Rhythm", isSelected: selectedTab == 0) { selectedTab = 0 }
             Spacer()
             LocalTabBarButton(icon: "chart.xyaxis.line", label: "Analysis", isSelected: selectedTab == 1) { selectedTab = 1 }
             Spacer()

@@ -766,12 +766,13 @@ import SwiftUI
 import Charts
 import HealthKit
 
-// MARK: - 1. Models
+// MARK: - 1. DATA MODELS
+/// هذا القسم يحتوي على هياكل البيانات التي نستخدمها لعرض المعلومات في الرسم البياني والملخصات.
 struct HealthDataPoint: Identifiable {
     let id = UUID()
     var date: Date
     var value: Double
-    var type: String
+    var type: String // يحدد النوع (HRV, RHR, Sleep)
 }
 
 struct SummaryData {
@@ -779,13 +780,15 @@ struct SummaryData {
     var percentageText: String = ""
 }
 
-// MARK: - 2. AnalysisViewModel
+// MARK: - 2. VIEW MODEL
+/// هنا يتم جلب البيانات من HealthKit ومعالجتها قبل عرضها.
 class AnalysisViewModel: ObservableObject {
+    // الخصائص التي تراقبها الواجهة لتحديث نفسها تلقائياً
     @Published var chartData: [HealthDataPoint] = []
-    @Published var selectedOption: String = "All"
-    @Published var selectedTimeRange: String = "W"
-    @Published var scrollPosition: Date = Date()
-    @Published var rawSelectedDate: Date? = nil
+    @Published var selectedOption: String = "All"      // الفلتر (الكل، نوم، الخ)
+    @Published var selectedTimeRange: String = "W"     // النطاق الزمني (يوم، اسبوع، الخ)
+    @Published var scrollPosition: Date = Date()       // مكان التمرير في الرسم البياني
+    @Published var rawSelectedDate: Date? = nil        // التاريخ المختار عند اللمس
     
     @Published var sleepSummary = SummaryData()
     @Published var hrvSummary = SummaryData()
@@ -793,6 +796,8 @@ class AnalysisViewModel: ObservableObject {
 
     private let healthManager = HealthManager()
 
+    // MARK: - Computed Properties
+    /// حساب تاريخ البداية بناءً على النطاق الزمني المختار (D, W, M, Y)
     var chartStartDate: Date {
         let calendar = Calendar.current
         let now = Date()
@@ -805,6 +810,8 @@ class AnalysisViewModel: ObservableObject {
         }
     }
 
+    // MARK: - Data Fetching Methods
+    /// الوظيفة الرئيسية لبدء جلب البيانات  من هيلث بعد أخذ الإذن
     func fetchChartData() {
         healthManager.requestAuthorization { success in
             if success {
@@ -814,13 +821,12 @@ class AnalysisViewModel: ObservableObject {
         }
     }
 
+    /// تحديد أي نوع من البيانات يجب جلبه بناءً على الفلتر المختار
     private func loadHealthDataForChart() {
         let startDate = chartStartDate
         DispatchQueue.main.async { self.chartData = [] }
 
-        if selectedOption == "All" || selectedOption == "Sleep" {
-            fetchSleepData(start: startDate)
-        }
+        if selectedOption == "All" || selectedOption == "Sleep" { fetchSleepData(start: startDate) }
         if selectedOption == "All" || selectedOption == "HRV" {
             fetchQuantityData(identifier: .heartRateVariabilitySDNN, label: "HRV", unit: HKUnit(from: "ms"), start: startDate)
         }
@@ -829,6 +835,8 @@ class AnalysisViewModel: ObservableObject {
         }
     }
 
+    // MARK: - HealthKit Queries
+    /// جلب البيانات الرقمية (مثل نبضات القلب و HRV)
     private func fetchQuantityData(identifier: HKQuantityTypeIdentifier, label: String, unit: HKUnit, start: Date) {
         let type = HKQuantityType.quantityType(forIdentifier: identifier)!
         let predicate = HKQuery.predicateForSamples(withStart: start, end: Date(), options: .strictStartDate)
@@ -841,6 +849,7 @@ class AnalysisViewModel: ObservableObject {
         healthManager.healthStore.execute(query)
     }
 
+    /// جلب بيانات النوم (تحويلها من فترات زمنية إلى ساعات)
     private func fetchSleepData(start: Date) {
         let type = HKObjectType.categoryType(forIdentifier: .sleepAnalysis)!
         let predicate = HKQuery.predicateForSamples(withStart: start, end: Date(), options: .strictStartDate)
@@ -858,6 +867,8 @@ class AnalysisViewModel: ObservableObject {
         self.chartData.sort { $0.date < $1.date }
     }
 
+    /// جلب ملخصات القيم الأخيرة لعرضها تحت الرسم البياني
+    /// تحتاج تعديل ان تكون مربوطة باللوجك
     private func fetchRealSummaries() {
         healthManager.fetchLatestHRV { v in DispatchQueue.main.async { self.hrvSummary = SummaryData(status: v, percentageText: "Latest") } }
         healthManager.fetchLatestRHR { v in DispatchQueue.main.async { self.rhrSummary = SummaryData(status: v, percentageText: "Latest") } }
@@ -865,7 +876,7 @@ class AnalysisViewModel: ObservableObject {
     }
 }
 
-// MARK: - 3. AnalysisView
+// MARK: - 3. MAIN VIEW (الواجهة الرئيسية)
 struct AnalysisView: View {
     @StateObject private var viewModel = AnalysisViewModel()
     let chartColors: KeyValuePairs<String, Color> = ["Sleep": .blue, "HRV": .purple, "RHR": .orange]
@@ -877,51 +888,26 @@ struct AnalysisView: View {
                     headerView
                     pickerView.padding(.top, 15)
 
+                    // MARK: Chart Container
+                    /// الحاوية التي تضم عنوان التاريخ، زر التصفية، والرسم البياني
                     VStack(alignment: .leading, spacing: 5) {
-                        // إضافة الـ Filter Menu بجانب عنوان التاريخ
                         HStack {
                             dateHeader
                             Spacer()
-                            filterMenu
+                            filterMenu // زر اختيار (Sleep, HRV, RHR)
                                 .padding(.trailing, 16)
                                 .padding(.top, 16)
                         }
                         
-                        Chart {
-                            ForEach(viewModel.chartData) { d in
-                                LineMark(x: .value("Date", d.date), y: .value("Value", d.value))
-                                    .foregroundStyle(by: .value("Type", d.type))
-                                    .interpolationMethod(.catmullRom)
-                                
-                                AreaMark(x: .value("Date", d.date), y: .value("Value", d.value))
-                                    .foregroundStyle(by: .value("Type", d.type))
-                                    .opacity(0.1)
-                            }
-                            
-                            if let selectedDate = viewModel.rawSelectedDate {
-                                RuleMark(x: .value("Selected", selectedDate))
-                                    .foregroundStyle(.white.opacity(0.5))
-                                    .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
-                            }
-                        }
-                        .chartForegroundStyleScale(chartColors)
-                        .chartXScale(domain: viewModel.chartStartDate...Date())
-                        .chartXAxis { configureXAxis() }
-                        .chartYAxis { AxisMarks(position: .leading) }
-                        .chartLegend(position: .bottom, alignment: .leading)
-                        .chartXSelection(value: $viewModel.rawSelectedDate)
-                        .chartScrollableAxes(.horizontal)
-                        .chartXVisibleDomain(length: getVisibleLength())
-                        .chartScrollPosition(x: $viewModel.scrollPosition)
-                        .frame(height: geometry.size.height * 0.32)
-                        .padding(.horizontal)
-                        .padding(.bottom, 10)
+                        mainChartView(height: geometry.size.height * 0.32)
                     }
                     .background(Color.white.opacity(0.05))
                     .clipShape(RoundedRectangle(cornerRadius: 24))
                     .padding(.horizontal)
                     .padding(.top, 25)
 
+                    // MARK: Summary Section
+                    /// عرض البيانات الملخصة في الأسفل
                     VStack(alignment: .leading, spacing: 25) {
                         summaryRow(title: "HRV", data: viewModel.hrvSummary)
                         summaryRow(title: "RHR", data: viewModel.rhrSummary)
@@ -936,7 +922,11 @@ struct AnalysisView: View {
         }
         .onAppear { viewModel.fetchChartData() }
     }
+}
 
+// MARK: - 4. VIEW COMPONENTS
+extension AnalysisView {
+    
     private var headerView: some View {
         HStack {
             Text("Analysis").font(.system(size: 34, weight: .bold)).foregroundColor(.white)
@@ -971,6 +961,41 @@ struct AnalysisView: View {
         .onChange(of: viewModel.selectedOption) { _ in viewModel.fetchChartData() }
     }
 
+    /// مكون الرسم البياني نفسه
+    /// هنا التعديل المطلوب امكانية اليوزر يلف لليسار يرجع للاسابيع الاشهر السابقة
+    private func mainChartView(height: CGFloat) -> some View {
+        Chart {
+            ForEach(viewModel.chartData) { d in
+                LineMark(x: .value("Date", d.date), y: .value("Value", d.value))
+                    .foregroundStyle(by: .value("Type", d.type))
+                    .interpolationMethod(.catmullRom)
+                
+                AreaMark(x: .value("Date", d.date), y: .value("Value", d.value))
+                    .foregroundStyle(by: .value("Type", d.type))
+                    .opacity(0.1)
+            }
+            
+            if let selectedDate = viewModel.rawSelectedDate {
+                RuleMark(x: .value("Selected", selectedDate))
+                    .foregroundStyle(.white.opacity(0.5))
+                    .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
+            }
+        }
+        .chartForegroundStyleScale(chartColors) // 🎨 لتلوين كل نوع بيانات بلونه الخاص (مثل: النوم أزرق)
+        .chartXScale(domain: viewModel.chartStartDate...Date()) // 📅 يحدد بداية ونهاية الوقت في الرسم (مثلاً من أسبوع حتى اليوم)
+        .chartXAxis { configureXAxis() } // 🕒 ينظم شكل التواريخ في الأسفل (ساعات، أيام، أو شهور)
+        .chartYAxis { AxisMarks(position: .leading) } // 📈 يضع أرقام القياسات (القيم) على جهة اليسار
+        .chartLegend(position: .bottom, alignment: .leading) // 🔑 يظهر مفتاح الرسم في الأسفل ليوضح معنى كل لون
+        .chartXSelection(value: $viewModel.rawSelectedDate) // ☝️ يكتشف التاريخ الذي يلمسه المستخدم بإصبعه لمعرفة قيمته
+        .chartScrollableAxes(.horizontal) // ↔️ يسمح للمستخدم بسحب الرسم لليمين واليسار (Scroll)
+        .chartXVisibleDomain(length: getVisibleLength()) // 🔍 يحدد "كم يوم" يظهر في الشاشة الواحدة عشان ما تزدحم البيانات
+        .chartScrollPosition(x: $viewModel.scrollPosition) // 📍 يراقب مكان السحب لتحديث التاريخ الظاهر في أعلى الشاشة
+        .frame(height: height) // 📏 يحدد ارتفاع منطقة الرسم البياني
+        .padding(.horizontal) // ⬅️➡️ يترك مسافة بسيطة عن حواف الشاشة الجانبية
+        .padding(.bottom, 10) // ⬇️ يترك مسافة بسيطة من الأسفل
+    }
+    
+// ملخص البيانات هنا كذلك نحتاج نعدل اللوجك ونسوي cases لكل حالة كلمة وسهم معين
     private func summaryRow(title: String, data: SummaryData) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title).font(.system(size: 16, weight: .semibold)).foregroundColor(.gray)
@@ -984,28 +1009,16 @@ struct AnalysisView: View {
             }
         }
     }
-
+// الباقي ext غير مهم
+    // MARK: - Helper Methods (وظائف مساعدة للواجهة)
     @AxisContentBuilder
     private func configureXAxis() -> some AxisContent {
         switch viewModel.selectedTimeRange {
-        case "D":
-            AxisMarks(values: .stride(by: .hour, count: 6)) { _ in
-                AxisValueLabel(format: .dateTime.hour())
-            }
-        case "W":
-            AxisMarks(values: .stride(by: .day, count: 1)) { _ in
-                AxisValueLabel(format: .dateTime.weekday(.narrow))
-            }
-        case "M":
-            AxisMarks(values: .stride(by: .day, count: 7)) { _ in
-                AxisValueLabel(format: .dateTime.day())
-            }
-        case "Y":
-            AxisMarks(values: .stride(by: .month, count: 1)) { _ in
-                AxisValueLabel(format: .dateTime.month(.narrow))
-            }
-        default:
-            AxisMarks()
+        case "D": AxisMarks(values: .stride(by: .hour, count: 6)) { _ in AxisValueLabel(format: .dateTime.hour()) }
+        case "W": AxisMarks(values: .stride(by: .day, count: 1)) { _ in AxisValueLabel(format: .dateTime.weekday(.narrow)) }
+        case "M": AxisMarks(values: .stride(by: .day, count: 7)) { _ in AxisValueLabel(format: .dateTime.day()) }
+        case "Y": AxisMarks(values: .stride(by: .month, count: 1)) { _ in AxisValueLabel(format: .dateTime.month(.narrow)) }
+        default: AxisMarks()
         }
     }
 
@@ -1029,7 +1042,6 @@ struct AnalysisView: View {
         let f = DateFormatter(); f.dateFormat = "MMMM yyyy"; return f.string(from: date)
     }
 }
-
 #Preview {
     HomeView()
 }
