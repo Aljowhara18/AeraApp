@@ -14,7 +14,7 @@ struct Question {
 }
 
 struct BurnoutCheckView: View {
-    @State private var step = 0 // 0: البداية، 1: الأسئلة، 2: النتيجة
+    @State private var step = 0
     @State private var currentIdx = 0
     @State private var selectedOption: Int? = nil
     @State private var totalScore = 0
