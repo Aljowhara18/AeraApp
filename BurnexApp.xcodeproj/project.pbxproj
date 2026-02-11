@@ -6,11 +6,63 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		6218AC9D2F3C6FD20040AECB /* Burnexwatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 6218AC7D2F3C6FD10040AECB /* Burnexwatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6218AC8A2F3C6FD20040AECB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDA9CEB2F37C92200A4264F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6218AC7C2F3C6FD10040AECB;
+			remoteInfo = "Burnexwatch Watch App";
+		};
+		6218AC942F3C6FD20040AECB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDA9CEB2F37C92200A4264F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6218AC7C2F3C6FD10040AECB;
+			remoteInfo = "Burnexwatch Watch App";
+		};
+		6218AC9B2F3C6FD20040AECB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EBDA9CEB2F37C92200A4264F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6218AC7C2F3C6FD10040AECB;
+			remoteInfo = "Burnexwatch Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6218AC9E2F3C6FD20040AECB /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				6218AC9D2F3C6FD20040AECB /* Burnexwatch Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		6218AC7D2F3C6FD10040AECB /* Burnexwatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Burnexwatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6218AC892F3C6FD20040AECB /* Burnexwatch Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Burnexwatch Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6218AC932F3C6FD20040AECB /* Burnexwatch Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Burnexwatch Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBDA9CF32F37C92200A4264F /* BurnexApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BurnexApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		6218ACDA2F3C766E0040AECB /* Exceptions for "BurnexApp" folder in "Burnexwatch Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Model/HealthKitManager.swift,
+			);
+			target = 6218AC7C2F3C6FD10040AECB /* Burnexwatch Watch App */;
+		};
 		EBDA9D002F37C92300A4264F /* Exceptions for "BurnexApp" folder in "BurnexApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -21,10 +73,26 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		6218AC7E2F3C6FD10040AECB /* Burnexwatch Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Burnexwatch Watch App";
+			sourceTree = "<group>";
+		};
+		6218AC8C2F3C6FD20040AECB /* Burnexwatch Watch AppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Burnexwatch Watch AppTests";
+			sourceTree = "<group>";
+		};
+		6218AC962F3C6FD20040AECB /* Burnexwatch Watch AppUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Burnexwatch Watch AppUITests";
+			sourceTree = "<group>";
+		};
 		EBDA9CF52F37C92200A4264F /* BurnexApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				EBDA9D002F37C92300A4264F /* Exceptions for "BurnexApp" folder in "BurnexApp" target */,
+				6218ACDA2F3C766E0040AECB /* Exceptions for "BurnexApp" folder in "Burnexwatch Watch App" target */,
 			);
 			path = BurnexApp;
 			sourceTree = "<group>";
@@ -32,6 +100,27 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		6218AC7A2F3C6FD10040AECB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6218AC862F3C6FD20040AECB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6218AC902F3C6FD20040AECB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EBDA9CF02F37C92200A4264F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -46,6 +135,9 @@
 			isa = PBXGroup;
 			children = (
 				EBDA9CF52F37C92200A4264F /* BurnexApp */,
+				6218AC7E2F3C6FD10040AECB /* Burnexwatch Watch App */,
+				6218AC8C2F3C6FD20040AECB /* Burnexwatch Watch AppTests */,
+				6218AC962F3C6FD20040AECB /* Burnexwatch Watch AppUITests */,
 				EBDA9CF42F37C92200A4264F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,6 +146,9 @@
 			isa = PBXGroup;
 			children = (
 				EBDA9CF32F37C92200A4264F /* BurnexApp.app */,
+				6218AC7D2F3C6FD10040AECB /* Burnexwatch Watch App.app */,
+				6218AC892F3C6FD20040AECB /* Burnexwatch Watch AppTests.xctest */,
+				6218AC932F3C6FD20040AECB /* Burnexwatch Watch AppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -61,6 +156,74 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		6218AC7C2F3C6FD10040AECB /* Burnexwatch Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6218ACA52F3C6FD20040AECB /* Build configuration list for PBXNativeTarget "Burnexwatch Watch App" */;
+			buildPhases = (
+				6218AC792F3C6FD10040AECB /* Sources */,
+				6218AC7A2F3C6FD10040AECB /* Frameworks */,
+				6218AC7B2F3C6FD10040AECB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				6218AC7E2F3C6FD10040AECB /* Burnexwatch Watch App */,
+			);
+			name = "Burnexwatch Watch App";
+			packageProductDependencies = (
+			);
+			productName = "Burnexwatch Watch App";
+			productReference = 6218AC7D2F3C6FD10040AECB /* Burnexwatch Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6218AC882F3C6FD20040AECB /* Burnexwatch Watch AppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6218ACA62F3C6FD20040AECB /* Build configuration list for PBXNativeTarget "Burnexwatch Watch AppTests" */;
+			buildPhases = (
+				6218AC852F3C6FD20040AECB /* Sources */,
+				6218AC862F3C6FD20040AECB /* Frameworks */,
+				6218AC872F3C6FD20040AECB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6218AC8B2F3C6FD20040AECB /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				6218AC8C2F3C6FD20040AECB /* Burnexwatch Watch AppTests */,
+			);
+			name = "Burnexwatch Watch AppTests";
+			packageProductDependencies = (
+			);
+			productName = "Burnexwatch Watch AppTests";
+			productReference = 6218AC892F3C6FD20040AECB /* Burnexwatch Watch AppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		6218AC922F3C6FD20040AECB /* Burnexwatch Watch AppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6218ACA72F3C6FD20040AECB /* Build configuration list for PBXNativeTarget "Burnexwatch Watch AppUITests" */;
+			buildPhases = (
+				6218AC8F2F3C6FD20040AECB /* Sources */,
+				6218AC902F3C6FD20040AECB /* Frameworks */,
+				6218AC912F3C6FD20040AECB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6218AC952F3C6FD20040AECB /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				6218AC962F3C6FD20040AECB /* Burnexwatch Watch AppUITests */,
+			);
+			name = "Burnexwatch Watch AppUITests";
+			packageProductDependencies = (
+			);
+			productName = "Burnexwatch Watch AppUITests";
+			productReference = 6218AC932F3C6FD20040AECB /* Burnexwatch Watch AppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		EBDA9CF22F37C92200A4264F /* BurnexApp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = EBDA9D012F37C92300A4264F /* Build configuration list for PBXNativeTarget "BurnexApp" */;
@@ -68,10 +231,12 @@
 				EBDA9CEF2F37C92200A4264F /* Sources */,
 				EBDA9CF02F37C92200A4264F /* Frameworks */,
 				EBDA9CF12F37C92200A4264F /* Resources */,
+				6218AC9E2F3C6FD20040AECB /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				6218AC9C2F3C6FD20040AECB /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				EBDA9CF52F37C92200A4264F /* BurnexApp */,
@@ -93,6 +258,17 @@
 				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
+					6218AC7C2F3C6FD10040AECB = {
+						CreatedOnToolsVersion = 26.0.1;
+					};
+					6218AC882F3C6FD20040AECB = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 6218AC7C2F3C6FD10040AECB;
+					};
+					6218AC922F3C6FD20040AECB = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 6218AC7C2F3C6FD10040AECB;
+					};
 					EBDA9CF22F37C92200A4264F = {
 						CreatedOnToolsVersion = 26.0.1;
 					};
@@ -113,11 +289,35 @@
 			projectRoot = "";
 			targets = (
 				EBDA9CF22F37C92200A4264F /* BurnexApp */,
+				6218AC7C2F3C6FD10040AECB /* Burnexwatch Watch App */,
+				6218AC882F3C6FD20040AECB /* Burnexwatch Watch AppTests */,
+				6218AC922F3C6FD20040AECB /* Burnexwatch Watch AppUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		6218AC7B2F3C6FD10040AECB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6218AC872F3C6FD20040AECB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6218AC912F3C6FD20040AECB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EBDA9CF12F37C92200A4264F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -128,6 +328,27 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		6218AC792F3C6FD10040AECB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6218AC852F3C6FD20040AECB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6218AC8F2F3C6FD20040AECB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EBDA9CEF2F37C92200A4264F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -137,7 +358,187 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		6218AC8B2F3C6FD20040AECB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6218AC7C2F3C6FD10040AECB /* Burnexwatch Watch App */;
+			targetProxy = 6218AC8A2F3C6FD20040AECB /* PBXContainerItemProxy */;
+		};
+		6218AC952F3C6FD20040AECB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6218AC7C2F3C6FD10040AECB /* Burnexwatch Watch App */;
+			targetProxy = 6218AC942F3C6FD20040AECB /* PBXContainerItemProxy */;
+		};
+		6218AC9C2F3C6FD20040AECB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6218AC7C2F3C6FD10040AECB /* Burnexwatch Watch App */;
+			targetProxy = 6218AC9B2F3C6FD20040AECB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		6218AC9F2F3C6FD20040AECB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Burnexwatch Watch App/Burnexwatch Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5H8MK84QQ6;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Burnexwatch;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "\"يحتاج تطبيق Burnexwatch للوصول إلى بياناتك الصحية لعرض معدل ضربات القلب والنشاط.\"";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "نحتاج المعلومات";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.aljowhara.BurnexApp;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aljowhara.BurnexApp.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		6218ACA02F3C6FD20040AECB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Burnexwatch Watch App/Burnexwatch Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5H8MK84QQ6;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Burnexwatch;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "\"يحتاج تطبيق Burnexwatch للوصول إلى بياناتك الصحية لعرض معدل ضربات القلب والنشاط.\"";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "نحتاج المعلومات";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.aljowhara.BurnexApp;
+				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aljowhara.BurnexApp.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
+		6218ACA12F3C6FD20040AECB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5H8MK84QQ6;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.faitmh.Burnexwatch-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Burnexwatch Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Burnexwatch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		6218ACA22F3C6FD20040AECB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5H8MK84QQ6;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.faitmh.Burnexwatch-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Burnexwatch Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Burnexwatch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
+		6218ACA32F3C6FD20040AECB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.faitmh.Burnexwatch-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "Burnexwatch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		6218ACA42F3C6FD20040AECB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.faitmh.Burnexwatch-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "Burnexwatch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Release;
+		};
 		EBDA9D022F37C92300A4264F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -146,7 +547,7 @@
 				CODE_SIGN_ENTITLEMENTS = BurnexApp/BurnexApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4C88H9734X;
+				DEVELOPMENT_TEAM = 5H8MK84QQ6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BurnexApp/Info.plist;
@@ -180,7 +581,7 @@
 				CODE_SIGN_ENTITLEMENTS = BurnexApp/BurnexApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4C88H9734X;
+				DEVELOPMENT_TEAM = 5H8MK84QQ6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BurnexApp/Info.plist;
@@ -330,6 +731,33 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		6218ACA52F3C6FD20040AECB /* Build configuration list for PBXNativeTarget "Burnexwatch Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6218AC9F2F3C6FD20040AECB /* Debug */,
+				6218ACA02F3C6FD20040AECB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6218ACA62F3C6FD20040AECB /* Build configuration list for PBXNativeTarget "Burnexwatch Watch AppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6218ACA12F3C6FD20040AECB /* Debug */,
+				6218ACA22F3C6FD20040AECB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6218ACA72F3C6FD20040AECB /* Build configuration list for PBXNativeTarget "Burnexwatch Watch AppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6218ACA32F3C6FD20040AECB /* Debug */,
+				6218ACA42F3C6FD20040AECB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		EBDA9CEE2F37C92200A4264F /* Build configuration list for PBXProject "BurnexApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
