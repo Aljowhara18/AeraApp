@@ -762,7 +762,6 @@ struct AnalysisView: View {
     }
 }
 */
-
 import SwiftUI
 import Charts
 import HealthKit
@@ -879,9 +878,14 @@ struct AnalysisView: View {
                     pickerView.padding(.top, 15)
 
                     VStack(alignment: .leading, spacing: 5) {
-                        dateHeader
-                        
-                        // تم حذف legendView من هنا كما طلبتِ ليبقى اللي بالأسفل فقط
+                        // إضافة الـ Filter Menu بجانب عنوان التاريخ
+                        HStack {
+                            dateHeader
+                            Spacer()
+                            filterMenu
+                                .padding(.trailing, 16)
+                                .padding(.top, 16)
+                        }
                         
                         Chart {
                             ForEach(viewModel.chartData) { d in
@@ -904,7 +908,6 @@ struct AnalysisView: View {
                         .chartXScale(domain: viewModel.chartStartDate...Date())
                         .chartXAxis { configureXAxis() }
                         .chartYAxis { AxisMarks(position: .leading) }
-                        // تخصيص الـ Legend السفلي ليظهر بشكل أجمل (اختياري)
                         .chartLegend(position: .bottom, alignment: .leading)
                         .chartXSelection(value: $viewModel.rawSelectedDate)
                         .chartScrollableAxes(.horizontal)
@@ -949,6 +952,23 @@ struct AnalysisView: View {
         .pickerStyle(.segmented)
         .padding(.horizontal, 20)
         .onChange(of: viewModel.selectedTimeRange) { _ in viewModel.fetchChartData() }
+    }
+
+    private var filterMenu: some View {
+        Menu {
+            Picker("", selection: $viewModel.selectedOption) {
+                ForEach(["All", "Sleep", "HRV", "RHR"], id: \.self) { Text($0).tag($0) }
+            }
+        } label: {
+            HStack(spacing: 4) {
+                Text(viewModel.selectedOption)
+                Image(systemName: "chevron.down")
+            }
+            .font(.caption2).bold().padding(6)
+            .background(Capsule().fill(.white.opacity(0.1)))
+            .foregroundColor(.white)
+        }
+        .onChange(of: viewModel.selectedOption) { _ in viewModel.fetchChartData() }
     }
 
     private func summaryRow(title: String, data: SummaryData) -> some View {
