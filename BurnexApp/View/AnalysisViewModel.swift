@@ -812,20 +812,27 @@ class AnalysisViewModel: ObservableObject {
 
     // MARK: - Data Fetching Methods
     /// الوظيفة الرئيسية لبدء جلب البيانات  من هيلث بعد أخذ الإذن
+    // داخل AnalysisViewModel
+
+    // 1. نحدد تاريخ البداية الفعلي لجلب البيانات (مثلاً سنة كاملة للماضي)
+    private var dataFetchStartDate: Date {
+        Calendar.current.date(byAdding: .year, value: -1, to: Date()) ?? Date()
+    }
+
     func fetchChartData() {
         healthManager.requestAuthorization { success in
             if success {
-                self.loadHealthDataForChart()
+                // نمرر تاريخ قديم لجلب كل البيانات السابقة
+                self.loadHealthDataForChart(from: self.dataFetchStartDate)
                 self.fetchRealSummaries()
             }
         }
     }
 
-    /// تحديد أي نوع من البيانات يجب جلبه بناءً على الفلتر المختار
-    private func loadHealthDataForChart() {
-        let startDate = chartStartDate
+    private func loadHealthDataForChart(from startDate: Date) {
         DispatchQueue.main.async { self.chartData = [] }
-
+        
+        // نستخدم startDate الممرر بدلاً من المحسوب لحظياً
         if selectedOption == "All" || selectedOption == "Sleep" { fetchSleepData(start: startDate) }
         if selectedOption == "All" || selectedOption == "HRV" {
             fetchQuantityData(identifier: .heartRateVariabilitySDNN, label: "HRV", unit: HKUnit(from: "ms"), start: startDate)
@@ -862,8 +869,15 @@ class AnalysisViewModel: ObservableObject {
         healthManager.healthStore.execute(query)
     }
 
+    // داخل الـ ViewModel، قم بتعديل تحديث البيانات:
     private func updateChart(with points: [HealthDataPoint]) {
-        self.chartData.append(contentsOf: points)
+        // هذه الإضافة تضمن دمج القراءات التي تحدث في نفس اليوم
+        let grouped = Dictionary(grouping: points) { Calendar.current.startOfDay(for: $0.date) }
+        let dailyPoints = grouped.map { (key, value) in
+            HealthDataPoint(date: key, value: value.map { $0.value }.reduce(0, +) / Double(value.count), type: value.first?.type ?? "")
+        }
+        
+        self.chartData.append(contentsOf: dailyPoints)
         self.chartData.sort { $0.date < $1.date }
     }
 
@@ -960,39 +974,67 @@ extension AnalysisView {
         }
         .onChange(of: viewModel.selectedOption) { _ in viewModel.fetchChartData() }
     }
-
     /// مكون الرسم البياني نفسه
     /// هنا التعديل المطلوب امكانية اليوزر يلف لليسار يرجع للاسابيع الاشهر السابقة
     private func mainChartView(height: CGFloat) -> some View {
         Chart {
             ForEach(viewModel.chartData) { d in
-                LineMark(x: .value("Date", d.date), y: .value("Value", d.value))
+                // 1. رسم الخط الرئيسي
+                LineMark(
+                    x: .value("Date", d.date, unit: getUnit()),
+                    y: .value("Value", d.value)
+                )
+                .foregroundStyle(by: .value("Type", d.type))
+                .interpolationMethod(.catmullRom) // لجعل الخط منحني وانسيابي
+                .lineStyle(StrokeStyle(lineWidth: 3)) // تسميك الخط قليلاً
+
+                // 2. إضافة نقاط عند كل يوم (اختياري - يعطي شكل احترافي)
+                if viewModel.selectedTimeRange != "Y" { // لا نظهر النقاط في عرض السنة لعدم الازدحام
+                    PointMark(
+                        x: .value("Date", d.date, unit: getUnit()),
+                        y: .value("Value", d.value)
+                    )
                     .foregroundStyle(by: .value("Type", d.type))
-                    .interpolationMethod(.catmullRom)
+                    .symbolSize(30)
+                }
                 
-                AreaMark(x: .value("Date", d.date), y: .value("Value", d.value))
-                    .foregroundStyle(by: .value("Type", d.type))
-                    .opacity(0.1)
+                // 3. تظليل خفيف تحت الخط (Area)
+                AreaMark(
+                    x: .value("Date", d.date, unit: getUnit()),
+                    y: .value("Value", d.value)
+                )
+                .foregroundStyle(by: .value("Type", d.type))
+                .opacity(0.1) // شفافية عالية جداً ليكون مجرد ظل ناعم
             }
-            
+
+            // مؤشر الاختيار عند اللمس (الخط المقطع)
             if let selectedDate = viewModel.rawSelectedDate {
                 RuleMark(x: .value("Selected", selectedDate))
                     .foregroundStyle(.white.opacity(0.5))
                     .lineStyle(StrokeStyle(lineWidth: 2, dash: [5]))
             }
         }
-        .chartForegroundStyleScale(chartColors) // 🎨 لتلوين كل نوع بيانات بلونه الخاص (مثل: النوم أزرق)
-        .chartXScale(domain: viewModel.chartStartDate...Date()) // 📅 يحدد بداية ونهاية الوقت في الرسم (مثلاً من أسبوع حتى اليوم)
-        .chartXAxis { configureXAxis() } // 🕒 ينظم شكل التواريخ في الأسفل (ساعات، أيام، أو شهور)
-        .chartYAxis { AxisMarks(position: .leading) } // 📈 يضع أرقام القياسات (القيم) على جهة اليسار
-        .chartLegend(position: .bottom, alignment: .leading) // 🔑 يظهر مفتاح الرسم في الأسفل ليوضح معنى كل لون
-        .chartXSelection(value: $viewModel.rawSelectedDate) // ☝️ يكتشف التاريخ الذي يلمسه المستخدم بإصبعه لمعرفة قيمته
-        .chartScrollableAxes(.horizontal) // ↔️ يسمح للمستخدم بسحب الرسم لليمين واليسار (Scroll)
-        .chartXVisibleDomain(length: getVisibleLength()) // 🔍 يحدد "كم يوم" يظهر في الشاشة الواحدة عشان ما تزدحم البيانات
-        .chartScrollPosition(x: $viewModel.scrollPosition) // 📍 يراقب مكان السحب لتحديث التاريخ الظاهر في أعلى الشاشة
-        .frame(height: height) // 📏 يحدد ارتفاع منطقة الرسم البياني
-        .padding(.horizontal) // ⬅️➡️ يترك مسافة بسيطة عن حواف الشاشة الجانبية
-        .padding(.bottom, 10) // ⬇️ يترك مسافة بسيطة من الأسفل
+        .chartForegroundStyleScale(chartColors)
+        .chartScrollableAxes(.horizontal)
+        .chartXVisibleDomain(length: getVisibleLength())
+        .chartScrollPosition(initialX: Date())
+        .chartScrollPosition(x: $viewModel.scrollPosition)
+        .chartXAxis { configureXAxis() }
+        .chartYAxis { AxisMarks(position: .leading) }
+        .animation(.smooth, value: viewModel.selectedTimeRange) // حركة "Smooth" أفضل للخطوط
+        .frame(height: height)
+        .padding(.horizontal)
+    }
+    
+    // وظيفة مساعدة لتحديد وحدة الرسم
+    private func getUnit() -> Calendar.Component {
+        switch viewModel.selectedTimeRange {
+        case "D": return .hour
+        case "W": return .day
+        case "M": return .day
+        case "Y": return .month
+        default: return .day
+        }
     }
     
 // ملخص البيانات هنا كذلك نحتاج نعدل اللوجك ونسوي cases لكل حالة كلمة وسهم معين
@@ -1014,32 +1056,95 @@ extension AnalysisView {
     @AxisContentBuilder
     private func configureXAxis() -> some AxisContent {
         switch viewModel.selectedTimeRange {
-        case "D": AxisMarks(values: .stride(by: .hour, count: 6)) { _ in AxisValueLabel(format: .dateTime.hour()) }
-        case "W": AxisMarks(values: .stride(by: .day, count: 1)) { _ in AxisValueLabel(format: .dateTime.weekday(.narrow)) }
-        case "M": AxisMarks(values: .stride(by: .day, count: 7)) { _ in AxisValueLabel(format: .dateTime.day()) }
-        case "Y": AxisMarks(values: .stride(by: .month, count: 1)) { _ in AxisValueLabel(format: .dateTime.month(.narrow)) }
-        default: AxisMarks()
+        case "D":
+            // عرض الساعات لليوم الواحد
+            AxisMarks(values: .stride(by: .hour, count: 4)) { _ in
+                AxisValueLabel(format: .dateTime.hour())
+                AxisGridLine()
+            }
+        case "W":
+            // عرض اسم اليوم (S, M, T...) لكل يوم في الأسبوع
+            AxisMarks(values: .stride(by: .day, count: 1)) { _ in
+                AxisValueLabel(format: .dateTime.weekday(.narrow))
+                AxisGridLine()
+            }
+        case "M":
+            // عرض رقم اليوم (5, 10, 15...) لكل شهر
+            AxisMarks(values: .stride(by: .day, count: 5)) { _ in
+                AxisValueLabel(format: .dateTime.day())
+                AxisGridLine()
+            }
+        case "Y":
+            // عرض الحرف الأول من الشهر (J, F, M...) لكل سنة
+            AxisMarks(values: .stride(by: .month, count: 1)) { _ in
+                AxisValueLabel(format: .dateTime.month(.narrow))
+                AxisGridLine()
+            }
+        default:
+            AxisMarks()
         }
     }
 
     private func getVisibleLength() -> Double {
         let day: Double = 3600 * 24
         switch viewModel.selectedTimeRange {
-        case "D": return day
-        case "W": return day * 7
-        case "M": return day * 30
-        case "Y": return day * 365
-        default: return day * 7
+        case "D":
+            return day // الشاشة تعرض 24 ساعة
+        case "W":
+            return day * 7 // الشاشة تعرض 7 أيام (يظهر كل يوم بوضوح)
+        case "M":
+            return day * 30 // الشاشة تعرض شهر
+        case "Y":
+            return day * 365 // الشاشة تعرض سنة كاملة
+        default:
+            return day * 7
         }
     }
 
     private var dateHeader: some View {
         Text(getFormattedDate(for: viewModel.scrollPosition))
-            .font(.caption).fontWeight(.semibold).foregroundColor(.gray).padding([.top, .leading], 16)
+            .font(.system(size: 14, weight: .bold, design: .rounded))
+            .foregroundColor(.gray)
+            .padding([.top, .leading], 16)
     }
 
     private func getFormattedDate(for date: Date) -> String {
-        let f = DateFormatter(); f.dateFormat = "MMMM yyyy"; return f.string(from: date)
+        let calendar = Calendar.current
+        let formatter = DateFormatter()
+        
+        switch viewModel.selectedTimeRange {
+        case "D":
+            // يعرض: 11 February 2026
+            formatter.dateFormat = "d MMMM yyyy"
+            return formatter.string(from: date)
+            
+        case "W":
+            // يعرض نطاق الأسبوع: 8 Feb - 14 Feb
+            let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date))!
+            let endOfWeek = calendar.date(byAdding: .day, value: 6, to: startOfWeek)!
+            
+            formatter.dateFormat = "d MMM"
+            let startStr = formatter.string(from: startOfWeek)
+            let endStr = formatter.string(from: endOfWeek)
+            
+            formatter.dateFormat = "yyyy"
+            let yearStr = formatter.string(from: endOfWeek)
+            
+            return "\(startStr) - \(endStr), \(yearStr)"
+            
+        case "M":
+            // يعرض الشهر والسنة: February 2026
+            formatter.dateFormat = "MMMM yyyy"
+            return formatter.string(from: date)
+            
+        case "Y":
+            // يعرض السنة فقط: 2026
+            formatter.dateFormat = "yyyy"
+            return formatter.string(from: date)
+            
+        default:
+            return ""
+        }
     }
 }
 #Preview {
