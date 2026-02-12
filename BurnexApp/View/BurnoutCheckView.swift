@@ -274,7 +274,7 @@ struct BurnoutCheckView: View {
 
             Spacer()
 
-            VideoLoopPlayer(fileName: "Ball")
+            VideoLoopPlayer(fileName: "Ball2")
                 .frame(width: 220, height: 220)
                 .clipShape(Circle())
                 .grayscale(1.0)
@@ -363,7 +363,7 @@ struct BurnoutCheckView: View {
 //                    .foregroundColor(.white)
 //                    .padding(.top, 20)
                 
-                VideoLoopPlayer(fileName: "Ball")
+                VideoLoopPlayer(fileName: "Ball2")
                     .frame(width: 200, height: 200)
                     .clipShape(Circle())
                     .colorMultiply(totalScore > 12 ? .red : .green)

@@ -385,13 +385,15 @@ struct HomeView: View {
             // منطقة الكرة التفاعلية والأزرار (Stats)
             ZStack {
                 Circle()
-                    .fill(Color("ball"))
-                    .frame(width: 240, height: 240)
+                    .foregroundStyle(.ball)
+                    .frame(width: 300,height: 300)
+                    .cornerRadius(90000)
+                    .frame(width: 300, height: 300)
                 
-                VideoLoopPlayer(fileName: "Ball")
-                    .opacity(0.20)
-                    .blendMode(.luminosity)
-                    .frame(width: 400, height: 400)
+                VideoLoopPlayer(fileName: "Ball2")
+                //.opacity(0.20)
+                .blendMode(.luminosity)
+                .frame(width: 300, height: 300)
                     .clipShape(Circle())
                 
                 StatFlipButton(stat: viewModel.stats[0], pos: CGPoint(x: 90, y: -100)) {
@@ -406,8 +408,8 @@ struct HomeView: View {
                     viewModel.flipCard(at: 2)
                 }
             }
-            .frame(maxWidth: UIScreen.main.bounds.width)
-            .offset(y: -50)
+            //.frame(maxWidth: UIScreen.main.bounds.width)
+            .offset(x: 40, y: -50)
             
             Spacer(minLength: 120)
         }
@@ -481,7 +483,7 @@ struct StatFlipButton: View {
                 .foregroundColor(.white)
                 .frame(width: 110, height: 45)
                 .glassEffect(in:.rect(cornerRadius: 100))
-                .background(.white.opacity(0.5))
+                .background(.white.opacity(0.1))
                 .cornerRadius(100)
                 .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white.opacity(0.1)))
         }

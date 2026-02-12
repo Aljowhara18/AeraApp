@@ -39,7 +39,7 @@ struct AnalysisView: View {
                         VStack(alignment: .leading, spacing: 5) {
                             dateHeader
                             mainChartView(height: geometry.size.height * 0.32)
-                                //.padding(.bottom, 15)
+                                .padding(.top, 16)
                         }
                         .padding(.bottom,16)
                         .glassEffect(in: .rect(cornerRadius: 24))
