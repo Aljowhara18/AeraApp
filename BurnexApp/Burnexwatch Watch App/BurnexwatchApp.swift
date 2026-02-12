@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-@main
+//@main
 struct appwat: App {
     var body: some Scene {
         WindowGroup {

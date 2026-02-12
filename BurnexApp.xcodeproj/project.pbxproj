@@ -46,6 +46,7 @@
 				View/BurnoutCheckView.swift,
 				View/HomeView.swift,
 				View/MainContainerView.swift,
+				View/MainTabView.swift,
 				View/Onboarding.swift,
 				View/QuizeViews.swift,
 				View/TestView.swift,
@@ -71,6 +72,7 @@
 				View/BurnoutCheckView.swift,
 				View/HomeView.swift,
 				View/MainContainerView.swift,
+				View/MainTabView.swift,
 				View/Onboarding.swift,
 				View/QuizeViews.swift,
 				View/TestView.swift,
@@ -81,10 +83,8 @@
 		EBDA9D002F37C92300A4264F /* Exceptions for "BurnexApp" folder in "BurnexApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"Burnexwatch Watch App/Assets.xcassets",
 				"Burnexwatch Watch App/stress_video.mp4",
 				Info.plist,
-				"Model/Burnexwatch Watch App/Assets.xcassets",
 			);
 			target = EBDA9CF22F37C92200A4264F /* BurnexApp */;
 		};

@@ -144,16 +144,29 @@ extension AnalysisView {
 
     private func summaryRow(title: String) -> some View {
         let data = viewModel.calculateSummary(for: title)
+        
+        // اللون حسب الحالة
+        let textColor: Color = data.state == .noData ? .grayApp : .text2
+        
         return VStack(alignment: .leading, spacing: 6) {
-            Text(title).font(.system(size: 16, weight: .semibold)).foregroundColor(.gray)
+            Text(title)
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(.gray)
+
             HStack(alignment: .center, spacing: 8) {
-                Text(data.status).font(.system(size: 28, weight: .bold)).foregroundColor(data.state.color)
+                Text(data.status)
+                    .font(.system(size: 28, weight: .bold))
+                    .foregroundColor(textColor)
+
                 if data.state != .noData {
-                    Text("\(data.percentageText)").font(.system(size: 15, weight: .medium)).foregroundColor(data.state.color)
+                    Text("\(data.percentageText)")
+                        .font(.system(size: 15, weight: .medium))
+                        .foregroundColor(.white)
                 }
             }
         }
     }
+
 
     // Helpers
     private func getUnit() -> Calendar.Component {

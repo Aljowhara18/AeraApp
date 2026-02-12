@@ -352,10 +352,11 @@ struct HomeView: View {
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                
+               
                 // 3. التاب بار المخصص
-                customTabBar
-                    .padding()
+//                customTabBar
+//                    .padding()
+             
             }
             .navigationBarHidden(true)
         }
@@ -370,10 +371,10 @@ struct HomeView: View {
                 .padding(.top, 60)
 
             Text("Your Status Right Now")
-                .font(.system(size: 18, weight: .medium))
-                .foregroundColor(.gray)
-                .padding(.horizontal, 30)
-                .padding(.top, 25)
+                .font(.system(size: 22))
+                .foregroundColor(.grayApp)
+                .padding(.horizontal, 20)
+                 .padding(.top, 15)
             
             glassyAlert
                 .padding(.horizontal, 30)
@@ -412,21 +413,22 @@ struct HomeView: View {
         }
     }
 
-    var customTabBar: some View {
-        HStack {
-            LocalTabBarButton(icon: "timelapse", label: "Rhythm", isSelected: selectedTab == 0) { selectedTab = 0 }
-            Spacer()
-            LocalTabBarButton(icon: "chart.xyaxis.line", label: "Analysis", isSelected: selectedTab == 1) { selectedTab = 1 }
-            Spacer()
-            LocalTabBarButton(icon: "clipboard", label: "Test", isSelected: selectedTab == 2) { selectedTab = 2 }
-        }
-        .padding(.horizontal, 4)
-        .frame(width: 350, height: 85)
-        .glassEffect(in:.rect(cornerRadius: 100))
-        .background(.black)
-        .clipShape(Capsule())
-        .padding(.bottom, 25)
-    }
+//    var customTabBar: some View {
+//        
+//        HStack {
+//            LocalTabBarButton(icon: "timelapse", label: "Rhythm", isSelected: selectedTab == 0) { selectedTab = 0 }
+//            Spacer()
+//            LocalTabBarButton(icon: "chart.xyaxis.line", label: "Analysis", isSelected: selectedTab == 1) { selectedTab = 1 }
+//            Spacer()
+//            LocalTabBarButton(icon: "clipboard", label: "Test", isSelected: selectedTab == 2) { selectedTab = 2 }
+//        }
+//        .padding(.horizontal, 4)
+//        .frame(width: 350, height: 85)
+//        .glassEffect()
+//        .background(.text.opacity(0.3))
+//        .clipShape(Capsule())
+//        .padding(.bottom, 25)
+//    }
 
     var glassyAlert: some View {
         HStack(spacing: 12) {
@@ -479,9 +481,9 @@ struct StatFlipButton: View {
                 .foregroundColor(.white)
                 .frame(width: 110, height: 45)
                 .glassEffect(in:.rect(cornerRadius: 100))
-                .background(.black.opacity(0.1))
-                .cornerRadius(20)
-                .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.red.opacity(0.1)))
+                .background(.white.opacity(0.5))
+                .cornerRadius(100)
+                .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white.opacity(0.1)))
         }
         .offset(x: pos.x, y: pos.y)
     }
