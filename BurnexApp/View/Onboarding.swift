@@ -7,187 +7,235 @@
 // ماعرفت كيف اسوي التوهج اللي بفيقما
 import SwiftUI
 
-import SwiftUI
-
 struct OnboardingView: View {
+    // MARK: - Properties
     @State private var step = 0
-    // Animation States
-    @State private var circleTrim: CGFloat = 0.0
-    @State private var fillOpacity: Double = 0.0
     @State private var contentOpacity: Double = 0.0
     @State private var pulseScale: CGFloat = 1.0
     @State private var hintBouncing: CGFloat = 0.0
+    @State private var imageOpacity: Double = 0.0
+    
+    // ستايت للتحكم في الصفحات اليدوية والنافقيشن
+    @State private var manualPage = 0
+    @State private var navigateToHome = false
 
     var body: some View {
-        ZStack {
-            Color.black.ignoresSafeArea()
-            
-            // --- المرحلة 1: اسم التطبيق (Splash) ---
-            if step == 0 {
-                Text("Burnex")
-                    .font(.system(size: 42, weight: .ultraLight, design: .serif))
-                    .foregroundColor(.white)
-                    .tracking(12)
-                    .opacity(contentOpacity)
-                    .onAppear {
-                        withAnimation(.easeIn(duration: 1.5)) { contentOpacity = 1.0 }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                            withAnimation {
-                                contentOpacity = 0
-                                step = 1
-                            }
-                        }
-                    }
-            }
-            
-            // --- المرحلة 2: تلميح اللمس (Tab Hint) ---
-            if step == 1 {
-                VStack(spacing: 30) {
-                    Text("Your Rhythm Starts With A Touch")
-                        .font(.system(size: 18, weight: .light))
-                        .foregroundColor(.white)
-                    
-                    Image(systemName: "hand.tap.fill")
-                        .font(.system(size: 40))
-                        .foregroundColor(.white.opacity(0.7))
-                        .offset(y: hintBouncing)
-                        .onAppear {
-                            withAnimation(.easeInOut(duration: 0.8).repeatForever()) {
-                                hintBouncing = 15
-                            }
-                        }
-                }
-                .opacity(step == 1 ? 1 : 0)
-                .onTapGesture {
-                    withAnimation { step = 2 }
-                }
-            }
-            
-            // --- المرحلة 3: الدوائر المتحركة (The Orbs) ---
-            if step >= 2 {
-                VStack {
-                    Spacer()
-                    
-                    ZStack {
-                        // 1. التوهج الخلفي البعيد (Glow Background)
-                        Circle()
-                            .fill(currentOrbColor.opacity(0.15))
-                            .frame(width: 400, height: 400)
-                            .blur(radius: 60)
-                        
-                        // 2. الدائرة المنقطة (الجزيئات كما في الصورة)
-                        Circle()
-                            .trim(from: 0, to: circleTrim)
-                            .stroke(
-                                AngularGradient(
-                                    gradient: Gradient(colors: [currentOrbColor.opacity(0), currentOrbColor, currentOrbColor.opacity(0.5)]),
-                                    center: .center
-                                ),
-                                style: StrokeStyle(lineWidth: 3, lineCap: .round, dash: [1, 6])
-                            )
-                            .frame(width: 280, height: 280)
-                            .rotationEffect(.degrees(-90))
-                            .blur(radius: 0.5)
-                        
-                        // 3. التعبئة الداخلية المشعة (The Core)
-                        Circle()
-                            .fill(
-                                RadialGradient(
-                                    gradient: Gradient(colors: [currentOrbColor.opacity(0.9), currentOrbColor.opacity(0.2), .clear]),
-                                    center: .center,
-                                    startRadius: 5,
-                                    endRadius: 120
-                                )
-                            )
-                            .frame(width: 250, height: 250)
-                            .opacity(fillOpacity)
-                            .scaleEffect(pulseScale)
-                    }
-                    
-                    Spacer()
-                    
-                    // النصوص والوصف
-                    Text(currentInstruction)
-                        .font(.system(size: 20, weight: .light))
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(.center)
-                        .transition(.opacity)
-                        .id(step) // للتأكد من إعادة تشغيل الأنميشن عند تغيير النص
-                    
-                    Spacer()
-                    
-                    // --- المرحلة الأخيرة: زر الدخول ---
-                    if step == 4 {
-                        Button(action: {
-                            // انتقلي هنا للـ HomeView
-                        }) {
-                            Text("Start with Burnex")
-                                .font(.headline)
-                                .foregroundColor(.black)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Capsule().fill(Color.white))
-                                .padding(.horizontal, 40)
-                        }
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
+        NavigationStack {
+            ZStack(alignment: .topTrailing) {
+                Color.black.ignoresSafeArea()
+                
+                // --- محتوى الصفحات بناءً على الـ Step ---
+                Group {
+                    if step == 0 {
+                        splashView
+                    } else if step == 1 {
+                        hintView
+                    } else if step >= 2 && step <= 6 {
+                        automaticAnimationView
+                    } else if step > 6 {
+                        manualOnboardingView
                     }
                 }
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    if step < 4 {
-                        withAnimation(.spring()) {
-                            step += 1
-                            triggerOrbAnimation()
-                        }
+                
+                // --- زر Skip (ينقل للهوم مباشرة) ---
+                if step > 6 && manualPage < 2 {
+                    Button(action: {
+                        navigateToHome = true // تعديل: الآن ينقل لصفحة الهوم فوراً
+                    }) {
+                        Text("Skip")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundColor(.white.opacity(0.6))
+                            .padding(.top, 20)
+                            .padding(.trailing, 25)
                     }
+                    .transition(.opacity)
                 }
-                .onAppear { triggerOrbAnimation() }
             }
-        }
-    }
-    
-    // وظيفة تشغيل أنميشن الدائرة "نفس الصورة"
-    func triggerOrbAnimation() {
-        circleTrim = 0
-        fillOpacity = 0
-        
-        // 1. رسم الإطار المنقط (الجزيئات)
-        withAnimation(.easeOut(duration: 1.5)) {
-            circleTrim = 1.0
-        }
-        
-        // 2. إظهار التوهج الداخلي بعد اكتمال الرسم قليلاً
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            withAnimation(.easeInOut(duration: 1.2)) {
-                fillOpacity = 1.0
-            }
-            // 3. حركة النبض المستمرة
-            withAnimation(.easeInOut(duration: 2.5).repeatForever(autoreverses: true)) {
-                pulseScale = 1.08
+            // ربط النافقيشن بالوجهة المطلوبة
+            .navigationDestination(isPresented: $navigateToHome) {
+                HomeView()
             }
         }
     }
 
-    // البيانات (الألوان والنصوص)
-    var currentOrbColor: Color {
-        switch step {
-        case 2: return Color(red: 0.0, green: 0.8, blue: 1.0) // Cyan
-        case 3: return Color.blue
-        case 4: return Color.red
-        default: return Color.cyan
+    // MARK: - Splash View
+    private var splashView: some View {
+        ZStack{
+            Image("Background")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .ignoresSafeArea()
+            Text("Burnex")
+                 .font(.system(size: 42, weight: .ultraLight, design: .serif))
+                 .foregroundColor(.white)
+                 .tracking(12)
+                 .opacity(contentOpacity)
+                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                 .onAppear {
+                     withAnimation(.easeIn(duration: 1.0)) { contentOpacity = 1.0 }
+                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                         withAnimation {
+                             contentOpacity = 0
+                             step = 1
+                         }
+                     }
+                 }
+         } }
+ 
+
+    // MARK: - Hint View
+    private var hintView: some View {
+        VStack(spacing: 30) {
+            Text("Your Rhythm Starts With A Touch")
+                .font(.system(size: 24, weight: .light))
+                .foregroundColor(.white)
+            
+            Image(systemName: "hand.tap.fill")
+                .font(.system(size: 40))
+                .foregroundColor(.white.opacity(0.7))
+                .offset(y: hintBouncing)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onAppear {
+            withAnimation(.easeInOut(duration: 0.6).repeatForever()) {
+                hintBouncing = 12
+            }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            withAnimation(.easeInOut(duration: 0.8)) {
+                step = 2
+            }
+        }
+    }
+
+    // MARK: - Automatic Animation (Orbs)
+    private var automaticAnimationView: some View {
+        VStack(spacing: 40) {
+            Spacer()
+            Image(currentImageName(for: step))
+                .resizable()
+                .scaledToFit()
+                .frame(width: 300, height: 300)
+                .scaleEffect(pulseScale)
+                .opacity(imageOpacity)
+                .transition(.opacity)
+                .id(step)
+            
+            Text(currentInstruction(for: step))
+                .font(.system(size: 20, weight: .light))
+                .foregroundColor(.white)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 30)
+                .opacity(imageOpacity)
+            Spacer()
+        }
+        .onAppear {
+            startAutomaticSequence()
+        }
+    }
+
+    // MARK: - Manual Swiping Section
+    private var manualOnboardingView: some View {
+        VStack {
+            TabView(selection: $manualPage) {
+                manualPageContent(image: "AppleWatch", text: "Make Sure To Connect Your App With\nYour Apple Watch For Better Analysis")
+                    .tag(0)
+                
+                manualPageContent(image: "HealthIcon", text: "Or Enter Your Daily Data Manualy\nFrom Health App")
+                    .tag(1)
+                
+                manualPageContent(image: "Health", text: "Or Enter Your Daily Data Manualy\nFrom Health App", showButton: true)
+                    .tag(2)
+            }
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            
+            // النقاط (3 اندكيترز)
+            HStack(spacing: 8) {
+                ForEach(0..<3) { index in
+                    Circle()
+                        .fill(manualPage == index ? Color.white : Color.gray.opacity(0.5))
+                        .frame(width: 8, height: 8)
+                        .animation(.spring(), value: manualPage)
+                }
+            }
+            .padding(.bottom, manualPage == 2 ? 20 : 50)
+        }
+    }
+
+    private func manualPageContent(image: String, text: String, showButton: Bool = false) -> some View {
+        VStack(spacing: 40) {
+            Spacer()
+            Image(image)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 280, height: 280)
+            
+            Text(text)
+                .font(.system(size: 19, weight: .light))
+                .foregroundColor(.white)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 30)
+            
+            Spacer()
+            
+            if showButton {
+                Button(action: {
+                    navigateToHome = true // ينقل للهوم
+                }) {
+                    Text("Start with Burnex")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(RoundedRectangle(cornerRadius: 12).stroke(Color.white.opacity(0.5), lineWidth: 1))
+                        .background(Color.blue.opacity(0.2))
+                        .padding(.horizontal, 40)
+                }
+                .padding(.bottom, 30)
+            }
+        }
+    }
+
+    // MARK: - Logic Helpers
+    func startAutomaticSequence() {
+        triggerImageVisuals()
+        if step < 6 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
+                withAnimation(.easeInOut(duration: 0.8)) {
+                    step += 1
+                    startAutomaticSequence()
+                }
+            }
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                withAnimation { step = 7 }
+            }
         }
     }
     
-    var currentInstruction: String {
-        switch step {
-        case 2: return "This Is Your Calm"
-        case 3: return "Stay In Control"
-        case 4: return "But Life Gets Chaotic\nYour Rhythm Is Disrupted"
-        default: return ""
+    func triggerImageVisuals() {
+        imageOpacity = 0
+        withAnimation(.easeOut(duration: 0.6)) { imageOpacity = 1.0 }
+        withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
+            pulseScale = 1.06
         }
     }
+
+    func currentImageName(for s: Int) -> String {
+        let names = [2: "BlueTail", 3: "Bluehalf", 4: "BlueGlow", 5: "RedGlow", 6: "PurbleGlow"]
+        return names[s] ?? ""
+    }
+    
+    func currentInstruction(for s: Int) -> String {
+        if s <= 4 { return "This Is Your Calm" }
+        if s == 5 { return "But Life Gets Chaotic\nYour Rhythm Is Disrupted" }
+        return "With Aura You Don't Just Go Back\nYou Move Forward Balanced And Wiser"
+    }
 }
+
 
 #Preview {
     OnboardingView()
 }
+
