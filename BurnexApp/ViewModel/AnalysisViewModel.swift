@@ -11,7 +11,7 @@ import Combine
 class AnalysisViewModel: ObservableObject {
     @Published var chartData: [HealthDataPoint] = []
     @Published var selectedOption: String = "All"
-    @Published var selectedTimeRange: String = "W"
+    @Published var selectedTimeRange: String = "D"
     @Published var scrollPosition: Date = Date()
     @Published var rawSelectedDate: Date? = nil
     
