@@ -5,7 +5,7 @@
 //  Created by Jojo on 07/02/2026.
 import HealthKit
 
-class HealthManager {
+class HealthkitManager {
     let healthStore = HKHealthStore()
 
     // الأنواع التي نحتاج لقراءتها

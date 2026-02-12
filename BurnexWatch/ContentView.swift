@@ -1,8 +1,8 @@
 //
 //  ContentView.swift
-//  Burnexwatch Watch App
+//  BurnexWatch
 //
-//  Created by Faitmh ibrahim on 23/08/1447 AH.
+//  Created by Jojo on 12/02/2026.
 //
 
 import SwiftUI
@@ -20,5 +20,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    OverviewWatchView()
+    ContentView()
 }

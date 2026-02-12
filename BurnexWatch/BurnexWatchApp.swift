@@ -1,14 +1,14 @@
 //
-//  appwatApp.swift
-//  appwat Watch App
+//  BurnexWatchApp.swift
+//  BurnexWatch
 //
-//  Created by Faitmh ibrahim on 21/08/1447 AH.
+//  Created by Jojo on 12/02/2026.
 //
 
 import SwiftUI
 
 @main
-struct appwat: App {
+struct BurnexWatchApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack {
@@ -17,4 +17,3 @@ struct appwat: App {
         }
     }
 }
-

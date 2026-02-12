@@ -75,15 +75,25 @@ struct TestView: View {
                 .font(.caption)
                 .opacity(0.8)
             
-            Button(action: {}) {
-                Text("Start the test")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(.black)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 35)
-                    .background(Color.white.opacity(0.8))
-                    .cornerRadius(10)
+            NavigationStack {
+
+                Button(action: {
+                    // سيتم التنقل
+                }) {
+                    Text("Start the test")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(.black)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 35)
+                        .background(Color.white.opacity(0.8))
+                        .cornerRadius(10)
+                }
+                .navigationDestination(isPresented: .constant(false)) {
+                    BurnoutCheckView()
+                }
+
             }
+
         }
         .padding()
         .foregroundColor(.white)
@@ -173,14 +183,17 @@ struct ExpandedCardView: View {
             .frame(width: 5, height: 5)
     }
 }
-<<<<<<< HEAD
+
+
 #Preview {
     HomeView()
-=======
-
-#Preview{
     
-    TestView()
-    
->>>>>>> main
 }
+    #Preview{
+        
+        TestView()
+        
+        
+    }
+    
+
