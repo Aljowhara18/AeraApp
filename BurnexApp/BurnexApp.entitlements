@@ -14,7 +14,7 @@
 	<true/>
 	<key>com.apple.developer.icloud-container-identifiers</key>
 	<array>
-		<string>iCloud.com.Aljowhara.BurnexApp</string>
+		<string>iCloud.com.BurnexApp</string>
 	</array>
 	<key>com.apple.developer.icloud-extended-share-access</key>
 	<array/>
