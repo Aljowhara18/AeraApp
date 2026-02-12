@@ -6,6 +6,8 @@
 	<dict>
 		<key>BurnexApp.xcscheme_^#shared#^_</key>
 		<dict>
+			<key>isShown</key>
+			<true/>
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
@@ -13,6 +15,34 @@
 		<dict>
 			<key>orderHint</key>
 			<integer>1</integer>
+		</dict>
+		<key>Burnexwatchapp Watch App.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>6218B4CE2F3E43970040AECB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EB5360812F3DBA77000A8AC6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EB5360F52F3DC357000A8AC6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EBDA9CF22F37C92200A4264F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>
