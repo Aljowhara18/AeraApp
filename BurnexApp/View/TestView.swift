@@ -173,6 +173,14 @@ struct ExpandedCardView: View {
             .frame(width: 5, height: 5)
     }
 }
+<<<<<<< HEAD
 #Preview {
     HomeView()
+=======
+
+#Preview{
+    
+    TestView()
+    
+>>>>>>> main
 }
