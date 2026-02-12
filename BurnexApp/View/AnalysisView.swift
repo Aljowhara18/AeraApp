@@ -15,31 +15,50 @@ struct AnalysisView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
+                
+                //MARK: - Background
+                
                        Image("Background")
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .ignoresSafeArea()
                                 .frame(width: geometry.size.width, height: geometry.size.height)
                 
-                Color.black.opacity(0.3).ignoresSafeArea()///طبقة تعتيم
+                Color.black.opacity(0.3).ignoresSafeArea()
+                
+                //MARK: - Chart Rectangle
                 
                 VStack(alignment: .leading, spacing: 0) {
                     headerView
-                    pickerView.padding(.top, 15)
+                    pickerView
+                        .padding(.top, 16)
 
-                    VStack(alignment: .leading, spacing: 5) {
-                        HStack {
+                    ZStack(alignment: .topTrailing) {
+                        
+                        //Rectangle
+                        VStack(alignment: .leading, spacing: 5) {
                             dateHeader
-                            Spacer()
-                            filterMenu.padding(.trailing, 16).padding(.top, 16)
+                            mainChartView(height: geometry.size.height * 0.32)
+                                //.padding(.bottom, 15)
                         }
-                        mainChartView(height: geometry.size.height * 0.32)
+                        .padding(.bottom,16)
+                        .glassEffect(in: .rect(cornerRadius: 24))
+                        .clipShape(RoundedRectangle(cornerRadius: 24))
+                        
+                        
+                        //Picker
+                        filterMenu
+                            .padding(.top, 12)
+                            .padding(.trailing, 20)
+                            .zIndex(1) // مهم عشان يطلع فوق
                     }
-                    .background(Color.white.opacity(0.05))
-                    .clipShape(RoundedRectangle(cornerRadius: 24))
-                    .padding(.horizontal).padding(.top, 25)
+                    .padding(.horizontal)
+                    .padding(.top, 16)
+              
 
-                    // قسم الملخص الديناميكي
+
+                    //MARK: - Summary
+                    
                     VStack(alignment: .leading, spacing: 25) {
                         if viewModel.selectedOption == "All" || viewModel.selectedOption == "HRV" {
                             summaryRow(title: "HRV")
@@ -61,6 +80,7 @@ struct AnalysisView: View {
     }
 }
 
+
 // MARK: - View Components
 extension AnalysisView {
     private var headerView: some View {
@@ -71,7 +91,11 @@ extension AnalysisView {
         Picker("", selection: $viewModel.selectedTimeRange) {
             ForEach(["D", "W", "M", "Y"], id: \.self) { Text($0).tag($0) }
         }
-        .pickerStyle(.segmented).padding(.horizontal, 20)
+        .pickerStyle(.segmented)
+        .background(.black)
+        .cornerRadius(100)
+        .glassEffect(in: .rect(cornerRadius: 100))
+        .padding(.horizontal, 20)
         .onChange(of: viewModel.selectedTimeRange) { _ in viewModel.fetchChartData() }
     }
 
@@ -84,9 +108,12 @@ extension AnalysisView {
             HStack(spacing: 4) {
                 Text(viewModel.selectedOption)
                 Image(systemName: "chevron.down")
+                
             }
-            .font(.caption2).bold().padding(6)
-            .background(Capsule().fill(.white.opacity(0.1))).foregroundColor(.white)
+            .foregroundStyle(.white)
+            .frame(width: 95,height: 26)
+            .font(.system(size: 14))
+            .glassEffect(in:.rect(cornerRadius: 20))
         }
     }
 
@@ -179,4 +206,8 @@ extension AnalysisView {
         default: AxisMarks()
         }
     }
+}
+
+#Preview {
+    AnalysisView()
 }

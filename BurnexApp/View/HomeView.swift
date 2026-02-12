@@ -355,7 +355,7 @@ struct HomeView: View {
                 
                 // 3. التاب بار المخصص
                 customTabBar
-                    .padding(.bottom, 5)
+                    .padding()
             }
             .navigationBarHidden(true)
         }
@@ -422,7 +422,8 @@ struct HomeView: View {
         }
         .padding(.horizontal, 4)
         .frame(width: 350, height: 85)
-        .background(BlurView(style: .systemUltraThinMaterialDark))
+        .glassEffect(in:.rect(cornerRadius: 100))
+        .background(.black)
         .clipShape(Capsule())
         .padding(.bottom, 25)
     }
@@ -477,11 +478,14 @@ struct StatFlipButton: View {
                 .font(.system(size: 15, weight: .medium))
                 .foregroundColor(.white)
                 .frame(width: 110, height: 45)
-                .background(BlurView(style: .systemThinMaterialDark))
+                .glassEffect(in:.rect(cornerRadius: 100))
+                .background(.black.opacity(0.1))
                 .cornerRadius(20)
-                .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white.opacity(0.1)))
+                .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.red.opacity(0.1)))
         }
         .offset(x: pos.x, y: pos.y)
     }
 }
 
+#Preview{ HomeView()
+}
