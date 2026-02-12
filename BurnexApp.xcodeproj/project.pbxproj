@@ -29,6 +29,7 @@
 		EB5360CC2F3DBE6A000A8AC6 /* Exceptions for "BurnexApp" folder in "BurnexWatch" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				auraIcon.icon,
 				"Burnexwatch Watch App/AnalysisPagerView.swift",
 				"Burnexwatch Watch App/BurnexwatchApp.swift",
 				"Burnexwatch Watch App/ContentView.swift",
@@ -57,6 +58,7 @@
 		EB5361632F3DCF85000A8AC6 /* Exceptions for "BurnexApp" folder in "BurnexWatch Watch App" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				auraIcon.icon,
 				"Burnexwatch Watch App/AnalysisPagerView.swift",
 				"Burnexwatch Watch App/BurnexwatchApp.swift",
 				"Burnexwatch Watch App/ContentView.swift",
@@ -392,7 +394,9 @@
 				DEVELOPMENT_TEAM = 4C88H9734X;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "BurnexWatch-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = BurnexWatch1;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "we need your data";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "we really have to fetch your data";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -427,7 +431,9 @@
 				DEVELOPMENT_TEAM = 4C88H9734X;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "BurnexWatch-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = BurnexWatch1;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "we need your data";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "we really have to fetch your data";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -455,7 +461,7 @@
 		EBDA9D022F37C92300A4264F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = auraIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BurnexApp/BurnexApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -489,7 +495,7 @@
 		EBDA9D032F37C92300A4264F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = auraIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BurnexApp/BurnexApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;

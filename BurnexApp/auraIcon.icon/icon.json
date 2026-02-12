@@ -1,0 +1,36 @@
+{
+  "fill" : {
+    "automatic-gradient" : "display-p3:0.26196,0.23462,0.39502,1.00000"
+  },
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "image-name" : "Screenshot_1447-08-24_at_4.34.28_PM-removebg-preview.png",
+          "name" : "Screenshot_1447-08-24_at_4.34.28_PM-removebg-preview",
+          "position" : {
+            "scale" : 1.55,
+            "translation-in-points" : [
+              14,
+              0
+            ]
+          }
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}
