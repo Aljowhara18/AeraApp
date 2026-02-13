@@ -195,7 +195,6 @@
 //#Preview {
 //    BurnoutCheckView()
 //}
-
 import SwiftUI
 
 // 1. تعريف هيكل السؤال
@@ -214,6 +213,10 @@ struct BurnoutCheckView: View {
     @State private var reflectionTitle: String = ""
     @State private var reflectionDetails: String = ""
     
+    // --- متغيرات الحالة الجديدة للكارد ---
+    @State private var showSuccessPopup = false
+    @State private var navigateToTestView = false // للملاحة الجديدة
+    
     let questions = [
         Question(text: "I feel emotionally exhausted because of my work.", category: "EE"),
         Question(text: "I feel drained and worn out at the end of the workday.", category: "EE"),
@@ -224,21 +227,38 @@ struct BurnoutCheckView: View {
     ]
 
     var body: some View {
-        ZStack {
-            // --- الخلفية ---
-            Image("Background")
-                .resizable()
-                .ignoresSafeArea()
-            
-            if step == 0 {
-                // --- شاشة البداية ---
-                startPage
-            } else if step == 1 {
-                // --- شاشة الأسئلة ---
-                questionsPage
-            } else {
-                // --- شاشة النتيجة (المعدلة) ---
-                resultPage
+        NavigationStack { // أضفنا NavigationStack لتمكين التنقل
+            ZStack {
+                // --- الخلفية ---
+                Image("Background")
+                    .resizable()
+                    .ignoresSafeArea()
+                
+                if step == 0 {
+                    // --- شاشة البداية ---
+                    startPage
+                } else if step == 1 {
+                    // --- شاشة الأسئلة ---
+                    questionsPage
+                } else {
+                    // --- شاشة النتيجة (المعدلة) ---
+                    resultPage
+                }
+                
+                // --- إضافة الكارد فوق المحتوى ---
+                if showSuccessPopup {
+                    Color.black.opacity(0.4) // تعتيم بسيط للخلفية
+                        .ignoresSafeArea()
+                    
+                    successPopupView
+                        .transition(.scale.combined(with: .opacity))
+                        .zIndex(1)
+                }
+                
+                // رابط انتقال مخفي
+                NavigationLink(destination: TestView(), isActive: $navigateToTestView) {
+                    EmptyView()
+                }
             }
         }
     }
@@ -247,11 +267,10 @@ struct BurnoutCheckView: View {
     var startPage: some View {
         VStack(spacing: 0) {
             ZStack {
-                // تم إبقاء HStack فارغاً للحفاظ على توازن الـ ZStack والمسافات
                 HStack {
                     Spacer()
                 }
-                .frame(height: 44) // ارتفاع افتراضي يعادل مساحة زر الرجوع المحذوف
+                .frame(height: 44)
                 
                 Text("Burnout Check")
                     .font(.system(size: 22, weight: .bold))
@@ -303,15 +322,12 @@ struct BurnoutCheckView: View {
     var questionsPage: some View {
         VStack {
             HStack {
-                // تم استبدال الزر بـ Spacer بنفس العرض للحفاظ على توسيط النص في المنتصف
                 Spacer().frame(width: 40)
-                
                 Spacer()
                 Text("\(currentIdx + 1)/6")
                     .font(.headline)
                     .foregroundColor(.white)
                 Spacer()
-                
                 Spacer().frame(width: 40)
             }
             .padding(.horizontal, 25)
@@ -345,82 +361,131 @@ struct BurnoutCheckView: View {
 
     // MARK: - شاشة النتيجة
     var resultPage: some View {
-        ScrollView {
-            VStack(spacing: 25) {
-                VideoLoopPlayer(fileName: "Ball2")
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                    .colorMultiply(totalScore > 12 ? .red : .green)
-                    
-                Text(totalScore > 12 ? "You've been feeling tired lately Take care of yourself today" : "You're doing great!")
-                    .font(.title3)
-                    .foregroundColor(.white)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal)
-
-                VStack(alignment: .leading, spacing: 15) {
-                    Text("Your Reflection (optional)")
-                        .font(.headline)
+        VStack(spacing: 0) {
+            ScrollView {
+                VStack(spacing: 25) {
+                    VideoLoopPlayer(fileName: "Ball2")
+                        .frame(width: 200, height: 200)
+                        .clipShape(Circle())
+                        .colorMultiply(totalScore > 12 ? .red : .green)
+                        
+                    Text(totalScore > 12 ? "You've been feeling tired lately Take care of yourself today" : "You're doing great!")
+                        .font(.title3)
                         .foregroundColor(.white)
-                    
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Titel")
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                        TextField("Write title", text: $reflectionTitle)
-                            .padding()
-                            .background(Color.black.opacity(0.3))
-                            .cornerRadius(12)
-                            .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.white.opacity(0.2)))
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+
+                    VStack(alignment: .leading, spacing: 15) {
+                        Text("Your Reflection (optional)")
+                            .font(.headline)
                             .foregroundColor(.white)
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("More details")
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                        ZStack(alignment: .bottomTrailing) {
-                            TextEditor(text: $reflectionDetails)
-                                .frame(height: 100)
-                                .scrollContentBackground(.hidden)
-                                .padding(8)
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Titel")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            TextField("Write title", text: $reflectionTitle)
+                                .padding()
                                 .background(Color.black.opacity(0.3))
                                 .cornerRadius(12)
                                 .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.white.opacity(0.2)))
                                 .foregroundColor(.white)
-                            
-                            Text("\(reflectionDetails.count)/100")
-                                .font(.system(size: 10))
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("More details")
+                                .font(.caption)
                                 .foregroundColor(.gray)
-                                .padding(8)
+                            ZStack(alignment: .bottomTrailing) {
+                                TextEditor(text: $reflectionDetails)
+                                    .frame(height: 100)
+                                    .scrollContentBackground(.hidden)
+                                    .padding(8)
+                                    .background(Color.black.opacity(0.3))
+                                    .cornerRadius(12)
+                                    .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.white.opacity(0.2)))
+                                    .foregroundColor(.white)
+                                    .onChange(of: reflectionDetails) { newValue in
+                                        if newValue.count > 100 {
+                                            reflectionDetails = String(newValue.prefix(100))
+                                        }
+                                    }
+                                  
+                                Text("\(reflectionDetails.count)/100")
+                                    .font(.system(size: 10))
+                                    .foregroundColor(.gray)
+                                    .padding(8)
+                            }
                         }
                     }
+                    .padding(.horizontal, 30)
                 }
-                .padding(.horizontal, 30)
-
-                Button(action: {
-                    withAnimation {
-                        step = 0
-                        currentIdx = 0
-                        totalScore = 0
-                        selectedOption = nil
-                        reflectionTitle = ""
-                        reflectionDetails = ""
-                    }
-                }) {
-                    Text("Done")
-                        .font(.system(size: 20, weight: .bold))
-                        .foregroundColor(.white)
-                        .frame(width: 254, height: 49)
-                        .glassEffect(in:.rect(cornerRadius: 12))
-                        .background(.text.opacity(0.3))
-                        .cornerRadius(12)
-                        .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.white.opacity(0.2), lineWidth: 1))
-                        .background(RoundedRectangle(cornerRadius: 15).fill(Color.white.opacity(0.05)))
-                }
-                .padding(.horizontal, 40)
-                .padding(.bottom, 40)
+                .padding(.vertical, 20)
             }
+            
+            Button(action: {
+                withAnimation(.spring()) {
+                    showSuccessPopup = true
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                    withAnimation {
+                        showSuccessPopup = false
+                        // التعديل هنا: نقوم بتفعيل الانتقال بدلاً من العودة للبداية
+                        navigateToTestView = true
+                    }
+                }
+            }) {
+                Text("Release")
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundColor(.white)
+                    .frame(width: 254, height: 49)
+                    .glassEffect(in:.rect(cornerRadius: 12))
+                    .background(.text.opacity(0.3))
+                    .cornerRadius(12)
+                    .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.white.opacity(0.2), lineWidth: 1))
+                    .background(RoundedRectangle(cornerRadius: 15).fill(Color.white.opacity(0.05)))
+            }
+            .padding(.horizontal, 40)
+            .padding(.bottom, 40)
+        }
+    }
+
+    // MARK: - الكارد
+    var successPopupView: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 24)
+                .fill(Color(red: 0.12, green: 0.11, blue: 0.18))
+                .frame(width: 320, height: 380)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color.white.opacity(0.15), lineWidth: 1.5)
+                        .padding(12)
+                )
+            
+            VStack {
+                HStack {
+                    Circle().fill(Color.white.opacity(0.4)).frame(width: 6, height: 6)
+                    Spacer()
+                    Circle().fill(Color.white.opacity(0.4)).frame(width: 6, height: 6)
+                }
+                Spacer()
+                HStack {
+                    Circle().fill(Color.white.opacity(0.4)).frame(width: 6, height: 6)
+                    Spacer()
+                    Circle().fill(Color.white.opacity(0.4)).frame(width: 6, height: 6)
+                }
+            }
+            .frame(width: 260, height: 320)
+
+            VStack(spacing: 12) {
+                Text("It's out now")
+                    .font(.system(size: 26, weight: .medium))
+                Text("Take a deep breath")
+                    .font(.system(size: 30, weight: .bold))
+            }
+            .foregroundColor(.white.opacity(0.9))
+            .multilineTextAlignment(.center)
         }
     }
 
@@ -448,9 +513,8 @@ struct BurnoutCheckView: View {
     }
 }
 
-#Preview {
-    BurnoutCheckView()
-}
+
+
 #Preview {
     BurnoutCheckView()
 }

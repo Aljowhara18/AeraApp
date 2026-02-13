@@ -104,7 +104,7 @@ struct TestView: View {
     }
 }
 
-// MARK: - Supporting Views 
+// MARK: - Supporting Views
 
 struct ReflectionCard: View {
     let reflection: ReflectionModel
