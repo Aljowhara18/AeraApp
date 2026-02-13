@@ -16,6 +16,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Model/HealthKitManager.swift,
+				View/TestView.swift,
 			);
 			target = 6218B4CE2F3E43970040AECB /* Burnexwatchapp Watch App */;
 		};

@@ -247,16 +247,12 @@ struct BurnoutCheckView: View {
     var startPage: some View {
         VStack(spacing: 0) {
             ZStack {
+                // تم إبقاء HStack فارغاً للحفاظ على توازن الـ ZStack والمسافات
                 HStack {
-                    Button(action: {}) {
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 18, weight: .bold))
-                            .foregroundColor(.white)
-                            .padding(10)
-                            .background(Circle().fill(Color.white.opacity(0.1)))
-                    }
                     Spacer()
                 }
+                .frame(height: 44) // ارتفاع افتراضي يعادل مساحة زر الرجوع المحذوف
+                
                 Text("Burnout Check")
                     .font(.system(size: 22, weight: .bold))
                     .foregroundColor(.white)
@@ -297,7 +293,6 @@ struct BurnoutCheckView: View {
                     .cornerRadius(12)
                     .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.white.opacity(0.2), lineWidth: 1))
                     .background(RoundedRectangle(cornerRadius: 15).fill(Color.white.opacity(0.05)))
-                  
             }
             .padding(.horizontal, 40)
             .padding(.bottom, 40)
@@ -308,21 +303,15 @@ struct BurnoutCheckView: View {
     var questionsPage: some View {
         VStack {
             HStack {
-                Button(action: {
-                    withAnimation {
-                        if currentIdx > 0 { currentIdx -= 1 } else { step = 0 }
-                    }
-                }) {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(.white)
-                        .padding(10)
-                        .background(Circle().fill(Color.white.opacity(0.1)))
-                }
+                // تم استبدال الزر بـ Spacer بنفس العرض للحفاظ على توسيط النص في المنتصف
+                Spacer().frame(width: 40)
+                
                 Spacer()
                 Text("\(currentIdx + 1)/6")
                     .font(.headline)
                     .foregroundColor(.white)
                 Spacer()
+                
                 Spacer().frame(width: 40)
             }
             .padding(.horizontal, 25)
@@ -354,15 +343,10 @@ struct BurnoutCheckView: View {
         }
     }
 
-    // MARK: - شاشة النتيجة (المعدلة)
+    // MARK: - شاشة النتيجة
     var resultPage: some View {
         ScrollView {
             VStack(spacing: 25) {
-//                Text("Your Result")
-//                    .font(.largeTitle).bold()
-//                    .foregroundColor(.white)
-//                    .padding(.top, 20)
-                
                 VideoLoopPlayer(fileName: "Ball2")
                     .frame(width: 200, height: 200)
                     .clipShape(Circle())
@@ -374,7 +358,6 @@ struct BurnoutCheckView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
 
-                // --- قسم Reflection (كما في الصورة) ---
                 VStack(alignment: .leading, spacing: 15) {
                     Text("Your Reflection (optional)")
                         .font(.headline)
@@ -415,7 +398,6 @@ struct BurnoutCheckView: View {
                 }
                 .padding(.horizontal, 30)
 
-                // --- زر Done (ستايل ستارت) ---
                 Button(action: {
                     withAnimation {
                         step = 0
@@ -442,7 +424,6 @@ struct BurnoutCheckView: View {
         }
     }
 
-    // مكون التنبيه الصغير
     var warningView: some View {
         HStack(alignment: .top, spacing: 8) {
             Image(systemName: "exclamationmark.triangle.fill")
@@ -467,6 +448,9 @@ struct BurnoutCheckView: View {
     }
 }
 
+#Preview {
+    BurnoutCheckView()
+}
 #Preview {
     BurnoutCheckView()
 }
