@@ -11,32 +11,34 @@ struct OverviewWatchView: View {
     private let ringSize: CGFloat = 140
 
     var body: some View {
-        ZStack {
-            Color.black.ignoresSafeArea()
-            
-            VStack(spacing: 0) {
-                // العنوان
-                headerSection
-                    .padding(.top, 2)
+        NavigationStack {
+            ZStack {
+                Color.black.ignoresSafeArea()
                 
-                // الحلقة مع الفيديو الخلفي
-                ZStack {
-                    Color.clear
-                    RingWithFullBackgroundVideo(progress: vm.averageProgress, size: ringSize)
+                VStack(spacing: 0) {
+                    // العنوان
+                    headerSection
+                        .padding(.top, 2)
+                    
+                    // الحلقة مع الفيديو الخلفي
+                    ZStack {
+                        Color.clear
+                        RingWithFullBackgroundVideo(progress: vm.averageProgress, size: ringSize)
+                    }
+                    .frame(height: ringContainerHeight)
+                    .frame(maxWidth: .infinity)
+                    
+                    Spacer(minLength: 6)
+                    
+                    // زر الانتقال
+                    navigationButton
+                        .padding(.bottom, 2)
                 }
-                .frame(height: ringContainerHeight)
-                .frame(maxWidth: .infinity)
-                
-                Spacer(minLength: 6)
-                
-                // زر الانتقال
-                navigationButton
-                    .padding(.bottom, 2)
+                .padding(.horizontal, 8)
             }
-            .padding(.horizontal, 8)
-        }
-        .onAppear {
-            vm.requestAndFetch()
+            .onAppear {
+                vm.requestAndFetch()
+            }
         }
     }
 }
@@ -52,8 +54,10 @@ struct RingWithFullBackgroundVideo: View {
         }
         let p = AVPlayer(url: url)
         p.isMuted = true // كتم الصوت ضروري للتشغيل كخلفية
+        p.actionAtItemEnd = .none
         return p
     }()
+    @State private var endObserver: NSObjectProtocol?
 
     var body: some View {
         ZStack {
@@ -66,7 +70,7 @@ struct RingWithFullBackgroundVideo: View {
                         player.play()
                         
                         // إعادة تشغيل الفيديو تلقائياً (Loop)
-                        NotificationCenter.default.addObserver(
+                        endObserver = NotificationCenter.default.addObserver(
                             forName: .AVPlayerItemDidPlayToEndTime,
                             object: player.currentItem,
                             queue: .main
@@ -74,6 +78,13 @@ struct RingWithFullBackgroundVideo: View {
                             player.seek(to: .zero)
                             player.play()
                         }
+                    }
+                    .onDisappear {
+                        if let endObserver {
+                            NotificationCenter.default.removeObserver(endObserver)
+                            self.endObserver = nil
+                        }
+                        player.pause()
                     }
                     .frame(width: size, height: size)
                     .clipShape(Circle())
@@ -159,9 +170,8 @@ private extension OverviewWatchView {
         .buttonStyle(.plain)
     }
 }
-#Preview {
-    NavigationStack {
-        OverviewWatchView()
-    }
-}
 
+#Preview {
+    // لا حاجة لإضافة NavigationStack هنا لأنه مدمج داخل العرض
+    OverviewWatchView()
+}
