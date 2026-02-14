@@ -195,6 +195,7 @@
 //#Preview {
 //    BurnoutCheckView()
 //}
+
 import SwiftUI
 
 // 1. تعريف هيكل السؤال
@@ -204,18 +205,18 @@ struct Question {
 }
 
 struct BurnoutCheckView: View {
-    @State private var step = 0 // 0: البداية، 1: الأسئلة، 2: النتيجة
+    @ObservedObject var viewModel: TestViewModel
+    @Environment(\.dismiss) var dismiss
+    @State private var step = 0
     @State private var currentIdx = 0
     @State private var selectedOption: Int? = nil
     @State private var totalScore = 0
     
-    // متغيرات الكتابة الجديدة
     @State private var reflectionTitle: String = ""
     @State private var reflectionDetails: String = ""
     
-    // --- متغيرات الحالة الجديدة للكارد ---
     @State private var showSuccessPopup = false
-    @State private var navigateToTestView = false // للملاحة الجديدة
+    @State private var navigateToTestView = false
     
     let questions = [
         Question(text: "I feel emotionally exhausted because of my work.", category: "EE"),
@@ -227,40 +228,36 @@ struct BurnoutCheckView: View {
     ]
 
     var body: some View {
-        NavigationStack { // أضفنا NavigationStack لتمكين التنقل
-            ZStack {
-                // --- الخلفية ---
-                Image("Background")
-                    .resizable()
+        ZStack {
+            // --- الخلفية ---
+            Image("Background")
+                .resizable()
+                .ignoresSafeArea()
+            
+            if step == 0 {
+                startPage
+            } else if step == 1 {
+                questionsPage
+            } else {
+                resultPage
+            }
+            
+            // --- تعديل طبقة الكارد ليكون الخلفية ضبابية (نفس تأثير Expanded) ---
+            if showSuccessPopup {
+                Color.black.opacity(0.6) // تعتيم خفيف
+                    .background(.ultraThinMaterial.opacity(0.8)) // التغبيش (Blur) للخلفية
                     .ignoresSafeArea()
                 
-                if step == 0 {
-                    // --- شاشة البداية ---
-                    startPage
-                } else if step == 1 {
-                    // --- شاشة الأسئلة ---
-                    questionsPage
-                } else {
-                    // --- شاشة النتيجة (المعدلة) ---
-                    resultPage
-                }
-                
-                // --- إضافة الكارد فوق المحتوى ---
-                if showSuccessPopup {
-                    Color.black.opacity(0.4) // تعتيم بسيط للخلفية
-                        .ignoresSafeArea()
-                    
-                    successPopupView
-                        .transition(.scale.combined(with: .opacity))
-                        .zIndex(1)
-                }
-                
-                // رابط انتقال مخفي
-                NavigationLink(destination: TestView(), isActive: $navigateToTestView) {
-                    EmptyView()
-                }
+                successPopupView
+                    .transition(.scale(scale: 0.8).combined(with: .opacity))
+                    .zIndex(1)
+            }
+            
+            NavigationLink(destination: TestView(viewModel: viewModel), isActive: $navigateToTestView) {
+                EmptyView()
             }
         }
+        .navigationBarBackButtonHidden(true)
     }
 
     // MARK: - شاشة البداية
@@ -268,6 +265,12 @@ struct BurnoutCheckView: View {
         VStack(spacing: 0) {
             ZStack {
                 HStack {
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundColor(.white)
+                            .padding(.leading, 20)
+                    }
                     Spacer()
                 }
                 .frame(height: 44)
@@ -300,9 +303,7 @@ struct BurnoutCheckView: View {
 
             warningView
 
-            Button(action: {
-                withAnimation { step = 1 }
-            }) {
+            Button(action: { withAnimation { step = 1 } }) {
                 Text("Start")
                     .font(.system(size: 20, weight: .bold))
                     .foregroundColor(.white)
@@ -410,7 +411,7 @@ struct BurnoutCheckView: View {
                                             reflectionDetails = String(newValue.prefix(100))
                                         }
                                     }
-                                  
+                                    
                                 Text("\(reflectionDetails.count)/100")
                                     .font(.system(size: 10))
                                     .foregroundColor(.gray)
@@ -424,15 +425,22 @@ struct BurnoutCheckView: View {
             }
             
             Button(action: {
-                withAnimation(.spring()) {
+                let trimmedTitle = reflectionTitle.trimmingCharacters(in: .whitespaces)
+                if !trimmedTitle.isEmpty {
+                    viewModel.addReflection(
+                        title: trimmedTitle,
+                        content: reflectionDetails.isEmpty ? "No details provided" : reflectionDetails
+                    )
+                }
+
+                withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
                     showSuccessPopup = true
                 }
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
                     withAnimation {
                         showSuccessPopup = false
-                        // التعديل هنا: نقوم بتفعيل الانتقال بدلاً من العودة للبداية
-                        navigateToTestView = true
+                        dismiss()
                     }
                 }
             }) {
@@ -451,41 +459,47 @@ struct BurnoutCheckView: View {
         }
     }
 
-    // MARK: - الكارد
+    // MARK: - الكارد المنبثق المائي المحدث (مطابق لـ ExpandedCardView)
     var successPopupView: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 24)
-                .fill(Color(red: 0.12, green: 0.11, blue: 0.18))
-                .frame(width: 320, height: 380)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.white.opacity(0.15), lineWidth: 1.5)
-                        .padding(12)
-                )
-            
-            VStack {
-                HStack {
-                    Circle().fill(Color.white.opacity(0.4)).frame(width: 6, height: 6)
+            ZStack {
+                // 1. الخلفية المائية (نفس ExpandedCardView)
+                RoundedRectangle(cornerRadius: 25).fill(Color.white.opacity(0.1))
+                
+                // 2. الإطار الداخلي
+                RoundedRectangle(cornerRadius: 20).stroke(Color.white.opacity(0.2), lineWidth: 1).padding(10)
+                
+                // 3. الإطار الخارجي
+                RoundedRectangle(cornerRadius: 25).stroke(Color.white.opacity(0.3), lineWidth: 1.5)
+                
+                // 4. النقاط الجمالية في الزوايا
+                VStack {
+                    HStack {
+                        Circle().fill(Color.white.opacity(0.4)).frame(width: 6, height: 6)
+                        Spacer()
+                        Circle().fill(Color.white.opacity(0.4)).frame(width: 6, height: 6)
+                    }
                     Spacer()
-                    Circle().fill(Color.white.opacity(0.4)).frame(width: 6, height: 6)
+                    HStack {
+                        Circle().fill(Color.white.opacity(0.4)).frame(width: 6, height: 6)
+                        Spacer()
+                        Circle().fill(Color.white.opacity(0.4)).frame(width: 6, height: 6)
+                    }
                 }
-                Spacer()
-                HStack {
-                    Circle().fill(Color.white.opacity(0.4)).frame(width: 6, height: 6)
-                    Spacer()
-                    Circle().fill(Color.white.opacity(0.4)).frame(width: 6, height: 6)
-                }
-            }
-            .frame(width: 260, height: 320)
+                .padding(25)
 
-            VStack(spacing: 12) {
-                Text("It's out now")
-                    .font(.system(size: 26, weight: .medium))
-                Text("Take a deep breath")
-                    .font(.system(size: 30, weight: .bold))
+                // 5. محتوى النص
+                VStack(spacing: 12) {
+                    Text("It's out now")
+                        .font(.system(size: 26, weight: .medium))
+                    Text("Take a deep breath")
+                        .font(.system(size: 30, weight: .bold))
+                }
+                .foregroundColor(.white)
+                .multilineTextAlignment(.center)
             }
-            .foregroundColor(.white.opacity(0.9))
-            .multilineTextAlignment(.center)
+            .frame(width: 300, height: 320)
+            .shadow(color: .black.opacity(0.2), radius: 20)
         }
     }
 
@@ -513,8 +527,6 @@ struct BurnoutCheckView: View {
     }
 }
 
-
-
 #Preview {
-    BurnoutCheckView()
+    BurnoutCheckView(viewModel: TestViewModel())
 }

@@ -9,13 +9,15 @@ import SwiftUI
 
 struct OnboardingView: View {
     // MARK: - Properties
+    // ربط الحالة بذاكرة الجهاز لضمان عدم ظهور الاونبوردنق مرة أخرى بعد الانتهاء
+    @AppStorage("hasSeenOnboarding") var hasSeenOnboarding: Bool = false
+    
     @State private var step = 0
     @State private var contentOpacity: Double = 0.0
     @State private var pulseScale: CGFloat = 1.0
     @State private var hintBouncing: CGFloat = 0.0
     @State private var imageOpacity: Double = 0.0
     
-    // ستايت للتحكم في الصفحات اليدوية والنافقيشن
     @State private var manualPage = 0
     @State private var navigateToHome = false
 
@@ -24,7 +26,7 @@ struct OnboardingView: View {
             ZStack(alignment: .topTrailing) {
                 Color.black.ignoresSafeArea()
                 
-                // --- محتوى الصفحات بناءً على الـ Step ---
+                // --- المحتوى الرئيسي بناءً على المرحلة ---
                 Group {
                     if step == 0 {
                         splashView
@@ -37,10 +39,16 @@ struct OnboardingView: View {
                     }
                 }
                 
-                // --- زر Skip (ينقل للهوم مباشرة) ---
-                if step > 6 && manualPage < 2 {
+                // --- زر Skip الذكي ---
+                if step > 0 && !(step > 6 && manualPage == 1) {
                     Button(action: {
-                        navigateToHome = true // تعديل: الآن ينقل لصفحة الهوم فوراً
+                        if step <= 6 {
+                            // إذا كان في مرحلة الأورب، ينقله للمرحلة اليدوية
+                            withAnimation { step = 7 }
+                        } else {
+                            // إذا كان في المرحلة اليدوية، ينهي الاونبوردنق تماماً
+                            withAnimation { hasSeenOnboarding = true }
+                        }
                     }) {
                         Text("Skip")
                             .font(.system(size: 16, weight: .medium))
@@ -49,177 +57,154 @@ struct OnboardingView: View {
                             .padding(.trailing, 25)
                     }
                     .transition(.opacity)
+                    .zIndex(2)
                 }
             }
-            // ربط النافقيشن بالوجهة المطلوبة
-            .navigationDestination(isPresented: $navigateToHome) {
-                HomeView()
-            }
         }
     }
 
-    // MARK: - Splash View
+    // MARK: - 1. Splash View
     private var splashView: some View {
-        ZStack{
-            Image("Background")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .ignoresSafeArea()
+        ZStack {
+            Image("Background").resizable().aspectRatio(contentMode: .fill).ignoresSafeArea()
             Text("Burnex")
-                 .font(.system(size: 42, weight: .ultraLight, design: .serif))
-                 .foregroundColor(.white)
-                 .tracking(12)
-                 .opacity(contentOpacity)
-                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                 .onAppear {
-                     withAnimation(.easeIn(duration: 1.0)) { contentOpacity = 1.0 }
-                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                         withAnimation {
-                             contentOpacity = 0
-                             step = 1
-                         }
-                     }
-                 }
-         } }
- 
+                .font(.system(size: 42, weight: .ultraLight, design: .serif))
+                .foregroundColor(.white).tracking(12).opacity(contentOpacity)
+                .onAppear {
+                    withAnimation(.easeIn(duration: 1.0)) { contentOpacity = 1.0 }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        withAnimation { contentOpacity = 0; step = 1 }
+                    }
+                }
+        }
+    }
 
-    // MARK: - Hint View
+    // MARK: - 2. Hint View
     private var hintView: some View {
         VStack(spacing: 30) {
-            Text("Your Rhythm Starts With A Touch")
-                .font(.system(size: 24, weight: .light))
-                .foregroundColor(.white)
-            
-            Image(systemName: "hand.tap.fill")
-                .font(.system(size: 40))
-                .foregroundColor(.white.opacity(0.7))
-                .offset(y: hintBouncing)
+            Text("Your Rhythm Starts With A Touch").font(.system(size: 24, weight: .light)).foregroundColor(.white)
+            Image(systemName: "hand.tap.fill").font(.system(size: 40)).foregroundColor(.white.opacity(0.7)).offset(y: hintBouncing)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .onAppear {
-            withAnimation(.easeInOut(duration: 0.6).repeatForever()) {
-                hintBouncing = 12
-            }
-        }
+        .onAppear { withAnimation(.easeInOut(duration: 0.6).repeatForever()) { hintBouncing = 12 } }
         .contentShape(Rectangle())
-        .onTapGesture {
-            withAnimation(.easeInOut(duration: 0.8)) {
-                step = 2
-            }
-        }
+        .onTapGesture { withAnimation(.easeInOut(duration: 0.8)) { step = 2 } }
     }
 
-    // MARK: - Automatic Animation (Orbs)
+    // MARK: - 3. Automatic Animation (Orbs)
     private var automaticAnimationView: some View {
-        VStack(spacing: 40) {
+        VStack(spacing: 0) {
             Spacer()
-            Image(currentImageName(for: step))
-                .resizable()
-                .scaledToFit()
-                .frame(width: 300, height: 300)
-                .scaleEffect(pulseScale)
-                .opacity(imageOpacity)
-                .transition(.opacity)
-                .id(step)
+            // عرض الصور من المركز (Cross-fade)
+            ZStack {
+                ForEach(2...6, id: \.self) { i in
+                    if step == i {
+                        Image(currentImageName(for: i))
+                            .resizable().scaledToFit()
+                            .frame(width: i == 2 ? 240 : 300, height: i == 2 ? 240 : 300)
+                            .scaleEffect(pulseScale)
+                            // تحكم بمكان الصورة الأولى (BlueTail) من هنا
+                            .offset(y: i == 2 ? 60 : 0)
+                            .transition(.opacity.animation(.easeInOut(duration: 0.8)))
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity).frame(height: 300)
             
-            Text(currentInstruction(for: step))
-                .font(.system(size: 20, weight: .light))
-                .foregroundColor(.white)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 30)
-                .opacity(imageOpacity)
+            // نصوص ثابتة المكان لضمان ثبات التصميم
+            ZStack {
+                ForEach(2...6, id: \.self) { i in
+                    if step == i {
+                        Text(currentInstruction(for: i)).font(.system(size: 20, weight: .light)).foregroundColor(.white)
+                            .multilineTextAlignment(.center).padding(.horizontal, 30)
+                            .transition(.opacity.animation(.easeInOut(duration: 0.8)))
+                    }
+                }
+            }
+            .frame(height: 100).frame(maxWidth: .infinity).padding(.top, 40)
             Spacer()
         }
-        .onAppear {
-            startAutomaticSequence()
-        }
+        .onAppear { startAutomaticSequence() }
     }
 
-    // MARK: - Manual Swiping Section
+    // MARK: - 4. Manual Swiping Section
     private var manualOnboardingView: some View {
-        VStack {
+        VStack(spacing: 0) {
+            Spacer()
+            
+            // النص في الأعلى (ثابت)
+            ZStack {
+                if manualPage == 0 {
+                    Text("Make Sure To Connect Your App With\nYour Apple Watch For Better Analysis")
+                        .transition(.opacity)
+                } else {
+                    Text("Or Enter Your Daily Data Manually\nFrom Health App")
+                        .transition(.opacity)
+                }
+            }
+            .font(.system(size: 19, weight: .light)).foregroundColor(.white)
+            .multilineTextAlignment(.center).padding(.horizontal, 30)
+            .frame(height: 80).padding(.bottom, 20)
+
+            // الصور (تتحرك عند السحب)
             TabView(selection: $manualPage) {
-                manualPageContent(image: "AppleWatch", text: "Make Sure To Connect Your App With\nYour Apple Watch For Better Analysis")
-                    .tag(0)
-                
-                manualPageContent(image: "HealthIcon", text: "Or Enter Your Daily Data Manualy\nFrom Health App")
-                    .tag(1)
-                
-                manualPageContent(image: "Health", text: "Or Enter Your Daily Data Manualy\nFrom Health App", showButton: true)
-                    .tag(2)
+                Image("AppleWatch").resizable().scaledToFit().frame(width: 320, height: 320).tag(0)
+                Image("HealthIcon").resizable().scaledToFit().frame(width: 320, height: 320).tag(1)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
+            .frame(height: 320)
             
-            // النقاط (3 اندكيترز)
+            // الإنديكيتور تحت الصور مباشرة
             HStack(spacing: 8) {
-                ForEach(0..<3) { index in
+                ForEach(0..<2) { index in
                     Circle()
                         .fill(manualPage == index ? Color.white : Color.gray.opacity(0.5))
                         .frame(width: 8, height: 8)
                         .animation(.spring(), value: manualPage)
                 }
             }
-            .padding(.bottom, manualPage == 2 ? 20 : 50)
-        }
-    }
-
-    private func manualPageContent(image: String, text: String, showButton: Bool = false) -> some View {
-        VStack(spacing: 40) {
-            Spacer()
-            Image(image)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 280, height: 280)
-            
-            Text(text)
-                .font(.system(size: 19, weight: .light))
-                .foregroundColor(.white)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 30)
+            .padding(.top, 30)
             
             Spacer()
             
-            if showButton {
-                Button(action: {
-                    navigateToHome = true // ينقل للهوم
-                }) {
-                    Text("Start with Burnex")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 12).stroke(Color.white.opacity(0.5), lineWidth: 1))
-                        .background(Color.blue.opacity(0.2))
-                        .padding(.horizontal, 40)
+            // زر البدء النهائي (بتصميم زجاجي مطابق لزر البدء الأول)
+            VStack {
+                if manualPage == 1 {
+                    Button(action: {
+                        withAnimation { hasSeenOnboarding = true }
+                    }) {
+                        Text("Start with Burnex")
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundColor(.white)
+                            .frame(width: 254, height: 49)
+                            .glassEffect(in:.rect(cornerRadius: 12))
+                            .background(.text.opacity(0.3))
+                            .cornerRadius(12)
+                            .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.white.opacity(0.2), lineWidth: 1))
+                            .background(RoundedRectangle(cornerRadius: 15).fill(Color.white.opacity(0.05)))
+                    }
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
-                .padding(.bottom, 30)
             }
+            .frame(height: 60).padding(.bottom, 40)
         }
+        .animation(.easeInOut, value: manualPage)
     }
 
     // MARK: - Logic Helpers
     func startAutomaticSequence() {
-        triggerImageVisuals()
-        if step < 6 {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
-                withAnimation(.easeInOut(duration: 0.8)) {
-                    step += 1
-                    startAutomaticSequence()
-                }
-            }
-        } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+        guard step <= 6 else { return }
+        // توقيت ذكي: سريع لأول صورتين (اكتمال الدائرة) وبطيء للبقية (للقراءة)
+        let delay: Double = (step == 2 || step == 3) ? 0.6 : 3.0
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            if step < 6 {
+                withAnimation { step += 1; startAutomaticSequence() }
+            } else if step == 6 {
                 withAnimation { step = 7 }
             }
         }
-    }
-    
-    func triggerImageVisuals() {
-        imageOpacity = 0
-        withAnimation(.easeOut(duration: 0.6)) { imageOpacity = 1.0 }
-        withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
-            pulseScale = 1.06
-        }
+        withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) { pulseScale = 1.05 }
     }
 
     func currentImageName(for s: Int) -> String {
@@ -233,8 +218,6 @@ struct OnboardingView: View {
         return "With Aura You Don't Just Go Back\nYou Move Forward Balanced And Wiser"
     }
 }
-
-
 #Preview {
     OnboardingView()
 }

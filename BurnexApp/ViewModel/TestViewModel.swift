@@ -5,26 +5,42 @@
 //  Created by Jojo on 10/02/2026.
 //
 
+
 import SwiftUI
 import Combine
-
 class TestViewModel: ObservableObject {
-    @Published var reflections: [ReflectionModel] = [
-        // بيانات تجريبية مطابقة للصورة
-        ReflectionModel(title: "Meetings", content: "There is lot of meetings happens this period and thats why i feel so exhausted"),
-        ReflectionModel(title: "Close Out Project", content: "Finalizing the documentation was tough but rewarding.")
-    ]
+    @Published var reflections: [ReflectionModel] = []
     
-    // دالة للتحكم في حالة الكارد
+    // ✅ متغيرات جديدة للتحكم في الحذف والتنبيه
+    @Published var showDeleteAlert = false
+    @Published var itemToDelete: ReflectionModel? = nil
+    
+    func addReflection(title: String, content: String) {
+        // لن نقوم بإضافة كارد إلا إذا كان العنوان يحتوي على نص فعلي
+        let trimmedTitle = title.trimmingCharacters(in: .whitespaces)
+        if !trimmedTitle.isEmpty {
+            let newReflection = ReflectionModel(title: trimmedTitle, content: content)
+            withAnimation(.spring()) {
+                reflections.insert(newReflection, at: 0)
+            }
+        }
+    }
+    
+    func deleteReflection(id: UUID) {
+        withAnimation(.spring()) {
+            reflections.removeAll(where: { $0.id == id })
+        }
+    }
+    
+    // باقي الدوال (toggleCard, closeCard) تبقى كما هي...
+
     func toggleCard(id: UUID) {
         if let index = reflections.firstIndex(where: { $0.id == id }) {
             if !reflections[index].isExpanded {
-                // إذا لم تكن مكبرة، نكبرها أولاً
                 withAnimation(.spring()) {
                     reflections[index].isExpanded = true
                 }
             } else {
-                // إذا كانت مكبرة، نقلبها لإظهار المحتوى
                 withAnimation(.spring()) {
                     reflections[index].isFlipped.toggle()
                 }
@@ -32,7 +48,6 @@ class TestViewModel: ObservableObject {
         }
     }
     
-    // دالة لتصغير الكارد عند الضغط خارجها
     func closeCard(id: UUID) {
         if let index = reflections.firstIndex(where: { $0.id == id }) {
             withAnimation(.spring()) {

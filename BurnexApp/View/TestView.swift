@@ -5,62 +5,75 @@
 //  Created by Jojo on 10/02/2026.
 import SwiftUI
 
-// MARK: - Main View
 struct TestView: View {
-    @StateObject private var viewModel = TestViewModel()
+    // استقبال الـ ViewModel المشترك لضمان تزامن البيانات
+    @ObservedObject var viewModel: TestViewModel
+
+    // إعداد الشبكة لعرض كاردين في كل صف (2 تحت 2)
+    let columns = [
+        GridItem(.flexible(), spacing: 20),
+        GridItem(.flexible(), spacing: 20)
+    ]
+
+    // Initializer للسماح بالتشغيل المستقل ولحل أخطاء الاستدعاء
+    init(viewModel: TestViewModel = TestViewModel()) {
+        self.viewModel = viewModel
+    }
     
     var body: some View {
         NavigationStack {
             ZStack {
-                // 1. الخلفية الأساسية - تم استبدال اللون بالصورة مع منطق الحجم الكامل
-                Image("Background") // تأكد أن الحرف الأول كبير كما في الكود الأول
+                // 1. الخلفية
+                Image("Background")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
                     .clipped()
                     .ignoresSafeArea()
                 
-                // 2. المحتوى فوق الخلفية
+                // 2. المحتوى الرئيسي
                 VStack(alignment: .leading, spacing: 20) {
-                    
                     Text("Test")
                         .font(.system(size: 34, weight: .bold))
                         .foregroundColor(.white)
-                        .padding(.top, 60)
+                        .padding(.top, 90)
                     
-                    // 🔹 البانر (startTestBanner)
-                    NavigationLink(destination: BurnoutCheckView()) {
+                    // رابط الانتقال لصفحة الاختبار مع تمرير الـ ViewModel
+                    NavigationLink(destination: BurnoutCheckView(viewModel: viewModel)) {
                         startTestBanner
                     }
 
-                    HStack {
-                        Text("Your Reflection")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                        Spacer()
-                        Button("Show More") {}
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                    }
-                    .padding(.top, 20)
+                    Text("Your Reflection")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding(.top, 20)
                     
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 20) {
+                    // عرض الكروت في شبكة عمودية
+                    ScrollView(.vertical, showsIndicators: false) {
+                        LazyVGrid(columns: columns, spacing: 20) {
                             ForEach(viewModel.reflections) { reflection in
                                 ReflectionCard(reflection: reflection) {
                                     viewModel.toggleCard(id: reflection.id)
                                 }
+                                .simultaneousGesture(
+                                    LongPressGesture(minimumDuration: 0.8)
+                                        .onEnded { _ in
+                                            let impact = UIImpactFeedbackGenerator(style: .heavy)
+                                            impact.impactOccurred()
+                                            
+                                            viewModel.itemToDelete = reflection
+                                            viewModel.showDeleteAlert = true
+                                        }
+                                )
                             }
                         }
+                        .padding(.bottom, 30)
                     }
-                    
-                    Spacer()
                 }
                 .padding(.horizontal, 25)
-                // التغبيش يطبق على المحتوى والخلفية معاً عند الحاجة
                 .blur(radius: viewModel.reflections.contains(where: { $0.isExpanded }) ? 10 : 0)
                 
-                // 3. الطبقة العلوية عند تكبير الكارد (Expanded Card Overlay)
+                // 3. طبقة الكارد المكبر (Expanded Overlay)
                 if let expandedItem = viewModel.reflections.first(where: { $0.isExpanded }) {
                     Color.black.opacity(0.4)
                         .ignoresSafeArea()
@@ -73,39 +86,40 @@ struct TestView: View {
                     }
                 }
             }
+            .alert("Delete Reflection", isPresented: $viewModel.showDeleteAlert) {
+                Button("Delete", role: .destructive) {
+                    if let item = viewModel.itemToDelete {
+                        viewModel.deleteReflection(id: item.id)
+                    }
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("Are you sure you want to delete this reflection? This action cannot be undone.")
+            }
         }
+        .navigationBarBackButtonHidden(true)
     }
 
-    // القسم الخاص بالبانر
     private var startTestBanner: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: "sparkles")
-                Text("Start New Test")
-                    .font(.headline)
+                Text("Start New Test").font(.headline)
             }
             Text("Elevated Stress detected, help us understand your rhythm")
-                .font(.caption)
-                .opacity(0.8)
-            
+                .font(.caption).opacity(0.8)
             Text("Start the test")
                 .font(.system(size: 14, weight: .bold))
                 .foregroundColor(.black)
-                .frame(maxWidth: .infinity)
-                .frame(height: 35)
-                .background(Color.white.opacity(0.8))
-                .cornerRadius(10)
+                .frame(maxWidth: .infinity).frame(height: 35)
+                .background(Color.white.opacity(0.8)).cornerRadius(10)
         }
-        .padding()
-        .foregroundColor(.white)
-        .background(Color.white.opacity(0.1))
-        .cornerRadius(20)
+        .padding().foregroundColor(.white).background(Color.white.opacity(0.1)).cornerRadius(20)
         .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white.opacity(0.1), lineWidth: 1))
     }
 }
 
-// MARK: - Supporting Views
-
+// ✅ تصميم الكارد الصغير
 struct ReflectionCard: View {
     let reflection: ReflectionModel
     let action: () -> Void
@@ -118,35 +132,52 @@ struct ReflectionCard: View {
                 Text(reflection.title)
                     .font(.system(size: 18, weight: .medium))
                     .foregroundColor(.white)
+                    .padding(5)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.center)
             }
-            .frame(width: 130, height: 160)
+            .frame(maxWidth: 147)
+            .frame(height: 160)
         }
     }
 }
 
+// ✅ تصميم الكارد المكبر مع إضافة النقاط عند القلب
 struct ExpandedCardView: View {
     let reflection: ReflectionModel
     let action: () -> Void
     var body: some View {
         ZStack {
             ZStack {
-                RoundedRectangle(cornerRadius: 25)
-                    .fill(Color.white.opacity(0.1))
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(Color.white.opacity(0.2), lineWidth: 1)
-                    .padding(10)
-                RoundedRectangle(cornerRadius: 25)
-                    .stroke(Color.white.opacity(0.3), lineWidth: 1.5)
+                // الخلفية الأساسية
+                RoundedRectangle(cornerRadius: 25).fill(Color.white.opacity(0.1))
                 
+                // الإطار الداخلي
+                RoundedRectangle(cornerRadius: 20).stroke(Color.white.opacity(0.2), lineWidth: 1).padding(10)
+                
+                // الإطار الخارجي
+                RoundedRectangle(cornerRadius: 25).stroke(Color.white.opacity(0.3), lineWidth: 1.5)
+                
+                // ✨ إضافة النقاط في الزوايا فقط عند قلب الكارد
                 if reflection.isFlipped {
                     VStack {
-                        HStack { dot; Spacer(); dot }
+                        HStack {
+                            Circle().fill(Color.white.opacity(0.4)).frame(width: 6, height: 6)
+                            Spacer()
+                            Circle().fill(Color.white.opacity(0.4)).frame(width: 6, height: 6)
+                        }
                         Spacer()
-                        HStack { dot; Spacer(); dot }
+                        HStack {
+                            Circle().fill(Color.white.opacity(0.4)).frame(width: 6, height: 6)
+                            Spacer()
+                            Circle().fill(Color.white.opacity(0.4)).frame(width: 6, height: 6)
+                        }
                     }
-                    .padding(30)
+                    .padding(25) // لضمان وجود النقاط داخل الإطار الداخلي
+                    .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0)) // لكي لا تظهر النقاط مقلوبة برمجياً
                 }
                 
+                // المحتوى (نص العنوان أو نص التفاصيل)
                 if !reflection.isFlipped {
                     Text(reflection.title)
                         .font(.system(size: 32, weight: .medium))
@@ -162,16 +193,15 @@ struct ExpandedCardView: View {
             }
             .frame(width: 300, height: 320)
             .rotation3DEffect(.degrees(reflection.isFlipped ? 180 : 0), axis: (x: 0, y: 1, z: 0))
-            .onTapGesture { action() }
+            .onTapGesture {
+                withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
+                    action()
+                }
+            }
         }
-    }
-    private var dot: some View {
-        Circle().fill(Color.white.opacity(0.6)).frame(width: 5, height: 5)
     }
 }
 
-
-
 #Preview {
-    TestView()
+    TestView(viewModel: TestViewModel())
 }

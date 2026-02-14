@@ -368,7 +368,7 @@ struct HomeView: View {
                 .font(.system(size: 34, weight: .bold))
                 .foregroundColor(.white)
                 .padding(.horizontal, 20)
-                .padding(.top, 60)
+                .padding(.top, 90)
 
             Text("Your Status Right Now")
                 .font(.system(size: 22))

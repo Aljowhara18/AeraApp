@@ -84,7 +84,7 @@ struct AnalysisView: View {
 // MARK: - View Components
 extension AnalysisView {
     private var headerView: some View {
-        Text("Analysis").font(.system(size: 34, weight: .bold)).foregroundColor(.white).padding(.horizontal, 20).padding(.top, 60)
+        Text("Analysis").font(.system(size: 34, weight: .bold)).foregroundColor(.white).padding(.horizontal, 20).padding(.top, 20)
     }
 
     private var pickerView: some View {

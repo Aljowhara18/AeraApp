@@ -5,6 +5,7 @@
 //  Created by Jojo on 10/02/2026.
 //
 
+
 import Foundation
 
 struct TestModel
@@ -15,3 +16,4 @@ struct TestModel
     var isExpanded: Bool = false // لتكبير الكارد
     var isFlipped: Bool = false  // لقلب الكارد
 }
+
