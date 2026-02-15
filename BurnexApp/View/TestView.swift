@@ -33,7 +33,7 @@ struct TestView: View {
                 
                 // 2. المحتوى الرئيسي
                 VStack(alignment: .leading, spacing: 20) {
-                    Text("Test")
+                    Text("Assignment")
                         .font(.system(size: 34, weight: .bold))
                         .foregroundColor(.white)
                         .padding(.top, 90)
@@ -104,18 +104,32 @@ struct TestView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: "sparkles")
-                Text("Start New Test").font(.headline)
+                Text("Start New Assignment")
+                    .font(.headline)
             }
-            Text("Elevated Stress detected, help us understand your rhythm")
-                .font(.caption).opacity(0.8)
-            Text("Start the test")
+
+            Text("Elevated Stress detected, help us understand your rhythm.")
+                .font(.caption)
+                .opacity(0.8)
+                .frame(maxWidth: .infinity, alignment: .leading) // 👈 هذا يخلي كل الأسطر على اليسار
+                .multilineTextAlignment(.leading) // 👈 مهم لمحاذاة الأسطر التالية
+
+            Text("Check up")
                 .font(.system(size: 14, weight: .bold))
                 .foregroundColor(.black)
                 .frame(maxWidth: .infinity).frame(height: 35)
-                .background(Color.white.opacity(0.8)).cornerRadius(10)
+                .background(Color.white.opacity(0.8))
+                .cornerRadius(10)
         }
-        .padding().foregroundColor(.white).background(Color.white.opacity(0.1)).cornerRadius(20)
-        .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.white.opacity(0.1), lineWidth: 1))
+        .padding()
+        .foregroundColor(.white)
+        .background(Color.white.opacity(0.1))
+        .cornerRadius(20)
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color.white.opacity(0.1), lineWidth: 1)
+        )
+
     }
 }
 
