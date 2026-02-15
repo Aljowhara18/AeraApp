@@ -823,9 +823,9 @@ struct BurnoutCheckView: View {
                     VideoLoopPlayer(fileName: "Ball2")
                         .frame(width: 200, height: 200)
                         .clipShape(Circle())
-                        .colorMultiply(totalScore > 12 ? .red : .green)
+                        .colorMultiply(totalScore > 12 ? .redApp : .green)
                         
-                    Text(totalScore > 12 ? "You've been feeling tired lately Take care of yourself today" : "You're doing great!")
+                    Text(totalScore > 12 ? "We noticed early signs of burnout,Take care of yourself today" : "You're doing great!")
                         .font(.title3)
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
