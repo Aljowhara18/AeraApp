@@ -215,7 +215,7 @@ struct OnboardingView: View {
     func currentInstruction(for s: Int) -> String {
         if s <= 4 { return "This Is Your Calm" }
         if s == 5 { return "But Life Gets Chaotic\nYour Rhythm Is Disrupted" }
-        return "With Aura You Don't Just Go Back\nYou Move Forward Balanced And Wiser"
+        return "With Burnex You Don't Just Go Back\nYou Move Forward Balanced And Wiser"
     }
 }
 #Preview {

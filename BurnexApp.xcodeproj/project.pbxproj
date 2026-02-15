@@ -12,6 +12,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		5F47CA062F41A19900BF9AE2 /* Exceptions for "BurnexApp" folder in "Burnexwatchapp Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				auraIcon.icon,
+			);
+			target = 6218B4CE2F3E43970040AECB /* Burnexwatchapp Watch App */;
+		};
 		6218B5272F3E59F30040AECB /* Exceptions for "Burnexwatchapp Watch App" folder in "BurnexApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -42,6 +49,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				EBDA9D002F37C92300A4264F /* Exceptions for "BurnexApp" folder in "BurnexApp" target */,
+				5F47CA062F41A19900BF9AE2 /* Exceptions for "BurnexApp" folder in "Burnexwatchapp Watch App" target */,
 			);
 			path = BurnexApp;
 			sourceTree = "<group>";
@@ -207,7 +215,7 @@
 		6218B4F12F3E43970040AECB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = auraIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Burnexwatchapp Watch App/Burnexwatchapp Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -243,7 +251,7 @@
 		6218B4F22F3E43970040AECB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = auraIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Burnexwatchapp Watch App/Burnexwatchapp Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -282,9 +290,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = auraIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BurnexApp/BurnexApp.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5H8MK84QQ6;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BurnexApp/Info.plist;
@@ -300,8 +309,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.faitmh.Burnexwatchapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hadeel.BurnexApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
@@ -318,9 +328,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = auraIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BurnexApp/BurnexApp.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 5H8MK84QQ6;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BurnexApp/Info.plist;
@@ -336,8 +347,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.faitmh.Burnexwatchapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hadeel.BurnexApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
