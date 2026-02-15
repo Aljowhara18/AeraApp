@@ -9,7 +9,6 @@ final class AnalysisPagerViewModel: ObservableObject {
     @Published var hrvText: String = "-- ms"
     @Published var rhrText: String = "-- BPM"
     
-    // تأكد من وجود ملف HealthManager في مشروعك
     private let health = HealthManager()
     
     init() {
@@ -17,20 +16,20 @@ final class AnalysisPagerViewModel: ObservableObject {
     }
     
     func requestAndFetch() {
-        health.requestAuthorization { [weak self] (ok: Bool) in
+        health.requestAuthorization { [weak self] ok in
             guard let self = self, ok else { return }
             self.fetchAll()
         }
     }
     
     private func fetchAll() {
-        health.fetchSleep { [weak self] (s: String) in
+        health.fetchSleep { [weak self] s in
             DispatchQueue.main.async { self?.sleepText = s }
         }
-        health.fetchLatestHRV { [weak self] (s: String) in
+        health.fetchLatestHRV { [weak self] s in
             DispatchQueue.main.async { self?.hrvText = s }
         }
-        health.fetchLatestRHR { [weak self] (s: String) in
+        health.fetchLatestRHR { [weak self] s in
             DispatchQueue.main.async { self?.rhrText = s }
         }
     }
@@ -42,29 +41,46 @@ struct AnalysisPagerView: View {
     
     var body: some View {
         TabView {
-            // صفحة النوم
             AnalysisPageView(
                 title: "Sleep",
                 value: vm.sleepText,
-                videoTint: .blue
+                videoTint: colorForSleep(vm.sleepText)
             )
-            
-            // صفحة HRV
             AnalysisPageView(
                 title: "HRV",
                 value: vm.hrvText,
-                videoTint: .purple
+                videoTint: colorForHRV(vm.hrvText)
             )
-            
-            // صفحة RHR
             AnalysisPageView(
                 title: "RHR",
                 value: vm.rhrText,
-                videoTint: .orange
+                videoTint: colorForRHR(vm.rhrText)
             )
         }
         .tabViewStyle(.page)
         .ignoresSafeArea()
+    }
+    
+    // MARK: - Color Rules
+    // Sleep text like "75%"
+    private func colorForSleep(_ text: String) -> Color {
+        let pct = extractNumber(from: text) ?? 0
+        return pct >= 75 ? .green : .red
+    }
+    // HRV text like "45 ms"
+    private func colorForHRV(_ text: String) -> Color {
+        let hrv = extractNumber(from: text) ?? 0
+        return hrv >= 40 ? .green : .red
+    }
+    // RHR text like "62 BPM"
+    private func colorForRHR(_ text: String) -> Color {
+        let bpm = extractNumber(from: text) ?? 0
+        return bpm >= 80 ? .red : .green
+    }
+    // Extract first number in a string
+    private func extractNumber(from text: String) -> Double? {
+        let digits = text.compactMap { $0.isNumber || $0 == "." ? $0 : nil }
+        return Double(String(digits))
     }
 }
 
@@ -74,7 +90,7 @@ struct AnalysisPageView: View {
     let value: String
     let videoTint: Color
 
-    // أحجام مناسبة لشاشة الساعة
+    // Sizes appropriate for Apple Watch
     private let titleFont: Font = .system(size: 14, weight: .medium)
     private let valueFont: Font = .system(size: 34, weight: .bold, design: .rounded)
     private let circleSize: CGFloat = 150
@@ -85,23 +101,22 @@ struct AnalysisPageView: View {
         }
         let p = AVPlayer(url: url)
         p.isMuted = true
+        p.actionAtItemEnd = .none
         return p
     }()
+    @State private var endObserver: NSObjectProtocol?
 
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
 
             ZStack {
-                if let player = player {
+                if let player {
                     VideoPlayer(player: player)
-                        // الخدعة: تعطيل اللمس يمنع ظهور أزرار التحكم في الساعة
                         .disabled(true)
                         .onAppear {
                             player.play()
-                            
-                            // تكرار الفيديو (Loop)
-                            NotificationCenter.default.addObserver(
+                            endObserver = NotificationCenter.default.addObserver(
                                 forName: .AVPlayerItemDidPlayToEndTime,
                                 object: player.currentItem,
                                 queue: .main
@@ -110,25 +125,39 @@ struct AnalysisPageView: View {
                                 player.play()
                             }
                         }
+                        .onDisappear {
+                            if let endObserver {
+                                NotificationCenter.default.removeObserver(endObserver)
+                                self.endObserver = nil
+                            }
+                            player.pause()
+                        }
                         .frame(width: circleSize, height: circleSize)
                         .clipShape(Circle())
-                        // تحويل الفيديو للأبيض والأسود ليقبل التلوين
                         .saturation(0)
                         .overlay(
                             Circle()
                                 .fill(
                                     LinearGradient(
-                                        colors: [videoTint.opacity(0.8), videoTint.opacity(0.4)],
+                                        colors: [videoTint.opacity(0.85), videoTint.opacity(0.45)],
                                         startPoint: .topLeading,
                                         endPoint: .bottomTrailing
                                     )
                                 )
-                                // دمج اللون مع الفيديو ليصبح الفيديو ملوناً
                                 .blendMode(.multiply)
                         )
+                } else {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [videoTint.opacity(0.85), videoTint.opacity(0.45)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: circleSize, height: circleSize)
                 }
 
-                // النصوص فوق الفيديو
                 VStack(spacing: 2) {
                     Text(title)
                         .font(titleFont)
