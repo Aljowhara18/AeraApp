@@ -20,7 +20,7 @@ struct OverviewWatchView: View {
                     headerSection
                         .padding(.top, 2)
                     
-                    // الحلقة مع الفيديو الخلفي
+                    // الدائرة مع الفيديو الخلفي (بدون الحلقة)
                     ZStack {
                         Color.clear
                         RingWithFullBackgroundVideo(progress: vm.averageProgress, size: ringSize)
@@ -43,7 +43,7 @@ struct OverviewWatchView: View {
     }
 }
 
-// MARK: - الحلقة مع الفيديو المطور لـ watchOS
+// MARK: - الدائرة مع الفيديو المطور لـ watchOS (بدون الحلقة)
 struct RingWithFullBackgroundVideo: View {
     let progress: Double
     let size: CGFloat
@@ -123,17 +123,8 @@ struct RingWithFullBackgroundVideo: View {
                 )
                 .frame(width: size - 30, height: size - 30)
 
-            // الطبقة 3: قوس التقدم (Progress Ring)
-            Circle()
-                .trim(from: 0, to: progress)
-                .stroke(
-                    Color.white,
-                    style: StrokeStyle(lineWidth: 10, lineCap: .round)
-                )
-                .frame(width: size - 10, height: size - 10)
-                .rotationEffect(.degrees(-90))
-                .shadow(color: Color.purple.opacity(0.4), radius: 4, x: 0, y: 0)
-            
+            // تمت إزالة الطبقة الخاصة بقوس التقدم (الحلقة)
+
             // الطبقة 4: النصوص المركزية
             VStack(spacing: -2) {
                 Text("\(Int((progress * 100).rounded()))%")
