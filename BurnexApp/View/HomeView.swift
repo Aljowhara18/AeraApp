@@ -391,10 +391,9 @@ struct HomeView: View {
                     .frame(width: 300, height: 300)
                 
                 VideoLoopPlayer(fileName: "Ball2")
-                //.opacity(0.20)
                 .blendMode(.luminosity)
+                .clipShape(Circle())
                 .frame(width: 300, height: 300)
-                    .clipShape(Circle())
                 
                 StatFlipButton(stat: viewModel.stats[0], pos: CGPoint(x: 90, y: -100)) {
                     viewModel.flipCard(at: 0)
@@ -491,5 +490,6 @@ struct StatFlipButton: View {
     }
 }
 
-#Preview{ HomeView()
+#Preview{
+    HomeView()
 }

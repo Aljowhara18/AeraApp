@@ -10,7 +10,7 @@ import Charts
 
 struct AnalysisView: View {
     @StateObject private var viewModel = AnalysisViewModel()
-    let chartColors: KeyValuePairs<String, Color> = ["Sleep": .blue, "HRV": .purple, "RHR": .orange]
+    let chartColors: KeyValuePairs<String, Color> = ["Sleep": .blue, "HRV": .purple, "RHR": .text]
     
     var body: some View {
         GeometryReader { geometry in
