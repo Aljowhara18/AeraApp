@@ -875,18 +875,69 @@ struct BurnoutCheckView: View {
         }
     }
 
+//    var successPopupView: some View {
+//        ZStack {
+//            RoundedRectangle(cornerRadius: 25).fill(Color.white.opacity(0.1))
+//            VStack(spacing: 12) {
+//                Text("It's out now").font(.system(size: 26, weight: .medium))
+//                Text("Take a deep breath").font(.system(size: 30, weight: .bold))
+//            }
+//            .foregroundColor(.white)
+//        }
+//        .frame(width: 300, height: 320)
+//    }
     var successPopupView: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 25).fill(Color.white.opacity(0.1))
-            VStack(spacing: 12) {
-                Text("It's out now").font(.system(size: 26, weight: .medium))
-                Text("Take a deep breath").font(.system(size: 30, weight: .bold))
+            // 1. الخلفية الأساسية (الطبقة الخارجية)
+            RoundedRectangle(cornerRadius: 25)
+                .fill(Color.white.opacity(0.1))
+                .background(.ultraThinMaterial)
+                .cornerRadius(25)
+                // الإطار الخارجي النحيف جداً
+                .overlay(
+                    RoundedRectangle(cornerRadius: 25)
+                        .stroke(Color.white.opacity(0.2), lineWidth: 1)
+                )
+            
+            // 2. الإطار الداخلي (الخط المزدوج اللي داخل الكارد)
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                .padding(15) // المسافة بين الإطار الخارجي والداخلي
+            
+            // 3. الدوائر الأربعة في الزوايا (داخل الإطار الداخلي)
+            GeometryReader { geo in
+                let dotSize: CGFloat = 12
+                let offset: CGFloat = 35 // مكان الدوائر بالنسبة للزوايا
+                
+                Group {
+                    Circle().fill(Color.white.opacity(0.4)).frame(width: dotSize) // فوق يسار
+                        .position(x: offset, y: offset)
+                    
+                    Circle().fill(Color.white.opacity(0.4)).frame(width: dotSize) // فوق يمين
+                        .position(x: geo.size.width - offset, y: offset)
+                    
+                    Circle().fill(Color.white.opacity(0.4)).frame(width: dotSize) // تحت يسار
+                        .position(x: offset, y: geo.size.height - offset)
+                    
+                    Circle().fill(Color.white.opacity(0.4)).frame(width: dotSize) // تحت يمين
+                        .position(x: geo.size.width - offset, y: geo.size.height - offset)
+                }
             }
+            
+            // 4. النصوص في المنتصف
+            VStack(spacing: 12) {
+                Text("It's out now")
+                    .font(.system(size: 26, weight: .medium))
+                
+                Text("Take a deep breath")
+                    .font(.system(size: 30, weight: .bold))
+                    .multilineTextAlignment(.center)
+            }
+            .padding(40)
             .foregroundColor(.white)
         }
-        .frame(width: 300, height: 320)
+        .frame(width: 320, height: 350) // تكبير الحجم قليلاً ليتناسب مع التفاصيل
     }
-
     var warningView: some View {
         HStack(alignment: .top, spacing: 8) {
             Image(systemName: "exclamationmark.triangle.fill").foregroundColor(.red)
