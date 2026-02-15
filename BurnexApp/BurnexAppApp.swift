@@ -7,23 +7,22 @@ import SwiftUI
 
 @main
 struct AeraApp: App {
-    // 🚀 المتغير السحري: يحفظ حالة المستخدم (هل خلص الاونبوردنق أو لا)
-    @AppStorage("hasSeenOnboarding") var hasSeenOnboarding: Bool = false
     
-    // تعريف الـ ViewModel إذا كنت تحتاجه في كامل التطبيق
+    @AppStorage("hasSeenOnboarding") var hasSeenOnboarding: Bool = false
     @StateObject private var viewModel = TestViewModel()
 
     var body: some Scene {
         WindowGroup {
-            if hasSeenOnboarding {
-                // إذا شافه قبل، يفتح الواجهة الرئيسية مباشرة
-                MainTabView()
-                    .environmentObject(viewModel)
-            } else {
-                // إذا أول مرة، يفتح صفحة الاونبوردنق
-                OnboardingView()
-                    .environmentObject(viewModel)
+            Group {
+                if hasSeenOnboarding {
+                    MainTabView()
+                        .environmentObject(viewModel)
+                } else {
+                    OnboardingView()
+                        .environmentObject(viewModel)
+                }
             }
+            .preferredColorScheme(.dark) 
         }
     }
 }
