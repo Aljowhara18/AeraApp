@@ -8,7 +8,7 @@
 
 /* Begin PBXFileReference section */
 		6218B4CF2F3E43970040AECB /* Burnexwatchapp Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Burnexwatchapp Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		EBDA9CF32F37C92200A4264F /* BurnexApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BurnexApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EBDA9CF32F37C92200A4264F /* Burnex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Burnex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -19,20 +19,20 @@
 			);
 			target = 6218B4CE2F3E43970040AECB /* Burnexwatchapp Watch App */;
 		};
-		6218B5272F3E59F30040AECB /* Exceptions for "Burnexwatchapp Watch App" folder in "BurnexApp" target */ = {
+		6218B5272F3E59F30040AECB /* Exceptions for "Burnexwatchapp Watch App" folder in "Burnex" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				HealthManager.swift,
 				HighStressView.swift,
 			);
-			target = EBDA9CF22F37C92200A4264F /* BurnexApp */;
+			target = EBDA9CF22F37C92200A4264F /* Burnex */;
 		};
-		EBDA9D002F37C92300A4264F /* Exceptions for "BurnexApp" folder in "BurnexApp" target */ = {
+		EBDA9D002F37C92300A4264F /* Exceptions for "BurnexApp" folder in "Burnex" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = EBDA9CF22F37C92200A4264F /* BurnexApp */;
+			target = EBDA9CF22F37C92200A4264F /* Burnex */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -40,7 +40,7 @@
 		6218B4D32F3E43970040AECB /* Burnexwatchapp Watch App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				6218B5272F3E59F30040AECB /* Exceptions for "Burnexwatchapp Watch App" folder in "BurnexApp" target */,
+				6218B5272F3E59F30040AECB /* Exceptions for "Burnexwatchapp Watch App" folder in "Burnex" target */,
 			);
 			path = "Burnexwatchapp Watch App";
 			sourceTree = "<group>";
@@ -48,7 +48,7 @@
 		EBDA9CF52F37C92200A4264F /* BurnexApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				EBDA9D002F37C92300A4264F /* Exceptions for "BurnexApp" folder in "BurnexApp" target */,
+				EBDA9D002F37C92300A4264F /* Exceptions for "BurnexApp" folder in "Burnex" target */,
 				5F47CA062F41A19900BF9AE2 /* Exceptions for "BurnexApp" folder in "Burnexwatchapp Watch App" target */,
 			);
 			path = BurnexApp;
@@ -86,7 +86,7 @@
 		EBDA9CF42F37C92200A4264F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EBDA9CF32F37C92200A4264F /* BurnexApp.app */,
+				EBDA9CF32F37C92200A4264F /* Burnex.app */,
 				6218B4CF2F3E43970040AECB /* Burnexwatchapp Watch App.app */,
 			);
 			name = Products;
@@ -117,9 +117,9 @@
 			productReference = 6218B4CF2F3E43970040AECB /* Burnexwatchapp Watch App.app */;
 			productType = "com.apple.product-type.application";
 		};
-		EBDA9CF22F37C92200A4264F /* BurnexApp */ = {
+		EBDA9CF22F37C92200A4264F /* Burnex */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EBDA9D012F37C92300A4264F /* Build configuration list for PBXNativeTarget "BurnexApp" */;
+			buildConfigurationList = EBDA9D012F37C92300A4264F /* Build configuration list for PBXNativeTarget "Burnex" */;
 			buildPhases = (
 				EBDA9CEF2F37C92200A4264F /* Sources */,
 				EBDA9CF02F37C92200A4264F /* Frameworks */,
@@ -132,11 +132,11 @@
 			fileSystemSynchronizedGroups = (
 				EBDA9CF52F37C92200A4264F /* BurnexApp */,
 			);
-			name = BurnexApp;
+			name = Burnex;
 			packageProductDependencies = (
 			);
 			productName = BurnexApp;
-			productReference = EBDA9CF32F37C92200A4264F /* BurnexApp.app */;
+			productReference = EBDA9CF32F37C92200A4264F /* Burnex.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -171,7 +171,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				EBDA9CF22F37C92200A4264F /* BurnexApp */,
+				EBDA9CF22F37C92200A4264F /* Burnex */,
 				6218B4CE2F3E43970040AECB /* Burnexwatchapp Watch App */,
 			);
 		};
@@ -502,7 +502,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EBDA9D012F37C92300A4264F /* Build configuration list for PBXNativeTarget "BurnexApp" */ = {
+		EBDA9D012F37C92300A4264F /* Build configuration list for PBXNativeTarget "Burnex" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EBDA9D022F37C92300A4264F /* Debug */,
