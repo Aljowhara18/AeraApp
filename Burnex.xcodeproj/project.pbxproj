@@ -157,7 +157,7 @@
 					};
 				};
 			};
-			buildConfigurationList = EBDA9CEE2F37C92200A4264F /* Build configuration list for PBXProject "BurnexApp" */;
+			buildConfigurationList = EBDA9CEE2F37C92200A4264F /* Build configuration list for PBXProject "Burnex" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -493,7 +493,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EBDA9CEE2F37C92200A4264F /* Build configuration list for PBXProject "BurnexApp" */ = {
+		EBDA9CEE2F37C92200A4264F /* Build configuration list for PBXProject "Burnex" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EBDA9D042F37C92300A4264F /* Debug */,

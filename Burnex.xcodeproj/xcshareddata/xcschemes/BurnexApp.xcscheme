@@ -18,7 +18,7 @@
                BlueprintIdentifier = "EBDA9CF22F37C92200A4264F"
                BuildableName = "BurnexApp.app"
                BlueprintName = "BurnexApp"
-               ReferencedContainer = "container:BurnexApp.xcodeproj">
+               ReferencedContainer = "container:Burnex.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,7 +47,7 @@
             BlueprintIdentifier = "EBDA9CF22F37C92200A4264F"
             BuildableName = "BurnexApp.app"
             BlueprintName = "BurnexApp"
-            ReferencedContainer = "container:BurnexApp.xcodeproj">
+            ReferencedContainer = "container:Burnex.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -64,7 +64,7 @@
             BlueprintIdentifier = "EBDA9CF22F37C92200A4264F"
             BuildableName = "BurnexApp.app"
             BlueprintName = "BurnexApp"
-            ReferencedContainer = "container:BurnexApp.xcodeproj">
+            ReferencedContainer = "container:Burnex.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

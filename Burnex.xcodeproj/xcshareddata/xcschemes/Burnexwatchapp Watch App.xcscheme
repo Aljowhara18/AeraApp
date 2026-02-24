@@ -18,7 +18,7 @@
                BlueprintIdentifier = "6218B4CE2F3E43970040AECB"
                BuildableName = "Burnexwatchapp Watch App.app"
                BlueprintName = "Burnexwatchapp Watch App"
-               ReferencedContainer = "container:BurnexApp.xcodeproj">
+               ReferencedContainer = "container:Burnex.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -32,7 +32,7 @@
                BlueprintIdentifier = "6218B4AC2F3E43960040AECB"
                BuildableName = "Burnexwatchapp.app"
                BlueprintName = "Burnexwatchapp"
-               ReferencedContainer = "container:BurnexApp.xcodeproj">
+               ReferencedContainer = "container:Burnex.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -52,7 +52,7 @@
                BlueprintIdentifier = "6218B4B82F3E43970040AECB"
                BuildableName = "BurnexwatchappTests.xctest"
                BlueprintName = "BurnexwatchappTests"
-               ReferencedContainer = "container:BurnexApp.xcodeproj">
+               ReferencedContainer = "container:Burnex.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -63,7 +63,7 @@
                BlueprintIdentifier = "6218B4E72F3E43970040AECB"
                BuildableName = "Burnexwatchapp Watch AppUITests.xctest"
                BlueprintName = "Burnexwatchapp Watch AppUITests"
-               ReferencedContainer = "container:BurnexApp.xcodeproj">
+               ReferencedContainer = "container:Burnex.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -74,7 +74,7 @@
                BlueprintIdentifier = "6218B4DD2F3E43970040AECB"
                BuildableName = "Burnexwatchapp Watch AppTests.xctest"
                BlueprintName = "Burnexwatchapp Watch AppTests"
-               ReferencedContainer = "container:BurnexApp.xcodeproj">
+               ReferencedContainer = "container:Burnex.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -85,7 +85,7 @@
                BlueprintIdentifier = "6218B4C22F3E43970040AECB"
                BuildableName = "BurnexwatchappUITests.xctest"
                BlueprintName = "BurnexwatchappUITests"
-               ReferencedContainer = "container:BurnexApp.xcodeproj">
+               ReferencedContainer = "container:Burnex.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -107,7 +107,7 @@
             BlueprintIdentifier = "6218B4CE2F3E43970040AECB"
             BuildableName = "Burnexwatchapp Watch App.app"
             BlueprintName = "Burnexwatchapp Watch App"
-            ReferencedContainer = "container:BurnexApp.xcodeproj">
+            ReferencedContainer = "container:Burnex.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -124,7 +124,7 @@
             BlueprintIdentifier = "6218B4CE2F3E43970040AECB"
             BuildableName = "Burnexwatchapp Watch App.app"
             BlueprintName = "Burnexwatchapp Watch App"
-            ReferencedContainer = "container:BurnexApp.xcodeproj">
+            ReferencedContainer = "container:Burnex.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
