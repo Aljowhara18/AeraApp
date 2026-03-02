@@ -11,6 +11,7 @@
 //  BurnexApp
 //
 //  Created by Jojo on 07/02/2026.
+/*
 import HealthKit
 
 class HealthManager {
@@ -72,3 +73,4 @@ class HealthManager {
         healthStore.execute(query)
     }
 }
+*/
