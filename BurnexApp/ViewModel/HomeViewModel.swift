@@ -11,11 +11,12 @@ class HomeViewModel: ObservableObject {
         StatModel(title: "HRV", value: "Loading...")
     ]
     
-    // المتغير المتحكم في ظهور التنبيه (Alert)
     @Published var showStressAlert: Bool = false
-    
     private let healthManager = HealthManager()
     
+    // استخدام AnalysisViewModel للوصول إلى دالة الحساب calculateSummary
+    private let analysisViewModel = AnalysisViewModel()
+
     init() {
         fetchAllHealthData()
     }
@@ -24,57 +25,43 @@ class HomeViewModel: ObservableObject {
         healthManager.requestAuthorization { success in
             guard success else { return }
             
-            // 1. جلب البيانات اللحظية للكروت
-            self.fetchCurrentStats()
+            // 1. جلب البيانات التاريخية اللازمة للحسابات
+            self.analysisViewModel.fetchChartData()
             
-            // 2. تحليل البيانات التاريخية (آخر 10 أيام) للـ Alert
-            self.analyzeHealthTrends()
-        }
-    }
-    
-    private func fetchCurrentStats() {
-        healthManager.fetchLatestRHR { v in DispatchQueue.main.async { self.stats[0].value = v } }
-        healthManager.fetchSleep { v in DispatchQueue.main.async { self.stats[1].value = v } }
-        healthManager.fetchLatestHRV { v in DispatchQueue.main.async { self.stats[2].value = v } }
-    }
-    
-    private func analyzeHealthTrends() {
-       
-        healthManager.fetchHistoricalData(days: 10) { hrvData, rhrData, sleepData in
-            DispatchQueue.main.async {
-                let hrvDeviated = self.isDeviating(data: hrvData, isIncreaseBad: false)
-                let rhrDeviated = self.isDeviating(data: rhrData, isIncreaseBad: true)
-                let sleepDeviated = self.isDeviating(data: sleepData, isIncreaseBad: false)
-                
-                let totalDeviations = [hrvDeviated, rhrDeviated, sleepDeviated].filter { $0 == true }.count
-                
-                withAnimation(.spring()) {
-                    self.showStressAlert = (totalDeviations >= 2)
-                }
+            // 2. تحديث الحالات بناءً على بيانات "اليوم" بعد وقت قصير للتأكد من جلب البيانات
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                self.updateAllStats()
+                self.checkAlertTrigger()
             }
         }
     }
     
-    private func isDeviating(data: [Double], isIncreaseBad: Bool) -> Bool {
-        // التأكد من وجود بيانات كافية (10 أيام)
-        guard data.count >= 10 else { return false }
+    private func updateAllStats() {
+        // تحديث RHR
+        let rhrSummary = analysisViewModel.calculateSummary(for: "RHR")
+        self.stats[0].value = rhrSummary.status
         
-        // 1. حساب الـ Baseline (متوسط الـ 10 أيام كاملة)
-        let baseline = data.reduce(0, +) / Double(data.count)
+        // تحديث Sleep
+        let sleepSummary = analysisViewModel.calculateSummary(for: "Sleep")
+        self.stats[1].value = sleepSummary.status
         
-        // 2. حساب الـ Trend الحالي (آخر 5 أيام)
-        let last5Days = Array(data.suffix(5))
-        let currentTrend = last5Days.reduce(0, +) / Double(last5Days.count)
+        // تحديث HRV
+        let hrvSummary = analysisViewModel.calculateSummary(for: "HRV")
+        self.stats[2].value = hrvSummary.status
+    }
+
+    private func checkAlertTrigger() {
+        // التحقق إذا كان هناك انحراف (High أو Low) في مؤشرين على الأقل
+        let statuses = [
+            analysisViewModel.calculateSummary(for: "RHR").status,
+            analysisViewModel.calculateSummary(for: "Sleep").status,
+            analysisViewModel.calculateSummary(for: "HRV").status
+        ]
         
-        // 3. تحديد نسبة الانحراف (مثلاً 10% كمعيار للتغير الملحوظ)
-        let threshold = 0.10
+        let deviations = statuses.filter { $0 == "Low" || $0 == "High" }.count
         
-        if isIncreaseBad {
-            // انحراف لو الـ Trend أعلى من الـ Baseline بـ 10% (مثل نبض القلب)
-            return currentTrend > (baseline * (1 + threshold))
-        } else {
-            // انحراف لو الـ Trend أقل من الـ Baseline بـ 10% (مثل HRV أو النوم)
-            return currentTrend < (baseline * (1 - threshold))
+        withAnimation(.spring()) {
+            self.showStressAlert = (deviations >= 2)
         }
     }
     

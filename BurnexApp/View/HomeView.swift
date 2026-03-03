@@ -110,7 +110,6 @@ struct HomeView: View {
 }
 
 // MARK: - Subviews
-
 struct StatFlipButton: View {
     let stat: StatModel
     let pos: CGPoint
@@ -118,25 +117,39 @@ struct StatFlipButton: View {
     
     var body: some View {
         Button(action: action) {
-            Text(stat.isFlipped ? stat.value : stat.title)
-                .font(.system(size: 15, weight: .medium))
-                .foregroundColor(.white)
-                .frame(width: 110, height: 45)
-                // استعادة التصميم الزجاجي الأصلي
-                .glassEffect(in: .rect(cornerRadius: 100))
-                .background(.white.opacity(0.1))
-                .cornerRadius(100)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 100)
-                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
-                )
+            ZStack {
+                // الوجه الأمامي (العنوان)
+                Text(stat.title)
+                    .font(.system(size: 15, weight: .medium))
+                    .frame(width: 110, height: 45, alignment: .center) // تثبيت المساحة والنص في الوسط
+                    .opacity(stat.isFlipped ? 0 : 1)
+                
+                // الوجه الخلفي (القيمة)
+                Text(stat.value)
+                    .font(.system(size: 15, weight: .medium))
+                    .frame(width: 110, height: 45, alignment: .center) // نفس المساحة تماماً للمنع القفز
+                    .opacity(stat.isFlipped ? 1 : 0)
+                    .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
+            }
+            .foregroundColor(.white)
+            .frame(width: 110, height: 45)
+            .glassEffect(in: .rect(cornerRadius: 100))
+            .background(.white.opacity(0.1))
+            .cornerRadius(100)
+            .overlay(
+                RoundedRectangle(cornerRadius: 100)
+                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
+            )
+            // نطبق الدوران هنا
+            .rotation3DEffect(
+                .degrees(stat.isFlipped ? 180 : 0),
+                axis: (x: 0, y: 1, z: 0),
+                perspective: 0.3
+            )
         }
         .offset(x: pos.x, y: pos.y)
+        .id(stat.id)
     }
-}
-
-#Preview {
-    HomeView()
 }
 #Preview{
     HomeView()
