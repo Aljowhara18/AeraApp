@@ -41,7 +41,7 @@ struct HomeView: View {
                     .padding(.horizontal, 20)
                     .padding(.top, 90)
 
-                Text("Your Status Right Now")
+                Text("Your Current Balance")
                     .font(.system(size: 22))
                     .foregroundColor(.grayApp)
                     .padding(.horizontal, 20)

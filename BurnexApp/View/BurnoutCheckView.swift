@@ -2031,17 +2031,17 @@ struct BurnoutCheckView: View {
     
     // نصوص ديناميكية بناءً على النتيجة
     var resultTitle: String {
-        totalScore > 12 ? "Take a deep breath" : "You're doing great!"
+        totalScore > 12 ? "Early signs of burnout" : "You're doing great!"
     }
     
     var resultMessage: String {
         totalScore > 12 ?
-        "Based on your answers you may be showing early signs of burnout. Make sure to take care of yourself today." :
+        "Remember to prioritize your well being today." :
         "You have a healthy balance right now. Keep practicing your daily habits to stay energized!"
     }
     
     var resultButtonText: String {
-        totalScore > 12 ? "Done" : "Done "
+        totalScore > 12 ? "Next" : "Next"
         
     }
     
@@ -2099,7 +2099,7 @@ struct BurnoutCheckView: View {
                 }
                 Spacer()
             }
-            Text(step == 2 ? "Burnout check Result" : "Burnout Check")
+            Text(step == 2 ? "Your Result" : "Balance Check")
                 .font(.system(size: 22, weight: .bold))
                 .foregroundColor(.white)
         }
@@ -2110,28 +2110,27 @@ struct BurnoutCheckView: View {
     var startPage: some View {
         VStack {
             Spacer()
-            Text("We’ll ask you a few quick questions to understand your burnout level")
+            Text("Answer a few questions to check for early signs of burnout")
                 .font(.system(size: 20, weight: .medium)).foregroundColor(.white)
                 .multilineTextAlignment(.center).padding(.horizontal, 30)
-            Spacer()
+            Spacer().frame(height: 51)
             VideoLoopPlayer(fileName: "Ball2")
                 .frame(width: 220, height: 220).clipShape(Circle())
                 .grayscale(1.0).opacity(ballOpacity)
             Spacer()
             warningView
             Button(action: { withAnimation { step = 1 } }) {
-                Text("Start")
+                Text("Begin")
                     .font(.system(size: 20, weight: .bold))
-                                                        .foregroundColor(.white)
-                                                        .frame(width: 254, height: 49)
-                                                        .glassEffect(in:.rect(cornerRadius: 12))
-                                                        .background(.text.opacity(0.3))
-                                                        .cornerRadius(12)
-                                                                                        }
-                                                    .padding(.bottom, 40)
-                                                                                    }
-                                                                                }
-
+                    .foregroundColor(.white)
+                    .frame(width: 254, height: 49)
+                    .glassEffect(in:.rect(cornerRadius: 12))
+                    .background(.text.opacity(0.3))
+                    .cornerRadius(12)
+            }
+            .padding(.bottom, 40)
+        }
+    }
     // MARK: - 2. Questions Page
     var questionsPage: some View {
         VStack {
@@ -2174,10 +2173,11 @@ struct BurnoutCheckView: View {
             
             VStack(spacing: 15) {
                 Text(resultTitle)
-                    .font(.system(size: 26, weight: .bold)).foregroundColor(.white)
-                
+                    .font(.system(size: 28, weight: .bold)).foregroundColor(.white)
+            
                 Text(resultMessage)
-                    .font(.system(size: 18, weight: .medium)).foregroundColor(.white)
+                    .font(.system(size: 14, weight: .light))
+                    .foregroundColor(.white.opacity(0.7))
                     .multilineTextAlignment(.center).padding(.horizontal, 40)
             }
             
@@ -2186,15 +2186,15 @@ struct BurnoutCheckView: View {
             Button(action: { withAnimation { step = 3 } }) {
                 Text(resultButtonText)
                     .font(.system(size: 20, weight: .bold))
-                                                        .foregroundColor(.white)
-                                                        .frame(width: 254, height: 49)
-                                                        .glassEffect(in:.rect(cornerRadius: 12))
-                                                        .background(.text.opacity(0.3))
-                                                        .cornerRadius(12)
-                                                                                        }
-                                                    .padding(.bottom, 40)
-                                                                                    }
-                                                                                }
+                    .foregroundColor(.white)
+                    .frame(width: 254, height: 49)
+                    .glassEffect(in:.rect(cornerRadius: 12))
+                    .background(.text.opacity(0.3))
+                    .cornerRadius(12)
+            }
+            .padding(.bottom, 40)
+        }
+    }
 //                    .font(.system(size: 20, weight: .bold))
 //                    .foregroundColor(.white)
 //                    .frame(width: 254, height: 49)
@@ -2211,7 +2211,8 @@ struct BurnoutCheckView: View {
         VStack(spacing: 25) {
             HStack {
                 Button(action: { withAnimation { step = 2 } }) {
-                    Image(systemName: "xmark").circleBackground()
+                    Image(systemName: "xmark")
+                        .circleBackground()
                 }
                 Spacer()
                 Text("Reflection").font(.system(size: 20, weight: .bold)).foregroundColor(.white)
@@ -2225,22 +2226,54 @@ struct BurnoutCheckView: View {
             }
             .padding(.horizontal, 20).padding(.top, 10)
 
-            VStack(alignment: .leading, spacing: 30) {
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Write your reflection (Optional)").font(.title2.bold()).foregroundColor(.white)
-                    Text("Give it a name").foregroundColor(.white.opacity(0.9))
-                    TextField("Label this moment..", text: $reflectionTitle)
-                        .padding().background(Color.white.opacity(0.1)).cornerRadius(12).foregroundColor(.white)
+            VStack(alignment: .leading) {
+                VStack(alignment: .leading) {
+                    
+                    Spacer().frame(height: 60)
+                    
+                    Text("Reflect on your day")
+                        .font(.system(size: 22,weight: .semibold))
+                        .foregroundColor(.white)
+                                    +
+                    Text("  (Optional)")
+                        .font(.system(size: 14))
+                        .foregroundColor(.white)
+                    
+                    Spacer().frame(height: 64)
+                    
+                    Text("Define this feeling")
+                        .font(.system(size: 16))
+                        .foregroundColor(.white.opacity(0.9))
+                    
+                    TextField("E.g. Overwhelmed at work, meetings", text: $reflectionTitle)
+                        .padding()
+                        .background(Color.white.opacity(0.1))
+                        .cornerRadius(12).foregroundColor(.white)
                 }
 
+                Spacer().frame(height: 32)
+                
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Express your thoughts").foregroundColor(.white.opacity(0.9))
-                    ZStack(alignment: .bottomTrailing) {
-                        TextEditor(text: $reflectionDetails)
-                            .frame(height: 150).scrollContentBackground(.hidden)
-                            .padding(10).background(Color.white.opacity(0.1)).cornerRadius(12)
-                        Text("\(reflectionDetails.count)/100").font(.caption).foregroundColor(.gray).padding(10)
+                    Text("What’s weighing on you?")
+                        .font(.system(size: 16))
+                        .foregroundColor(.white.opacity(0.9))
+                    
+                    ZStack(alignment: .topLeading) {
+                        
+                        TextField("Describe the situation or events that disrupted your balance", text: $reflectionDetails)
+                            .frame(height: 150, alignment: .topLeading)
+                            .padding(10)
+                            .background(Color.white.opacity(0.1))
+                            .cornerRadius(12)
+                            .multilineTextAlignment(.leading)
                     }
+                    .overlay(
+                        Text("\(reflectionDetails.count)/100")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                            .padding(10),
+                        alignment: .bottomTrailing
+                    )
                 }
             }
             .padding(.horizontal, 25)
@@ -2250,9 +2283,16 @@ struct BurnoutCheckView: View {
 
     var warningView: some View {
         HStack(alignment: .top, spacing: 8) {
-            Image(systemName: "exclamationmark.triangle.fill").foregroundColor(.yellow)
-            Text("This test is for awareness purposes only and does not replace consulting specialists.").font(.system(size: 14)).foregroundColor(.white.opacity(0.7))
-        }.padding(.horizontal, 40).padding(.bottom, 30)
+            Image(systemName: "exclamationmark.triangle")
+                .font(.system(size: 15,weight: .bold))
+                .foregroundColor(.red)
+            Text("For awareness only This does not replace professional medical advice")
+                .font(.system(size: 14,weight: .light))
+                .foregroundColor(.white.opacity(0.7))
+            
+        }
+        .padding(.horizontal, 40)
+        .padding(.bottom, 30)
     }
 }
 

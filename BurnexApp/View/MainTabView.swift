@@ -34,7 +34,7 @@ struct MainTabView: View {
                     .tabItem {
                         Image(systemName: "list.clipboard")
 
-                        Text("Assignment")
+                        Text("Assessment")
                     }
                     .tag(2)
             }

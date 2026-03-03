@@ -33,7 +33,7 @@ struct TestView: View {
                 
                 // 2. المحتوى الرئيسي
                 VStack(alignment: .leading, spacing: 20) {
-                    Text("Assignment")
+                    Text("Assessment")
                         .font(.system(size: 34, weight: .bold))
                         .foregroundColor(.white)
                         .padding(.top, 90)
@@ -44,7 +44,7 @@ struct TestView: View {
                     }
 
                     Text("Your Reflection")
-                        .font(.headline)
+                        .font(.system(size: 22))
                         .foregroundColor(.white)
                         .padding(.top, 20)
                     
@@ -101,20 +101,24 @@ struct TestView: View {
     }
 
     private var startTestBanner: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Image(systemName: "sparkles")
-                Text("Start New Assignment")
+                    .font(.system(size: 35.85))
+                Text("Balance Check")
+                    .font(.system(size: 22,weight: .medium))
                     .font(.headline)
             }
 
-            Text("Elevated Stress detected, help us understand your rhythm.")
-                .font(.caption)
+            Text("Help us understand the shift in your pattern")
+                .font(.system(size: 13))
                 .opacity(0.8)
                 .frame(maxWidth: .infinity, alignment: .leading) // 👈 هذا يخلي كل الأسطر على اليسار
                 .multilineTextAlignment(.leading) // 👈 مهم لمحاذاة الأسطر التالية
 
-            Text("Check up")
+            Spacer().frame(height: 8)
+            
+            Text("Start Checking")
                 .font(.system(size: 14, weight: .bold))
                 .foregroundColor(.black)
                 .frame(maxWidth: .infinity).frame(height: 35)
