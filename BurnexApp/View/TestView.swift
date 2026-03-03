@@ -7,7 +7,7 @@ import SwiftUI
 
 struct TestView: View {
     // استقبال الـ ViewModel المشترك لضمان تزامن البيانات
-    @ObservedObject var viewModel: TestViewModel
+    @StateObject private var viewModel: TestViewModel
 
     // إعداد الشبكة لعرض كاردين في كل صف (2 تحت 2)
     let columns = [
@@ -17,7 +17,7 @@ struct TestView: View {
 
     // Initializer للسماح بالتشغيل المستقل ولحل أخطاء الاستدعاء
     init(viewModel: TestViewModel = TestViewModel()) {
-        self.viewModel = viewModel
+        _viewModel = StateObject(wrappedValue: viewModel)
     }
     
     var body: some View {
@@ -219,3 +219,4 @@ struct ExpandedCardView: View {
 #Preview {
     TestView(viewModel: TestViewModel())
 }
+
