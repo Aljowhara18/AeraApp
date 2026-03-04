@@ -5,13 +5,16 @@ import AVFoundation
 struct OverviewWatchView: View {
     @StateObject private var vm = OverviewWatchViewModel()
     
+    // Navigation path لإرجاع الجذر عند إغلاق الشيت
+    @State private var path = NavigationPath()
+    
     // الحاوية الثابتة للحلقة/الفيديو
     private let ringContainerHeight: CGFloat = 180
     // تحكم بحجم الفيديو/الحلقة
     private let ringSize: CGFloat = 140
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             ZStack {
                 Color.black.ignoresSafeArea()
                 
@@ -39,6 +42,16 @@ struct OverviewWatchView: View {
             .onAppear {
                 vm.requestAndFetch()
             }
+            // sheet يعرض صفحة التنبيه، يُغلق بالسحب للأسفل
+            .sheet(isPresented: $vm.showStressAlert) {
+                WatchStressAlertView()
+            }
+            // عندما يُغلق الشيت بالسحب نرجّع المسار للجذر
+            .onChange(of: vm.showStressAlert) { presented in
+                if presented == false {
+                    path = NavigationPath()
+                }
+            }
         }
     }
 }
@@ -61,15 +74,13 @@ struct RingWithFullBackgroundVideo: View {
 
     var body: some View {
         ZStack {
-            // الطبقة 1: الفيديو (مع تعطيل التفاعل لمنع ظهور أدوات التحكم)
+            // الطبقة 1: الفيديو
             if let player = player {
                 VideoPlayer(player: player)
-                    .disabled(true) // لمنع ظهور أزرار التشغيل عند اللمس
-                    .allowsHitTesting(false) // يمنع وصول اللمس للفيديو تماماً
+                    .disabled(true)
+                    .allowsHitTesting(false)
                     .onAppear {
                         player.play()
-                        
-                        // إعادة تشغيل الفيديو تلقائياً (Loop)
                         endObserver = NotificationCenter.default.addObserver(
                             forName: .AVPlayerItemDidPlayToEndTime,
                             object: player.currentItem,
@@ -88,7 +99,7 @@ struct RingWithFullBackgroundVideo: View {
                     }
                     .frame(width: size, height: size)
                     .clipShape(Circle())
-                    .saturation(0) // أبيض وأسود
+                    .saturation(0)
                     .overlay(
                         Circle()
                             .fill(
@@ -109,7 +120,7 @@ struct RingWithFullBackgroundVideo: View {
                     .frame(width: size, height: size)
             }
             
-            // الطبقة 2: التدرج الداخلي لتحسين وضوح النص
+            // الطبقة 2: التدرج الداخلي
             Circle()
                 .fill(
                     LinearGradient(
@@ -123,9 +134,7 @@ struct RingWithFullBackgroundVideo: View {
                 )
                 .frame(width: size - 30, height: size - 30)
 
-            // تمت إزالة الطبقة الخاصة بقوس التقدم (الحلقة)
-
-            // الطبقة 4: النصوص المركزية
+            // النصوص المركزية
             VStack(spacing: -2) {
                 Text("\(Int((progress * 100).rounded()))%")
                     .font(.system(size: size * 0.22, weight: .bold, design: .rounded))
@@ -163,6 +172,5 @@ private extension OverviewWatchView {
 }
 
 #Preview {
-    // لا حاجة لإضافة NavigationStack هنا لأنه مدمج داخل العرض
     OverviewWatchView()
 }

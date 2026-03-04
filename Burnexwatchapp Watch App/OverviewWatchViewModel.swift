@@ -16,6 +16,9 @@ final class OverviewWatchViewModel: ObservableObject {
     
     // تقدم الحلقة: متوسط مطبّع لثلاثة مؤشرات (0...1)
     @Published var averageProgress: Double = 0.0
+
+    // حالة عرض شيت التنبيه في شاشة الساعة
+    @Published var showStressAlert: Bool = false
     
     private let health = HealthManager()
     

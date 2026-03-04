@@ -16,15 +16,17 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				auraIcon.icon,
+				Model/AnalysisModel.swift,
 				Model/HealthKitManager.swift,
+				ViewModel/AnalysisViewModel.swift,
 			);
 			target = 6218B4CE2F3E43970040AECB /* Burnexwatchapp Watch App */;
 		};
 		6218B5272F3E59F30040AECB /* Exceptions for "Burnexwatchapp Watch App" folder in "Burnex" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				AnalysisPagerView.swift,
 				HealthManager.swift,
-				HighStressView.swift,
 			);
 			target = EBDA9CF22F37C92200A4264F /* Burnex */;
 		};
