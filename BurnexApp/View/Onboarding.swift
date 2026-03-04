@@ -363,7 +363,7 @@ private extension OnboardingView {
     }
 }
 
-// MARK: - 7. Animation Logic (الحماية الحديدية)
+// MARK: - 7. Animation Logic 
 private extension OnboardingView {
     func startStory() {
         state = .calm
