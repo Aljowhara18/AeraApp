@@ -93,28 +93,52 @@ class AnalysisViewModel: ObservableObject {
             return SummaryData()
         }
         
-        let currentData = chartData.filter { $0.type == type && $0.date >= currentRangeStart && $0.date <= now }
-        let previousData = chartData.filter { $0.type == type && $0.date >= previousRangeStart && $0.date < currentRangeStart }
+        let currentData = chartData.filter {
+            $0.type == type &&
+            $0.date >= currentRangeStart &&
+            $0.date <= now
+        }
         
-        if currentData.isEmpty { return SummaryData() }
+        let previousData = chartData.filter {
+            $0.type == type &&
+            $0.date >= previousRangeStart &&
+            $0.date < currentRangeStart
+        }
+        
+        if currentData.isEmpty {
+            return SummaryData(
+                status: NSLocalizedString("No Data", comment: ""),
+                percentageText: "",
+                state: .noData
+            )
+        }
         
         let currentAvg = currentData.map { $0.value }.reduce(0, +) / Double(currentData.count)
-        let previousAvg = previousData.isEmpty ? currentAvg : previousData.map { $0.value }.reduce(0, +) / Double(previousData.count)
+        let previousAvg = previousData.isEmpty
+            ? currentAvg
+            : previousData.map { $0.value }.reduce(0, +) / Double(previousData.count)
+        
         let diff = previousAvg == 0 ? 0 : ((currentAvg - previousAvg) / previousAvg) * 100
         
         var state: SummaryData.ComparisonState = .normal
-        var status = "Normal"
+        var statusKey = "Normal"
         
         if abs(diff) < 5 {
-            status = "Normal"; state = .normal
+            statusKey = "Normal"
+            state = .normal
         } else if diff > 5 {
-            status = (type == "RHR") ? "Low" : "Great"
+            statusKey = (type == "RHR") ? "Low" : "Great"
             state = (type == "RHR") ? .low : .great
         } else {
-            status = (type == "RHR") ? "Great" : "Low"
+            statusKey = (type == "RHR") ? "Great" : "Low"
             state = (type == "RHR") ? .great : .low
         }
         
-        return SummaryData(status: status, percentageText: String(format: "%.1f%%", abs(diff)), state: state)
+        return SummaryData(
+            status: NSLocalizedString(statusKey, comment: ""),
+            percentageText: String(format: "%.1f%%", abs(diff)),
+            state: state
+        )
     }
+
 }

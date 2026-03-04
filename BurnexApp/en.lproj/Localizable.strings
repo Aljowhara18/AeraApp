@@ -1,0 +1,87 @@
+/* 
+  Localizable.strings
+  Burnex
+
+  Created by Hadeel Alansari on 04/03/2026.
+  
+*/
+//MARK: - Onboarding
+"Your Rhythm Starts With A Touch" = "Your Rhythm Starts With A Touch";
+"This Is Your Balance\nStable and in control" = "This Is Your Balance\nStable and in control";
+"But Life Gets Chaotic\nYour Rhythm Is Disrupted" = "But Life Gets Chaotic\nYour Rhythm Is Disrupted";
+"With Burnex You Don't Just Go Back\nYou Move Forward Balanced And Wiser" = "With Burnex You Don't Just Go Back\nYou Move Forward Balanced And Wiser";
+"Make Sure To Connect Your App With\nYour Apple Watch For Better Analysis" = "Make Sure To Connect Your App With\nYour Apple Watch For Better Analysis";
+"Or Enter Your Daily Data Manually\nFrom Health App" = "Or Enter Your Daily Data Manually\nFrom Health App";
+"Start with Burnex" = "Start with Burnex";
+"Skip" = "Skip";
+
+//MARK: - Home
+"Welcome" = "Welcome";
+"Your Current Balance" = "Your Current Balance";
+"Rhythm" = "Rhythm";
+"Analysis" = "Analysis";
+"Assessment" = "Assessment";
+
+//MARK: - Analysis
+"D" = "D";
+"W" = "W";
+"M" = "M";
+"Y" = "Y";
+"All" = "All";
+"HRV" = "HRV";
+"RHR" = "RHR";
+"Sleep" = "Sleep";
+"No Data" = "No Data";
+"Normal" = "Normal";
+"Low" = "Low";
+"Great" = "Great";
+
+//MARK: - Assessment
+
+//p1
+"Balance Check" = "Balance Check";
+"Help us understand the shift in your pattern" = "Help us understand the shift in your pattern";
+"Start Checking" = "Start Checking";
+"Your Reflection" = "Your Reflection";
+
+//p2
+"Answer a few questions to check for early signs of burnout" = "Answer a few questions to check for early signs of burnout";
+"For awareness only This does not replace professional medical advice" = "For awareness only This does not replace professional medical advice";
+"Begin" = "Begin";
+
+//p3 QA
+"Never" = "Never";
+"Rarely" = "Rarely";
+"Sometimes" = "Sometimes";
+"Often" = "Often";
+"Always" = "Always";
+"I feel emotionally exhausted because of my work." = "I feel emotionally exhausted because of my work.";
+"I feel drained and worn out at the end of the workday." = "I feel drained and worn out at the end of the workday.";
+"I have become less caring toward people related to my work." = "I have become less caring toward people related to my work.";
+"I feel emotionally detached or indifferent toward my work." = "I feel emotionally detached or indifferent toward my work.";
+"I feel that my work makes a meaningful difference." = "I feel that my work makes a meaningful difference.";
+"I feel competent and accomplished in what I do at work." = "I feel competent and accomplished in what I do at work.";
+
+//p4 Result
+"Your Result" = "Your Result";
+"Early signs of burnout" = "Early signs of burnout";
+"You're doing great!" = "You're doing great!";
+"Remember to prioritize your well being today." = "Remember to prioritize your well being today.";
+"You have a healthy balance right now. Keep practicing your daily habits to stay energized!" = "You have a healthy balance right now. Keep practicing your daily habits to stay energized!";
+"Next" = "Next";
+
+//p5 Reflection
+"Reflection" = "Reflection";
+"Reflect on your day" = "Reflect on your day";
+"  (Optional)" = "  (Optional)";
+"Define this feeling" = "Define this feeling";
+"E.g. Overwhelmed at work, meetings" = "E.g. Overwhelmed at work, meetings";
+"What’s weighing on you?" = "What’s weighing on you?";
+"Describe the situation or events that disrupted your balance" = "Describe the situation or events that disrupted your balance";
+
+//delete alert
+"Delete Reflection" = "Delete Reflection";
+"Delete" = "Delete";
+"Cancel" = "Cancel";
+"Are you sure you want to delete this reflection? This action cannot be undone." = "Are you sure you want to delete this reflection? This action cannot be undone?";
+

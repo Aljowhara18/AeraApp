@@ -212,11 +212,12 @@ struct OnboardingView: View {
         return names[s] ?? ""
     }
     
-    func currentInstruction(for s: Int) -> String {
-        if s <= 4 { return "This Is Your Balance\nStable and in control" }
-        if s == 5 { return "But Life Gets Chaotic\nYour Rhythm Is Disrupted" }
-        return "With Burnex You Don't Just Go Back\nYou Move Forward Balanced And Wiser"
+    func currentInstruction(for s: Int) -> LocalizedStringKey {
+        if s <= 4 { return LocalizedStringKey("This Is Your Balance\nStable and in control") }
+        if s == 5 { return LocalizedStringKey("But Life Gets Chaotic\nYour Rhythm Is Disrupted") }
+        return LocalizedStringKey("With Burnex You Don't Just Go Back\nYou Move Forward Balanced And Wiser")
     }
+
 }
 #Preview {
     OnboardingView()

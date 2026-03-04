@@ -2099,7 +2099,7 @@ struct BurnoutCheckView: View {
                 }
                 Spacer()
             }
-            Text(step == 2 ? "Your Result" : "Balance Check")
+            Text(LocalizedStringKey(step == 2 ? "Your Result" : "Balance Check"))
                 .font(.system(size: 22, weight: .bold))
                 .foregroundColor(.white)
         }
@@ -2134,35 +2134,42 @@ struct BurnoutCheckView: View {
     // MARK: - 2. Questions Page
     var questionsPage: some View {
         VStack {
-            Text("\(currentIdx + 1)/\(questions.count)").foregroundColor(.white.opacity(0.6)).padding(.top, 20)
+            // عداد السؤال
+            Text("\(currentIdx + 1)/\(questions.count)")
+                .foregroundColor(.white.opacity(0.6))
+                .padding(.top, 20)
             Spacer()
             
-            QuestionCard(text: questions[currentIdx].text, selected: $answers[currentIdx])
-                .id(currentIdx)
-                .transition(.asymmetric(
-                    insertion: .move(edge: .trailing).combined(with: .opacity),
-                    removal: .move(edge: .leading).combined(with: .opacity)
-                ))
-                .onChange(of: answers[currentIdx]) { newValue in
-                    guard newValue != nil && !isMovingBack else { return }
-                    
-                    if currentIdx == questions.count - 1 {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                            withAnimation { step = 2 }
-                        }
-                    } else {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                            if !isMovingBack {
-                                withAnimation(.easeInOut(duration: 0.6)) { currentIdx += 1 }
-                            }
+            // البطاقة
+            QuestionCard(
+                text: NSLocalizedString(questions[currentIdx].text, comment: ""),
+                selected: $answers[currentIdx]
+            )
+            .id(currentIdx)
+            .transition(.asymmetric(
+                insertion: .move(edge: .trailing).combined(with: .opacity),
+                removal: .move(edge: .leading).combined(with: .opacity)
+            ))
+            .onChange(of: answers[currentIdx]) { newValue in
+                guard newValue != nil && !isMovingBack else { return }
+                
+                if currentIdx == questions.count - 1 {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                        withAnimation { step = 2 }
+                    }
+                } else {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                        if !isMovingBack {
+                            withAnimation(.easeInOut(duration: 0.6)) { currentIdx += 1 }
                         }
                     }
                 }
+            }
+            
             Spacer()
             Color.clear.frame(height: 49).padding(.bottom, 40)
         }
     }
-
     // MARK: - 3. Result Page
     var resultPage: some View {
         VStack(spacing: 40) {
@@ -2172,10 +2179,10 @@ struct BurnoutCheckView: View {
                 .colorMultiply(totalScore > 12 ? .red : .green)
             
             VStack(spacing: 15) {
-                Text(resultTitle)
+                Text(LocalizedStringKey(resultTitle))
                     .font(.system(size: 28, weight: .bold)).foregroundColor(.white)
             
-                Text(resultMessage)
+                Text(LocalizedStringKey(resultMessage))
                     .font(.system(size: 14, weight: .light))
                     .foregroundColor(.white.opacity(0.7))
                     .multilineTextAlignment(.center).padding(.horizontal, 40)
@@ -2184,7 +2191,7 @@ struct BurnoutCheckView: View {
             Spacer()
             
             Button(action: { withAnimation { step = 3 } }) {
-                Text(resultButtonText)
+                Text(LocalizedStringKey(resultButtonText))
                     .font(.system(size: 20, weight: .bold))
                     .foregroundColor(.white)
                     .frame(width: 254, height: 49)

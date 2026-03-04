@@ -119,15 +119,15 @@ struct StatFlipButton: View {
         Button(action: action) {
             ZStack {
                 // الوجه الأمامي (العنوان)
-                Text(stat.title)
+                Text(LocalizedStringKey(stat.title))  // 🔹 الترجمة هنا
                     .font(.system(size: 15, weight: .medium))
-                    .frame(width: 110, height: 45, alignment: .center) // تثبيت المساحة والنص في الوسط
+                    .frame(width: 110, height: 45, alignment: .center)
                     .opacity(stat.isFlipped ? 0 : 1)
                 
                 // الوجه الخلفي (القيمة)
-                Text(stat.value)
+                Text(LocalizedStringKey(stat.value))  // 🔹 الترجمة هنا
                     .font(.system(size: 15, weight: .medium))
-                    .frame(width: 110, height: 45, alignment: .center) // نفس المساحة تماماً للمنع القفز
+                    .frame(width: 110, height: 45, alignment: .center)
                     .opacity(stat.isFlipped ? 1 : 0)
                     .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
             }
@@ -140,7 +140,6 @@ struct StatFlipButton: View {
                 RoundedRectangle(cornerRadius: 100)
                     .stroke(Color.white.opacity(0.1), lineWidth: 1)
             )
-            // نطبق الدوران هنا
             .rotation3DEffect(
                 .degrees(stat.isFlipped ? 180 : 0),
                 axis: (x: 0, y: 1, z: 0),
@@ -151,6 +150,7 @@ struct StatFlipButton: View {
         .id(stat.id)
     }
 }
+
 #Preview{
     HomeView()
 }

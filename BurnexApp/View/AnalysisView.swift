@@ -11,6 +11,20 @@ import Charts
 struct AnalysisView: View {
     @StateObject private var viewModel = AnalysisViewModel()
     let chartColors: KeyValuePairs<String, Color> = ["Sleep": .blue, "HRV": .purple, "RHR": .text]
+    private let chartColorPairs: KeyValuePairs<String, Color> = [
+        "Sleep": .blue,
+        "HRV": .purple,
+        "RHR": .text
+    ]
+
+    private let chartColorDict: [String: Color] = [
+        "Sleep": .blue,
+        "HRV": .purple,
+        "RHR": .text
+    ]
+    
+
+
     
     var body: some View {
         GeometryReader { geometry in
@@ -89,84 +103,131 @@ extension AnalysisView {
 
     private var pickerView: some View {
         Picker("", selection: $viewModel.selectedTimeRange) {
-            ForEach(["D", "W", "M", "Y"], id: \.self) { Text($0).tag($0) }
+            ForEach(["D", "W", "M", "Y"], id: \.self) { value in
+                Text(LocalizedStringKey(value))
+                    .tag(value)
+            }
         }
         .pickerStyle(.segmented)
-        .background(.black)
+        .background(Color.black)
         .cornerRadius(100)
         .glassEffect(in: .rect(cornerRadius: 100))
         .padding(.horizontal, 20)
-        .onChange(of: viewModel.selectedTimeRange) { _ in viewModel.fetchChartData() }
+        .onChange(of: viewModel.selectedTimeRange) { _ in
+            viewModel.fetchChartData()
+        }
     }
+
 
     private var filterMenu: some View {
         Menu {
             Picker("", selection: $viewModel.selectedOption) {
-                ForEach(["All", "Sleep", "HRV", "RHR"], id: \.self) { Text($0).tag($0) }
+                ForEach(["All", "Sleep", "HRV", "RHR"], id: \.self) { value in
+                    Text(LocalizedStringKey(value))
+                        .tag(value)
+                }
             }
         } label: {
             HStack(spacing: 4) {
-                Text(viewModel.selectedOption)
+                Text(LocalizedStringKey(viewModel.selectedOption))
                 Image(systemName: "chevron.down")
-                
             }
             .foregroundStyle(.white)
-            .frame(width: 95,height: 26)
+            .frame(width: 95, height: 26)
             .font(.system(size: 14))
-            .glassEffect(in:.rect(cornerRadius: 20))
+            .glassEffect(in: .rect(cornerRadius: 20))
         }
     }
+
 
     private func mainChartView(height: CGFloat) -> some View {
-        Chart {
-            ForEach(viewModel.chartData) { d in
-                LineMark(x: .value("Date", d.date, unit: getUnit()), y: .value("Value", d.value))
+        VStack(spacing: 8) {
+            Chart {
+                ForEach(viewModel.chartData) { d in
+                    LineMark(
+                        x: .value("Date", d.date, unit: getUnit()),
+                        y: .value("Value", d.value)
+                    )
                     .foregroundStyle(by: .value("Type", d.type))
-                    .interpolationMethod(.catmullRom).lineStyle(StrokeStyle(lineWidth: 3))
+                    .interpolationMethod(.catmullRom)
+                    .lineStyle(StrokeStyle(lineWidth: 3))
 
-                if viewModel.selectedTimeRange != "Y" {
-                    PointMark(x: .value("Date", d.date, unit: getUnit()), y: .value("Value", d.value))
-                        .foregroundStyle(by: .value("Type", d.type)).symbolSize(30)
+                    if viewModel.selectedTimeRange != "Y" {
+                        PointMark(
+                            x: .value("Date", d.date, unit: getUnit()),
+                            y: .value("Value", d.value)
+                        )
+                        .foregroundStyle(by: .value("Type", d.type))
+                        .symbolSize(30)
+                    }
+
+                    AreaMark(
+                        x: .value("Date", d.date, unit: getUnit()),
+                        y: .value("Value", d.value)
+                    )
+                    .foregroundStyle(by: .value("Type", d.type))
+                    .opacity(0.1)
                 }
-                AreaMark(x: .value("Date", d.date, unit: getUnit()), y: .value("Value", d.value))
-                    .foregroundStyle(by: .value("Type", d.type)).opacity(0.1)
             }
+            .chartForegroundStyleScale(chartColorPairs)
+            .chartLegend(.hidden)
+            .chartScrollableAxes(.horizontal)
+            .chartXVisibleDomain(length: getVisibleLength())
+            .chartScrollPosition(initialX: Date())
+            .chartScrollPosition(x: $viewModel.scrollPosition)
+            .chartXAxis { configureXAxis() }
+            .chartYAxis { AxisMarks(position: .leading) }
+            .frame(height: height)
+            .padding(.horizontal)
+            
+            HStack(spacing: 16) {
+                ForEach(["Sleep", "HRV", "RHR"], id: \.self) { type in
+                    if viewModel.selectedOption == "All" || viewModel.selectedOption == type {
+                        HStack(spacing: 6) {
+                            Circle()
+                                .fill(chartColorDict[type] ?? .white)
+                                .frame(width: 10, height: 10)
+                            Text(LocalizedStringKey(type))
+                                .font(.system(size: 12))
+                                .foregroundColor(.white)
+                        }
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 16)
+            .padding(.bottom, 8)
         }
-        .chartForegroundStyleScale(chartColors)
-        .chartScrollableAxes(.horizontal)
-        .chartXVisibleDomain(length: getVisibleLength())
-        .chartScrollPosition(initialX: Date())
-        .chartScrollPosition(x: $viewModel.scrollPosition)
-        .chartXAxis { configureXAxis() }
-        .chartYAxis { AxisMarks(position: .leading) }
-        .frame(height: height).padding(.horizontal)
     }
-
+    
     private func summaryRow(title: String) -> some View {
+        
         let data = viewModel.calculateSummary(for: title)
         
         // اللون حسب الحالة
-        let textColor: Color = data.state == .noData ? .grayApp : .text2
+        let textColor: Color =
+            data.state == .noData ? .grayApp : .text2
         
         return VStack(alignment: .leading, spacing: 6) {
-            Text(title)
+            
+            Text(LocalizedStringKey(title))
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(.gray)
 
             HStack(alignment: .center, spacing: 8) {
+                
                 Text(data.status)
                     .font(.system(size: 28, weight: .bold))
                     .foregroundColor(textColor)
 
                 if data.state != .noData {
-                    Text("\(data.percentageText)")
+                    Text(data.percentageText)
                         .font(.system(size: 15, weight: .medium))
                         .foregroundColor(.white)
                 }
             }
         }
     }
-
 
     // Helpers
     private func getUnit() -> Calendar.Component {

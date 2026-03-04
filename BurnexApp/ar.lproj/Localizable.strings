@@ -1,0 +1,94 @@
+/* 
+  Localizable.strings
+  Burnex
+
+  Created by Hadeel Alansari on 04/03/2026.
+  
+*/
+//MARK: - Onboarding
+
+"Your Rhythm Starts With A Touch" = "توازنك الداخلي يبدأ بلمسه";
+"This Is Your Balance\nStable and in control"="هذه نقطة توازنك\nمستقرة و متوازنة";
+"But Life Gets Chaotic\nYour Rhythm Is Disrupted"="لكن زحام الأيام قد يرهقك\nويفقدك هذا التوازن";
+"With Burnex You Don't Just Go Back\nYou Move Forward Balanced And Wiser"
+="رحلتك معنا لا تقف عند العودة للهدوء\nبل هي خطوة لوعي وحكمة أكبر";
+"Make Sure To Connect Your App With\nYour Apple Watch For Better Analysis"="لقراءات أدق يمكنك مزامنة بياناتك مع ساعة آبل";
+"Or Enter Your Daily Data Manually\nFrom Health App"="أو إدخال بياناتك اليومية عبر تطبيق صحتي";
+"Start with Burnex"="ابدأ الآن";
+"Skip"="تخطي";
+
+//MARK: - Home
+"Welcome"="مرحبًا";
+"Your Current Balance"="توازنك الآن";
+"Rhythm"="الملخص";
+"Analysis"="التحليل";
+"Assessment"="التقييم";
+
+//MARK: - Analysis
+"D"="ي";
+"W"="أ";
+"M"="ش";
+"Y"="س";
+"All"="الكل";
+"HRV"="جهد القلب";
+"RHR"="نبض الراحة";
+"Sleep"="نومك";
+"No Data" = "لا توجد بيانات";
+"Normal" = "طبيعي";
+"Low" = "منخفض";
+"Great" = "ممتاز";
+
+//MARK: - Assessment
+
+//p1
+"Balance Check"="فحص التوازن";
+"Help us understand the shift in your pattern"="للمساهمه في فهم التغيير في نمط مؤشراتك";
+"Start Checking"="ابدأ الفحص";
+"Your Reflection"="تدويناتك";
+
+//p2
+
+"Answer a few questions to check for early signs of burnout"="أجب عن أسئلة سريعة للكشف عن علامات الاحتراق الوظيفي الأولية";
+"For awareness only This does not replace professional medical advice"="تنويه: هذه النتائج للتوعية فقط ولا تغني عن الاستشارة الطبية المختصة";
+"Begin"="ابدأ";
+
+//p3 QA
+
+"Never" = "أبدًا";
+"Rarely" = "نادراً";
+"Sometimes" = "أحيانًا";
+"Often" = "غالبًا";
+"Always" = "دائمًا";
+"I feel emotionally exhausted because of my work." = "أشعر بالإرهاق العاطفي بسبب عملي.";
+"I feel drained and worn out at the end of the workday." = "أشعر بالإرهاق والانهاك في نهاية يوم العمل.";
+"I have become less caring toward people related to my work." = "أصبحت أقل اهتمامًا بالأشخاص المرتبطين بعملي.";
+"I feel emotionally detached or indifferent toward my work." = "أشعر بالانفصال العاطفي أو اللامبالاة تجاه عملي.";
+"I feel that my work makes a meaningful difference." = "أشعر أن عملي يُحدث فرقًا ذا معنى.";
+"I feel competent and accomplished in what I do at work." = "أشعر بالكفاءة والإنجاز فيما أقوم به في عملي.";
+
+//p4 Result
+
+"Your Result"="النتيجة";
+"Early signs of burnout"="بوادر احتراق أولي";
+"You're doing great!" = "أنت تقوم بعمل رائع!";
+"Remember to prioritize your well being today."="ننصحك بجعل راحتك أولوية ";
+"You have a healthy balance right now. Keep practicing your daily habits to stay energized!" = "لديك توازن صحي الآن. استمر في ممارسة عاداتك اليومية لتحافظ على نشاطك!";
+"Next"="التالي";
+
+//p5 Reflection
+
+"Reflection"="تدوين";
+"Reflect on your day"="مساحة تدوين";
+"  (Optional)"="  (اختياري)";
+"Define this feeling"="العنوان";
+"E.g. Overwhelmed at work, meetings"="مثال: توتر، ضغط عمل، تشتت ...";
+"What’s weighing on you?"="التفاصيل";
+"Describe the situation or events that disrupted your balance"="اكتب هنا الأسباب والمواقف التي أثرت على توازنك اليوم ...";
+
+//delete alert
+
+"Delete Reflection" = "حذف التدوين";
+"Delete" = "حذف";
+"Cancel" = "إلغاء";
+"Are you sure you want to delete this reflection? This action cannot be undone." = "هل أنت متأكد من حذف هذا التدوين؟ لا يمكن التراجع عن هذا الإجراء.";
+

@@ -86,16 +86,17 @@ struct TestView: View {
                     }
                 }
             }
-            .alert("Delete Reflection", isPresented: $viewModel.showDeleteAlert) {
-                Button("Delete", role: .destructive) {
+            .alert(LocalizedStringKey("Delete Reflection"), isPresented: $viewModel.showDeleteAlert) {
+                Button(LocalizedStringKey("Delete"), role: .destructive) {
                     if let item = viewModel.itemToDelete {
                         viewModel.deleteReflection(id: item.id)
                     }
                 }
-                Button("Cancel", role: .cancel) { }
+                Button(LocalizedStringKey("Cancel"), role: .cancel) { }
             } message: {
-                Text("Are you sure you want to delete this reflection? This action cannot be undone.")
+                Text(LocalizedStringKey("Are you sure you want to delete this reflection? This action cannot be undone."))
             }
+
         }
         .navigationBarBackButtonHidden(true)
     }

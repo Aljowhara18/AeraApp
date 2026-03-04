@@ -41,7 +41,7 @@ struct QuestionCard: View { let text: String; @Binding var selected: Int?; let o
                                 }
                             }
                             
-                            Text(options[index])
+                            Text(LocalizedStringKey(options[index]))
                                 .font(.system(size: 20))
                                 .foregroundColor(selected == index ? .white : .white.opacity(0.5))
                             
