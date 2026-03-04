@@ -460,13 +460,13 @@ private extension OnboardingView {
 private extension OnboardingView {
     var blueTextGroup: some View {
         VStack(spacing: 12) {
-            Text("This Is Your Balance").opacity(blueLine1Opacity).offset(y: blueLine1Opacity == 1 ? 0 : 5)
+            Text("This Is Your Balance at work").opacity(blueLine1Opacity).offset(y: blueLine1Opacity == 1 ? 0 : 5)
             Text("Stable And In Control").opacity(blueLine2Opacity).offset(y: blueLine2Opacity == 1 ? 0 : 5)
         }
     }
-    var redTextGroup: some View { VStack(spacing: 12) { Text("But Life Gets Chaotic"); Text("Your Rhythm Is Disrupted") }.opacity(redOpacity) }
-    var purpleText1: some View { Text("With Burnex You Don't Just Go Back").opacity(purplePart1Opacity) }
-    var purpleText2: some View { VStack(spacing: 12) { Text("You Move Forward"); Text("Balanced And Wiser") }.opacity(purplePart2Opacity) }
+    var redTextGroup: some View { VStack(spacing: 12) { Text("But burnout starts quietly"); Text("and Disrupting your balance") }.opacity(redOpacity) }
+    var purpleText1: some View { Text("With Burnex you reclaim control").opacity(purplePart1Opacity) }
+    var purpleText2: some View { VStack(spacing: 12) { Text("Recover wisely and move forward balanced") }.opacity(purplePart2Opacity) }
     
     var skipButton: some View {
         VStack {
