@@ -38,6 +38,13 @@
 "Low" = "منخفض";
 "Great" = "ممتاز";
 
+"HRV refers to Heart Rate Variability."="يعتبر جهد القلب (اختلاف معدل نبض القلب) عن مقدار التغير في الفترة الفاصلة بين النبضة و الأخرى.";
+"RHR refers to Resting Heart Rate."="معدل نبض قلبك وقت الراحة هو متوسط نبض القلب في الدقيقة عندما تكون مرتاحًا أو غير نشط لبعض دقائق.
+";
+"Info"="معلومات";
+"Close"="إغلاق";
+
+
 //MARK: - Assessment
 
 //p1
@@ -45,6 +52,8 @@
 "Help us understand the shift in your pattern"="للمساهمه في فهم التغيير في نمط مؤشراتك";
 "Start Checking"="ابدأ الفحص";
 "Your Reflection"="تدويناتك";
+
+"Sources: This check is based on the Maslach Burnout Inventory (MBI) to ensure scientific accuracy."="المصدر: هذا الفحص يعتمد على استبيان ماسلاش للاحتراق الوظيفي (MBI) لضمان الدقة العلمية.";
 
 //p2
 

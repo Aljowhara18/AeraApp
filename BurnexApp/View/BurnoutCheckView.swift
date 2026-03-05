@@ -2016,6 +2016,9 @@ struct BurnoutCheckView: View {
     @State private var reflectionDetails: String = ""
     @State private var ballOpacity: Double = 0.6
     
+    @State private var showInfoCard: Bool = false
+    @State private var infoText: String = ""
+    
     let questions = [
         Question(text: "I feel emotionally exhausted because of my work.", category: "EE"),
         Question(text: "I feel drained and worn out at the end of the workday.", category: "EE"),
@@ -2067,16 +2070,63 @@ struct BurnoutCheckView: View {
                     EmptyView()
                 }
             }
-        }
-        .navigationBarBackButtonHidden(true)
-        .animation(.spring(response: 0.5, dampingFraction: 0.8), value: step)
-        .animation(.spring(response: 0.5, dampingFraction: 0.8), value: currentIdx)
-    }
+            
+            // Overlay زر التعجب
+                        if showInfoCard {
+                            Color.black.opacity(0.4)
+                                .ignoresSafeArea()
+                                .onTapGesture {
+                                    withAnimation(.spring()) { showInfoCard = false }
+                                }
+                            
+                            VStack(spacing: 16) {
+                                Text("Info")
+                                    .font(.system(size: 22,weight: .bold))
+                                    .foregroundColor(.white)
+                                
+                                Text(infoText)
+                                    .font(.system(size: 16))
+                                    .foregroundColor(.white)
+                                    .multilineTextAlignment(.center)
+                                
+                                Button(action: {
+                                    withAnimation(.spring()) { showInfoCard = false }
+                                }) {
+                                    Text("Close")
+                                        .font(.system(size: 16, weight: .bold))
+                                        .foregroundColor(.text)
+                                        .padding(.vertical, 8)
+                                        .padding(.horizontal, 16)
+                                        .background(Color.white.opacity(0.1))
+                                        .cornerRadius(12)
+                                    
+                                }
+                            }
+                            .padding()
+                            .frame(width: 280)
+                            .background(
+                                    Color.black.opacity(0.5)
+                                        .cornerRadius(20)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .stroke(Color.white.opacity(0.4), lineWidth: 1) 
+                                        )
+                                )
+                            .cornerRadius(20)
+                            .transition(.scale.combined(with: .opacity))
+                            .zIndex(2)
+                        }
+                    }
+                    .navigationBarBackButtonHidden(true)
+                    .animation(.spring(response: 0.5, dampingFraction: 0.8), value: step)
+                    .animation(.spring(response: 0.5, dampingFraction: 0.8), value: currentIdx)
+                }
     
     // MARK: - Header
     var headerView: some View {
         ZStack {
             HStack {
+                // زر الباك
                 Button(action: {
                     if step == 1 {
                         if currentIdx > 0 {
@@ -2098,27 +2148,56 @@ struct BurnoutCheckView: View {
                         .padding(.leading, 20)
                 }
                 Spacer()
+                
+                //info
+                Button {
+                    withAnimation(.spring()) {
+                        showInfoCard = true
+                        infoText = NSLocalizedString(
+                            "Sources: This check is based on the Maslach Burnout Inventory (MBI) to ensure scientific accuracy.",
+                            comment: ""
+                        )
+                    }
+                } label: {
+                    Image(systemName: "exclamationmark.circle")
+                        .font(.system(size: 24))
+                        .foregroundColor(.white)
+                        .padding(.trailing, 20)
+                }
             }
+            
             Text(LocalizedStringKey(step == 2 ? "Your Result" : "Balance Check"))
                 .font(.system(size: 22, weight: .bold))
                 .foregroundColor(.white)
         }
-        .frame(height: 44).padding(.top, 10)
+        .frame(height: 44)
+        .padding(.top, 10)
     }
+
 
     // MARK: - 1. Start Page
     var startPage: some View {
         VStack {
             Spacer()
+            
             Text("Answer a few questions to check for early signs of burnout")
-                .font(.system(size: 20, weight: .medium)).foregroundColor(.white)
-                .multilineTextAlignment(.center).padding(.horizontal, 30)
+                .font(.system(size: 20, weight: .medium))
+                .foregroundColor(.white)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 30)
+            
             Spacer().frame(height: 51)
+            
             VideoLoopPlayer(fileName: "Ball2")
-                .frame(width: 220, height: 220).clipShape(Circle())
-                .grayscale(1.0).opacity(ballOpacity)
+                .frame(width: 220, height: 220)
+                .clipShape(Circle())
+                .grayscale(1.0)
+                .opacity(ballOpacity)
+            
             Spacer()
+            
             warningView
+            
             Button(action: { withAnimation { step = 1 } }) {
                 Text("Begin")
                     .font(.system(size: 20, weight: .bold))
@@ -2131,6 +2210,7 @@ struct BurnoutCheckView: View {
             .padding(.bottom, 40)
         }
     }
+
     // MARK: - 2. Questions Page
     var questionsPage: some View {
         VStack {
