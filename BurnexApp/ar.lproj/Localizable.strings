@@ -59,20 +59,20 @@
 "Sometimes" = "أحيانًا";
 "Often" = "غالبًا";
 "Always" = "دائمًا";
-"I feel emotionally exhausted because of my work." = "أشعر بالإرهاق العاطفي بسبب عملي.";
+"I feel emotionally exhausted because of my work." = "أشعر بالاستنزاف النفسي بسبب عملي.";
 "I feel drained and worn out at the end of the workday." = "أشعر بالإرهاق والانهاك في نهاية يوم العمل.";
-"I have become less caring toward people related to my work." = "أصبحت أقل اهتمامًا بالأشخاص المرتبطين بعملي.";
-"I feel emotionally detached or indifferent toward my work." = "أشعر بالانفصال العاطفي أو اللامبالاة تجاه عملي.";
-"I feel that my work makes a meaningful difference." = "أشعر أن عملي يُحدث فرقًا ذا معنى.";
-"I feel competent and accomplished in what I do at work." = "أشعر بالكفاءة والإنجاز فيما أقوم به في عملي.";
+"I have become less caring toward people related to my work." = "أصبحت أقل اهتماماً مع الأشخاص في محيط عملي.";
+"I feel emotionally detached or indifferent toward my work." = "أشعر بتبلد المشاعر و اللامبالاة تجاه عملي.";
+"I feel that my work makes a meaningful difference." = "أشعر أن لعملي قيمة وأثر حقيقي.";
+"I feel competent and accomplished in what I do at work." = "أشعر بالفعالية والإنجاز في أداء مهامي في العمل.";
 
 //p4 Result
 
 "Your Result"="النتيجة";
 "Early signs of burnout"="بوادر احتراق أولي";
-"You're doing great!" = "أنت تقوم بعمل رائع!";
+"You're doing great!" = "صحتك المهنية رائعة";
 "Remember to prioritize your well being today."="ننصحك بجعل راحتك أولوية ";
-"You have a healthy balance right now. Keep practicing your daily habits to stay energized!" = "لديك توازن صحي الآن. استمر في ممارسة عاداتك اليومية لتحافظ على نشاطك!";
+"You have a healthy balance right now. Keep practicing your daily habits to stay energized!" = "توازنك بين العمل وصحتك النفسية ممتاز. استمر في عاداتك الحالية للحفاظ على طاقتك وحيويتك.";
 "Next"="التالي";
 
 //p5 Reflection
@@ -83,7 +83,7 @@
 "Define this feeling"="العنوان";
 "E.g. Overwhelmed at work, meetings"="مثال: توتر، ضغط عمل، تشتت ...";
 "What’s weighing on you?"="التفاصيل";
-"Describe the situation or events that disrupted your balance"="اكتب هنا الأسباب والمواقف التي أثرت على توازنك اليوم ...";
+"Capture your thoughts"="دوّن أفكارك.. لتخفف عبء يومك";
 
 //delete alert
 
@@ -92,3 +92,10 @@
 "Cancel" = "إلغاء";
 "Are you sure you want to delete this reflection? This action cannot be undone." = "هل أنت متأكد من حذف هذا التدوين؟ لا يمكن التراجع عن هذا الإجراء.";
 
+//MARK: - Watch
+"Overview" = "نظرة عامة";
+"Average" = "المتوسط";
+"View All" = "عرض الكل";
+"Sleep"="نومك";
+"HRV"="جهد القلب";
+"RHR"="نبض الراحة";

@@ -159,7 +159,7 @@ struct AnalysisPageView: View {
                 }
 
                 VStack(spacing: 2) {
-                    Text(title)
+                    Text(LocalizedStringKey(title))
                         .font(titleFont)
                         .foregroundColor(.white.opacity(0.9))
                     

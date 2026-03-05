@@ -2267,7 +2267,7 @@ struct BurnoutCheckView: View {
                     
                     ZStack(alignment: .topLeading) {
                         
-                        TextField("Describe the situation or events that disrupted your balance", text: $reflectionDetails)
+                        TextField("Capture your thoughts", text: $reflectionDetails)
                             .frame(height: 150, alignment: .topLeading)
                             .padding(10)
                             .background(Color.white.opacity(0.1))

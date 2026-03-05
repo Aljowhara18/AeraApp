@@ -77,11 +77,14 @@
 "Define this feeling" = "Define this feeling";
 "E.g. Overwhelmed at work, meetings" = "E.g. Overwhelmed at work, meetings";
 "What’s weighing on you?" = "What’s weighing on you?";
-"Describe the situation or events that disrupted your balance" = "Describe the situation or events that disrupted your balance";
+"Capture your thoughts" = "Capture your thoughts";
 
 //delete alert
 "Delete Reflection" = "Delete Reflection";
 "Delete" = "Delete";
 "Cancel" = "Cancel";
 "Are you sure you want to delete this reflection? This action cannot be undone." = "Are you sure you want to delete this reflection? This action cannot be undone?";
+
+//MARK: - Watch
+
 
