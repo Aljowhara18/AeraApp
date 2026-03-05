@@ -126,7 +126,7 @@ struct BurnoutCheckView: View {
     var headerView: some View {
         ZStack {
             HStack {
-                // زر الباك
+                // زر العودة - الآن متجاوب مع العربي والإنجليزي
                 Button(action: {
                     if step == 1 {
                         if currentIdx > 0 {
@@ -142,30 +142,17 @@ struct BurnoutCheckView: View {
                         dismiss()
                     }
                 }) {
-                    Image(systemName: "chevron.left")
+                    // استخدام backward يجعل السهم ينقلب تلقائياً حسب اللغة
+                    Image(systemName: "chevron.backward")
                         .font(.system(size: 20, weight: .semibold))
                         .foregroundColor(.white)
-                        .padding(.leading, 20)
+                        .padding(.horizontal, 20) // حواف متساوية لضمان المسافة في الجهتين
                 }
-                Spacer()
                 
-                //info
-                Button {
-                    withAnimation(.spring()) {
-                        showInfoCard = true
-                        infoText = NSLocalizedString(
-                            "Sources: This check is based on the Maslach Burnout Inventory (MBI) to ensure scientific accuracy.",
-                            comment: ""
-                        )
-                    }
-                } label: {
-                    Image(systemName: "exclamationmark.circle")
-                        .font(.system(size: 24))
-                        .foregroundColor(.white)
-                        .padding(.trailing, 20)
-                }
+                Spacer() // سيدفع الزر لليمين في العربي ولليسار في الإنجليزي تلقائياً
             }
             
+            // العنوان يبقى في المنتصف بفضل وجوده داخل ZStack
             Text(LocalizedStringKey(step == 2 ? "Your Result" : "Balance Check"))
                 .font(.system(size: 22, weight: .bold))
                 .foregroundColor(.white)
@@ -173,6 +160,56 @@ struct BurnoutCheckView: View {
         .frame(height: 44)
         .padding(.top, 10)
     }
+//    var headerView: some View {
+//        ZStack {
+//            HStack {
+//                // زر الباك
+//                Button(action: {
+//                    if step == 1 {
+//                        if currentIdx > 0 {
+//                            isMovingBack = true
+//                            withAnimation(.easeInOut(duration: 0.6)) { currentIdx -= 1 }
+//                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { isMovingBack = false }
+//                        } else {
+//                            withAnimation { step = 0 }
+//                        }
+//                    } else if step > 0 {
+//                        withAnimation { step -= 1 }
+//                    } else {
+//                        dismiss()
+//                    }
+//                }) {
+//                    Image(systemName: "chevron.backward")
+//                        .font(.system(size: 20, weight: .semibold))
+//                        .foregroundColor(.white)
+//                        .padding(.leading, 20)
+//                }
+//                Spacer()
+//                
+//                //info
+////                Button {
+////                    withAnimation(.spring()) {
+////                        showInfoCard = true
+////                        infoText = NSLocalizedString(
+////                            "Sources: This check is based on the Maslach Burnout Inventory (MBI) to ensure scientific accuracy.",
+////                            comment: ""
+////                        )
+////                    }
+////                } label: {
+////                    Image(systemName: "exclamationmark.circle")
+////                        .font(.system(size: 24))
+////                        .foregroundColor(.white)
+////                        .padding(.trailing, 20)
+////                }
+//            }
+//            
+//            Text(LocalizedStringKey(step == 2 ? "Your Result" : "Balance Check"))
+//                .font(.system(size: 22, weight: .bold))
+//                .foregroundColor(.white)
+//        }
+//        .frame(height: 44)
+//        .padding(.top, 10)
+//    }
 
 
     // MARK: - 1. Start Page
@@ -372,7 +409,7 @@ struct BurnoutCheckView: View {
         HStack(alignment: .top, spacing: 8) {
             Image(systemName: "exclamationmark.triangle")
                 .font(.system(size: 15,weight: .bold))
-                .foregroundColor(.red)
+                .foregroundColor(.yellow)
             Text("For awareness only This does not replace professional medical advice")
                 .font(.system(size: 14,weight: .light))
                 .foregroundColor(.white.opacity(0.7))
