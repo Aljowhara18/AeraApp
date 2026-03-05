@@ -6,6 +6,7 @@
   
 */
 //MARK: - Onboarding
+
 "Your Rhythm Starts With A Touch" = "Your Rhythm Starts With A Touch";
 "This Is Your Balance\nStable and in control" = "This Is Your Balance\nStable and in control";
 "But Life Gets Chaotic\nYour Rhythm Is Disrupted" = "But Life Gets Chaotic\nYour Rhythm Is Disrupted";
@@ -36,6 +37,11 @@
 "Low" = "Low";
 "Great" = "Great";
 
+"HRV refers to Heart Rate Variability." = "HRV refers to Heart Rate Variability.";
+"RHR refers to Resting Heart Rate." = "RHR refers to Resting Heart Rate.";
+"Info" = "Info";
+"Close" = "Close";
+
 //MARK: - Assessment
 
 //p1
@@ -44,12 +50,16 @@
 "Start Checking" = "Start Checking";
 "Your Reflection" = "Your Reflection";
 
+"Sources: This check is based on the Maslach Burnout Inventory (MBI) to ensure scientific accuracy." = "Sources: This check is based on the Maslach Burnout Inventory (MBI) to ensure scientific accuracy.";
+
 //p2
+
 "Answer a few questions to check for early signs of burnout" = "Answer a few questions to check for early signs of burnout";
 "For awareness only This does not replace professional medical advice" = "For awareness only This does not replace professional medical advice";
 "Begin" = "Begin";
 
 //p3 QA
+
 "Never" = "Never";
 "Rarely" = "Rarely";
 "Sometimes" = "Sometimes";
@@ -63,6 +73,7 @@
 "I feel competent and accomplished in what I do at work." = "I feel competent and accomplished in what I do at work.";
 
 //p4 Result
+
 "Your Result" = "Your Result";
 "Early signs of burnout" = "Early signs of burnout";
 "You're doing great!" = "You're doing great!";
@@ -71,6 +82,7 @@
 "Next" = "Next";
 
 //p5 Reflection
+
 "Reflection" = "Reflection";
 "Reflect on your day" = "Reflect on your day";
 "  (Optional)" = "  (Optional)";
@@ -80,11 +92,16 @@
 "Capture your thoughts" = "Capture your thoughts";
 "Limit" = "100";
 //delete alert
+
 "Delete Reflection" = "Delete Reflection";
 "Delete" = "Delete";
 "Cancel" = "Cancel";
-"Are you sure you want to delete this reflection? This action cannot be undone." = "Are you sure you want to delete this reflection? This action cannot be undone?";
+"Are you sure you want to delete this reflection? This action cannot be undone." = "Are you sure you want to delete this reflection? This action cannot be undone.";
 
 //MARK: - Watch
-
-
+"Overview" = "Overview";
+"Average" = "Average";
+"View All" = "View All";
+"Sleep" = "Sleep";
+"HRV" = "HRV";
+"RHR" = "RHR";
