@@ -78,7 +78,7 @@
 "E.g. Overwhelmed at work, meetings" = "E.g. Overwhelmed at work, meetings";
 "What’s weighing on you?" = "What’s weighing on you?";
 "Capture your thoughts" = "Capture your thoughts";
-
+"Limit" = "100";
 //delete alert
 "Delete Reflection" = "Delete Reflection";
 "Delete" = "Delete";

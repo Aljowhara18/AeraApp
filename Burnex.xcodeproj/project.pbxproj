@@ -15,7 +15,6 @@
 		5F47CA062F41A19900BF9AE2 /* Exceptions for "BurnexApp" folder in "Burnexwatchapp Watch App" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"/Localized: Localizable.strings",
 				auraIcon.icon,
 				Model/HealthKitManager.swift,
 			);
