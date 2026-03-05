@@ -123,45 +123,45 @@ struct BurnoutCheckView: View {
                 }
     
     // MARK: - Header
-    var headerView: some View {
-        // نعرف متغير يشوف لغة الجهاز الحالية
-        let isArabic = Locale.current.language.languageCode?.identifier == "ar"
-
-        return ZStack {
-            HStack {
-                Button(action: {
-                    if step == 1 {
-                        if currentIdx > 0 {
-                            isMovingBack = true
-                            withAnimation(.easeInOut(duration: 0.6)) { currentIdx -= 1 }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { isMovingBack = false }
-                        } else {
-                            withAnimation { step = 0 }
-                        }
-                    } else if step > 0 {
-                        withAnimation { step -= 1 }
-                    } else {
-                        dismiss()
-                    }
-                }) {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 20, weight: .semibold))
-                        .foregroundColor(.white)
-                        // إذا اللغة عربي، اقلب السهم 180 درجة يدوياً
-                        .rotationEffect(isArabic ? .degrees(180) : .degrees(0))
-                        .padding(.horizontal, 20)
-                }
-                
-                Spacer()
-            }
-            
-            Text(LocalizedStringKey(step == 2 ? "Your Result" : "Balance Check"))
-                .font(.system(size: 22, weight: .bold))
-                .foregroundColor(.white)
-        }
-        .frame(height: 44)
-        .padding(.top, 10)
-    }
+//    var headerView: some View {
+//        // نعرف متغير يشوف لغة الجهاز الحالية
+//        let isArabic = Locale.current.language.languageCode?.identifier == "ar"
+//
+//        return ZStack {
+//            HStack {
+//                Button(action: {
+//                    if step == 1 {
+//                        if currentIdx > 0 {
+//                            isMovingBack = true
+//                            withAnimation(.easeInOut(duration: 0.6)) { currentIdx -= 1 }
+//                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { isMovingBack = false }
+//                        } else {
+//                            withAnimation { step = 0 }
+//                        }
+//                    } else if step > 0 {
+//                        withAnimation { step -= 1 }
+//                    } else {
+//                        dismiss()
+//                    }
+//                }) {
+//                    Image(systemName: "chevron.left")
+//                        .font(.system(size: 20, weight: .semibold))
+//                        .foregroundColor(.white)
+//                        // إذا اللغة عربي، اقلب السهم 180 درجة يدوياً
+//                        .rotationEffect(isArabic ? .degrees(180) : .degrees(0))
+//                        .padding(.horizontal, 20)
+//                }
+//                
+//                Spacer()
+//            }
+//            
+//            Text(LocalizedStringKey(step == 2 ? "Your Result" : "Balance Check"))
+//                .font(.system(size: 22, weight: .bold))
+//                .foregroundColor(.white)
+//        }
+//        .frame(height: 44)
+//        .padding(.top, 10)
+//    }
 //    var headerView: some View {
 //        ZStack {
 //            HStack {
@@ -199,56 +199,57 @@ struct BurnoutCheckView: View {
 //        .frame(height: 44)
 //        .padding(.top, 10)
 //    }
-//    var headerView: some View {
-//        ZStack {
-//            HStack {
-//                // زر الباك
-//                Button(action: {
-//                    if step == 1 {
-//                        if currentIdx > 0 {
-//                            isMovingBack = true
-//                            withAnimation(.easeInOut(duration: 0.6)) { currentIdx -= 1 }
-//                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { isMovingBack = false }
-//                        } else {
-//                            withAnimation { step = 0 }
-//                        }
-//                    } else if step > 0 {
-//                        withAnimation { step -= 1 }
-//                    } else {
-//                        dismiss()
-//                    }
-//                }) {
-//                    Image(systemName: "chevron.backward")
-//                        .font(.system(size: 20, weight: .semibold))
-//                        .foregroundColor(.white)
-//                        .padding(.leading, 20)
-//                }
-//                Spacer()
-//                
-//                //info
-////                Button {
-////                    withAnimation(.spring()) {
-////                        showInfoCard = true
-////                        infoText = NSLocalizedString(
-////                            "Sources: This check is based on the Maslach Burnout Inventory (MBI) to ensure scientific accuracy.",
-////                            comment: ""
-////                        )
-////                    }
-////                } label: {
-////                    Image(systemName: "exclamationmark.circle")
-////                        .font(.system(size: 24))
-////                        .foregroundColor(.white)
-////                        .padding(.trailing, 20)
-////                }
-//            }
-//            
-//            Text(LocalizedStringKey(step == 2 ? "Your Result" : "Balance Check"))
-//                .font(.system(size: 22, weight: .bold))
-//                .foregroundColor(.white)
-//        }
-//        .frame(height: 44)
-//        .padding(.top, 10)
-//    }
+    
+    var headerView: some View {
+        ZStack {
+            HStack {
+                // زر الباك
+                Button(action: {
+                    if step == 1 {
+                        if currentIdx > 0 {
+                            isMovingBack = true
+                            withAnimation(.easeInOut(duration: 0.6)) { currentIdx -= 1 }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { isMovingBack = false }
+                        } else {
+                            withAnimation { step = 0 }
+                        }
+                    } else if step > 0 {
+                        withAnimation { step -= 1 }
+                    } else {
+                        dismiss()
+                    }
+                }) {
+                    Image(systemName: "chevron.backward")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundColor(.white)
+                        .padding(.leading, 20)
+                }
+                Spacer()
+                
+                //info
+                Button {
+                    withAnimation(.spring()) {
+                        showInfoCard = true
+                        infoText = NSLocalizedString(
+                            "Sources: This check is based on the Maslach Burnout Inventory (MBI) to ensure scientific accuracy.",
+                            comment: ""
+                        )
+                    }
+                } label: {
+                    Image(systemName: "exclamationmark.circle")
+                        .font(.system(size: 24))
+                        .foregroundColor(.white)
+                        .padding(.trailing, 20)
+                }
+            }
+            
+            Text(LocalizedStringKey(step == 2 ? "Your Result" : "Balance Check"))
+                .font(.system(size: 22, weight: .bold))
+                .foregroundColor(.white)
+        }
+        .frame(height: 44)
+        .padding(.top, 10)
+    }
 
 
     // MARK: - 1. Start Page
