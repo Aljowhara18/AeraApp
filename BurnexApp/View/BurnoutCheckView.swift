@@ -124,9 +124,11 @@ struct BurnoutCheckView: View {
     
     // MARK: - Header
     var headerView: some View {
-        ZStack {
+        // نعرف متغير يشوف لغة الجهاز الحالية
+        let isArabic = Locale.current.language.languageCode?.identifier == "ar"
+
+        return ZStack {
             HStack {
-                // زر العودة - الآن متجاوب مع العربي والإنجليزي
                 Button(action: {
                     if step == 1 {
                         if currentIdx > 0 {
@@ -142,17 +144,17 @@ struct BurnoutCheckView: View {
                         dismiss()
                     }
                 }) {
-                    // استخدام backward يجعل السهم ينقلب تلقائياً حسب اللغة
-                    Image(systemName: "chevron.backward")
+                    Image(systemName: "chevron.left")
                         .font(.system(size: 20, weight: .semibold))
                         .foregroundColor(.white)
-                        .padding(.horizontal, 20) // حواف متساوية لضمان المسافة في الجهتين
+                        // إذا اللغة عربي، اقلب السهم 180 درجة يدوياً
+                        .rotationEffect(isArabic ? .degrees(180) : .degrees(0))
+                        .padding(.horizontal, 20)
                 }
                 
-                Spacer() // سيدفع الزر لليمين في العربي ولليسار في الإنجليزي تلقائياً
+                Spacer()
             }
             
-            // العنوان يبقى في المنتصف بفضل وجوده داخل ZStack
             Text(LocalizedStringKey(step == 2 ? "Your Result" : "Balance Check"))
                 .font(.system(size: 22, weight: .bold))
                 .foregroundColor(.white)
@@ -160,6 +162,43 @@ struct BurnoutCheckView: View {
         .frame(height: 44)
         .padding(.top, 10)
     }
+//    var headerView: some View {
+//        ZStack {
+//            HStack {
+//                // زر العودة - الآن متجاوب مع العربي والإنجليزي
+//                Button(action: {
+//                    if step == 1 {
+//                        if currentIdx > 0 {
+//                            isMovingBack = true
+//                            withAnimation(.easeInOut(duration: 0.6)) { currentIdx -= 1 }
+//                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { isMovingBack = false }
+//                        } else {
+//                            withAnimation { step = 0 }
+//                        }
+//                    } else if step > 0 {
+//                        withAnimation { step -= 1 }
+//                    } else {
+//                        dismiss()
+//                    }
+//                }) {
+//                    // استخدام backward يجعل السهم ينقلب تلقائياً حسب اللغة
+//                    Image(systemName: "chevron.backward")
+//                        .font(.system(size: 20, weight: .semibold))
+//                        .foregroundColor(.white)
+//                        .padding(.horizontal, 20) // حواف متساوية لضمان المسافة في الجهتين
+//                }
+//                
+//                Spacer() // سيدفع الزر لليمين في العربي ولليسار في الإنجليزي تلقائياً
+//            }
+//            
+//            // العنوان يبقى في المنتصف بفضل وجوده داخل ZStack
+//            Text(LocalizedStringKey(step == 2 ? "Your Result" : "Balance Check"))
+//                .font(.system(size: 22, weight: .bold))
+//                .foregroundColor(.white)
+//        }
+//        .frame(height: 44)
+//        .padding(.top, 10)
+//    }
 //    var headerView: some View {
 //        ZStack {
 //            HStack {
