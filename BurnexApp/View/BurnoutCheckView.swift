@@ -84,10 +84,16 @@ struct BurnoutCheckView: View {
                                     .font(.system(size: 22,weight: .bold))
                                     .foregroundColor(.white)
                                 
-                                Text(infoText)
+//                                Text(infoText)
+//                                    .font(.system(size: 16))
+//                                    .foregroundColor(.white)
+//                                    .multilineTextAlignment(.center)
+                                Text(LocalizedStringKey(infoText))
                                     .font(.system(size: 16))
                                     .foregroundColor(.white)
+                                    .tint(.blue) // هذا السطر بيخلي الرابط يشتغل ويصير أزرق
                                     .multilineTextAlignment(.center)
+                                    .padding(.horizontal, 10)
                                 
                                 Button(action: {
                                     withAnimation(.spring()) { showInfoCard = false }
@@ -227,20 +233,35 @@ struct BurnoutCheckView: View {
                 Spacer()
                 
                 //info
+//                Button {
+//                    withAnimation(.spring()) {
+//                        showInfoCard = true
+//                        infoText = NSLocalizedString(
+//                            "Sources: This check is based on the Maslach Burnout Inventory (MBI) to ensure scientific accuracy.",
+//                            comment: ""
+//                        )
+//                    }
+//                } label: {
+//                    Image(systemName: "exclamationmark.circle")
+//                        .font(.system(size: 24))
+//                        .foregroundColor(.white)
+//                        .padding(.trailing, 20)
+//                }
+                
                 Button {
-                    withAnimation(.spring()) {
-                        showInfoCard = true
-                        infoText = NSLocalizedString(
-                            "Sources: This check is based on the Maslach Burnout Inventory (MBI) to ensure scientific accuracy.",
-                            comment: ""
-                        )
+                        withAnimation(.spring()) {
+                            // هنا نحدد النص العلمي اللي بيظهر في البطاقة
+                            infoText = "Source: This assessment is based on the [Maslach Burnout Inventory - General Survey (MBI-GS)](https://www.mindgarden.com/117-maslach-burnout-inventory-mbi) to ensure scientific accuracy."
+                            showInfoCard = true
+                        }
+                    } label: {
+                        Image(systemName: "info.circle")
+                            .font(.system(size: 24))
+                            .foregroundColor(.white)
+                            .padding(.trailing, 20)
                     }
-                } label: {
-                    Image(systemName: "exclamationmark.circle")
-                        .font(.system(size: 24))
-                        .foregroundColor(.white)
-                        .padding(.trailing, 20)
-                }
+                
+                
             }
             
             Text(LocalizedStringKey(step == 2 ? "Your Result" : "Balance Check"))
@@ -445,17 +466,35 @@ struct BurnoutCheckView: View {
         }
     }
 
+//    var warningView: some View {
+//        HStack(alignment: .top, spacing: 8) {
+//            Image(systemName: "exclamationmark.triangle")
+//                .font(.system(size: 15,weight: .bold))
+//                .foregroundColor(.yellow)
+//            Text("For awareness only This does not replace professional medical advice")
+//                .font(.system(size: 14,weight: .light))
+//                .foregroundColor(.white.opacity(0.7))
+//        }
+//        .padding(.horizontal, 40)
+//        .padding(.bottom, 30)
+//    }
+    
     var warningView: some View {
         HStack(alignment: .top, spacing: 8) {
-            Image(systemName: "exclamationmark.triangle")
-                .font(.system(size: 15,weight: .bold))
+            Image(systemName: "exclamationmark.triangle.fill")
+                .font(.system(size: 14, weight: .bold))
                 .foregroundColor(.yellow)
-            Text("For awareness only This does not replace professional medical advice")
-                .font(.system(size: 14,weight: .light))
-                .foregroundColor(.white.opacity(0.7))
+            
+            (Text("Disclaimer: ").bold() +
+             Text("This tool is for awareness purposes only and does not replace professional medical advice."))
+                .font(.system(size: 13)) // صغرنا الخط شوي عشان الـ 3 سطور تطلع أنيقة
+                .foregroundColor(.white.opacity(0.8))
+                .lineLimit(nil)
+                .fixedSize(horizontal: false, vertical: true)
+                .multilineTextAlignment(.leading)
         }
-        .padding(.horizontal, 40)
-        .padding(.bottom, 30)
+        .padding(.horizontal, 30)
+        .padding(.bottom, 25)
     }
 }
 

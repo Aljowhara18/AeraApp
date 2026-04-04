@@ -9,6 +9,8 @@ import SwiftUI
 import Charts
 
 struct AnalysisView: View {
+    @State private var infoTitle: String = ""
+    @State private var showPrivacyPolicy = false
     @State private var showPopover: Bool = false
     @StateObject private var viewModel = AnalysisViewModel()
     private let chartColorPairs: KeyValuePairs<String, Color> = [
@@ -54,7 +56,9 @@ struct AnalysisView: View {
                         //Rectangle
                         VStack(alignment: .leading, spacing: 5) {
                             dateHeader
-                            mainChartView(height: geometry.size.height * 0.32)
+                            //  mainChartView(height: geometry.size.height * 0.32)
+                            mainChartView(height: geometry.size.height * 0.29)
+                            
                                 .padding(.top, 16)
                         }
                         .padding(.bottom,16)
@@ -74,21 +78,38 @@ struct AnalysisView: View {
                     
                     
                     //MARK: - Summary
+                    //                    VStack(alignment: .leading, spacing: 25) {
+                    //                        if viewModel.selectedOption == "All" || viewModel.selectedOption == "HRV" {
+                    //                            summaryRow(title: "HRV", info: "HRV refers to Heart Rate Variability.", showInfoButton: true)
+                    //                        }
+                    //                        if viewModel.selectedOption == "All" || viewModel.selectedOption == "RHR" {
+                    //                            summaryRow(title: "RHR", info: "RHR refers to Resting Heart Rate.", showInfoButton: true)
+                    //                        }
+                    //                        if viewModel.selectedOption == "All" || viewModel.selectedOption == "Sleep" {
+                    //                            summaryRow(title: "Sleep", info: "", showInfoButton: false)
+                    //                        }
+                    //                    }
+                    
+                    //MARK: - Summary
                     VStack(alignment: .leading, spacing: 25) {
                         if viewModel.selectedOption == "All" || viewModel.selectedOption == "HRV" {
-                            summaryRow(title: "HRV", info: "HRV refers to Heart Rate Variability.", showInfoButton: true)
+                            summaryRow(title: "HRV", info: "Heart Rate Variability (HRV) measures the variation in time between heartbeats. \nA lower HRV is often linked to higher stress levels.\n\nLearn more from:  [Harvard Health](https://www.health.harvard.edu/heart-health/what-is-heart-rate-variability).", showInfoButton: true)
                         }
                         if viewModel.selectedOption == "All" || viewModel.selectedOption == "RHR" {
-                            summaryRow(title: "RHR", info: "RHR refers to Resting Heart Rate.", showInfoButton: true)
+                            summaryRow(title: "RHR", info: "Resting Heart Rate (RHR) is the number of times your heart beats per minute while at rest. An elevated RHR can be an indicator of physical or emotional stress. \n\nLearn more from: [Mayo Clinic](https://www.mayoclinic.org/healthy-lifestyle/fitness/expert-answers/heart-rate/faq-20057979).", showInfoButton: true)
                         }
                         if viewModel.selectedOption == "All" || viewModel.selectedOption == "Sleep" {
-                            summaryRow(title: "Sleep", info: "", showInfoButton: false)
+                            // فعّلنا الـ Info للنوم وأضفنا الرابط
+                            summaryRow(title: "Sleep", info: "Sleep quality and duration are critical factors in stress recovery. \n\nLearn more from: [Sleep Foundation](https://www.sleephealthfoundation.org.au/sleep-topics/burnout-and-sleep).", showInfoButton: true)
                         }
                     }
+                    
+                    
+                    
                     .padding(.horizontal, 25)
                     .padding(.top, 25)
                     .animation(.easeInOut, value: viewModel.selectedOption)
-
+                    
                 }
                 
                 // MARK: - Info Card Overlay
@@ -102,14 +123,40 @@ struct AnalysisView: View {
                         }
                     
                     VStack(spacing: 16) {
-                        Text("Info")
-                            .font(.system(size: 22,weight: .bold))
+                        //                        Text("Info")
+                        //                            .font(.system(size: 22,weight: .bold))
+                        //                            .foregroundColor(.white)
+                        
+                        Text(LocalizedStringKey(infoTitle))
+                            .font(.system(size: 22, weight: .bold))
                             .foregroundColor(.white)
                         
-                        Text(infoText)
-                            .font(.system(size: 16))
-                            .foregroundColor(.white)
+                        //                        Text(infoText)
+                        //                            .font(.system(size: 16))
+                        //                            .foregroundColor(.white)
+                        //                            .multilineTextAlignment(.center)
+                        Text(LocalizedStringKey(infoText)) // أضفنا LocalizedStringKey هنا
+                            .font(.system(size: 15))
+                            .lineSpacing(6)
+                            .foregroundColor(.white.opacity(0.9))
+                        //  .foregroundColor(.white)
+                            .tint(.blue)
                             .multilineTextAlignment(.center)
+                            .padding(.horizontal, 10)
+                        
+                        //                        Button(action: {
+                        //                            withAnimation(.spring()) {
+                        //                                showInfoCard = false
+                        //                            }
+                        //                        }) {
+                        //                            Text("Close")
+                        //                                .font(.system(size: 16, weight: .bold))
+                        //                                .foregroundColor(.text)
+                        //                                .padding(.vertical, 8)
+                        //                                .padding(.horizontal, 16)
+                        //                                .background(Color.white.opacity(0.1))
+                        //                                .cornerRadius(12)
+                        //                        }
                         
                         Button(action: {
                             withAnimation(.spring()) {
@@ -119,22 +166,23 @@ struct AnalysisView: View {
                             Text("Close")
                                 .font(.system(size: 16, weight: .bold))
                                 .foregroundColor(.text)
-                                .padding(.vertical, 8)
-                                .padding(.horizontal, 16)
+                                .frame(width: 100, height: 40)
                                 .background(Color.white.opacity(0.1))
                                 .cornerRadius(12)
                         }
+                        .padding(.bottom, 10)
                     }
                     .padding()
-                    .frame(width: 280)
+                    // .frame(width: 280)
+                    .frame(width: 340)
                     .background(
-                            Color.black.opacity(0.5)
-                                .cornerRadius(20)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .stroke(Color.white.opacity(0.4), lineWidth: 1)
-                                )
-                        )
+                        Color.black.opacity(0.9)
+                            .cornerRadius(20)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(Color.white.opacity(0.4), lineWidth: 1)
+                            )
+                    )
                     .cornerRadius(20)
                     .transition(.scale.combined(with: .opacity))
                     .zIndex(2)
@@ -142,11 +190,70 @@ struct AnalysisView: View {
             }
         }
         .onAppear { viewModel.fetchChartData() }
-    }
+    
+        .sheet(isPresented: $showPrivacyPolicy) {
+            PrivacyPolicyView()
+        }
+}
+    
+//
+//    private var headerView: some View {
+//        Text("Analysis").font(.system(size: 34, weight: .bold)).foregroundColor(.white).padding(.horizontal, 20).padding(.top, 20)
+//        
+//    }
+    
+    
+    
+    
+    
+//    private var headerView: some View {
+//        VStack(alignment: .leading, spacing: 4) {
+//            Text("Analysis")
+//                .font(.system(size: 34, weight: .bold))
+//                .foregroundColor(.white)
+//            
+//            Text("All data is securely retrieved from Apple Health")
+//                .font(.system(size: 13))
+//                .foregroundColor(.gray)
+//        }
+//        .padding(.horizontal, 20)
+//        .padding(.top, 20)
+//    }
     
     private var headerView: some View {
-        Text("Analysis").font(.system(size: 34, weight: .bold)).foregroundColor(.white).padding(.horizontal, 20).padding(.top, 20)
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text("Analysis")
+                    .font(.system(size: 34, weight: .bold))
+                    .foregroundColor(.white)
+                
+                Spacer()
+                // يدفع الأيقونة لأقصى اليمين
+                
+                // زر الدرع البنفسجي
+                Button {
+                    showPrivacyPolicy = true // يفتح الـ Sheet
+                } label: {
+                    Image(systemName: "exclamationmark.shield")
+                    // أيقونة درع أنيقة
+                        .foregroundColor(.text2)
+                         .opacity(0.8)
+                        .font(.system(size: 22))
+                        .padding(8)
+                }
+            }
+            
+            Text("All data is securely retrieved from Apple Health")
+                .font(.system(size: 13))
+                .foregroundColor(.gray)
+        }
+        .padding(.horizontal, 20)
+      //  .padding(.top, 20)
     }
+    
+    
+    
+    
     
     private var pickerView: some View {
         Picker("", selection: $viewModel.selectedTimeRange) {
@@ -260,6 +367,7 @@ struct AnalysisView: View {
                 if showInfoButton {
                     Button {
                         // ترجم info عند العرض
+                        infoTitle = "About \(title)"
                         infoText = NSLocalizedString(info, comment: "")
                         withAnimation(.spring()) {
                             showInfoCard = true
