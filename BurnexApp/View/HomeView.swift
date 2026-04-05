@@ -85,9 +85,9 @@ struct HomeView: View {
                     viewModel.flipCard(at: 2)
                 }
             }
-            .offset(y: -20)
+            //.offset(y: -20)
             
-            Spacer(minLength: 120)
+            Spacer(minLength: 260)
         }
         .animation(.spring(), value: viewModel.showStressAlert)
     }

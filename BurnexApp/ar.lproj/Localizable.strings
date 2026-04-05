@@ -25,6 +25,8 @@
 "Assessment"="التقييم";
 
 //MARK: - Analysis
+"All data is securely retrieved from Apple Health" = "يتم جلب جميع البيانات بشكل آمن من تطبيق صحتي";
+
 "D"="ي";
 "W"="أ";
 "M"="ش";
@@ -38,9 +40,19 @@
 "Low" = "منخفض";
 "Great" = "ممتاز";
 
-"HRV refers to Heart Rate Variability."="يعتبر جهد القلب (اختلاف معدل نبض القلب) عن مقدار التغير في الفترة الفاصلة بين النبضة و الأخرى.";
-"RHR refers to Resting Heart Rate."="معدل نبض قلبك وقت الراحة هو متوسط نبض القلب في الدقيقة عندما تكون مرتاحًا أو غير نشط لبعض دقائق.
-";
+"Heart Rate Variability (HRV) measures the variation in time between heartbeats. \nA lower HRV is often linked to higher stress levels.\n\nLearn more from:  [Harvard Health](https://www.health.harvard.edu/heart-health/what-is-heart-rate-variability)." =
+"يقيس جهد القلب الاختلاف في الوقت بين كل نبضة قلب وأخرى.\nغالبًا ما يرتبط انخفاض جهد القلب بارتفاع مستويات التوتر.\n\nاعرف المزيد من: [Harvard Health](https://www.health.harvard.edu/heart-health/what-is-heart-rate-variability).";
+
+"Resting Heart Rate (RHR) is the number of times your heart beats per minute while at rest. An elevated RHR can be an indicator of physical or emotional stress. \n\nLearn more from: [Mayo Clinic](https://www.mayoclinic.org/healthy-lifestyle/fitness/expert-answers/heart-rate/faq-20057979)." =
+"نبض الراحة هو عدد مرات نبض القلب في الدقيقة أثناء الراحة. قد يشير ارتفاع نبض الراحة إلى وجود توتر جسدي أو عاطفي.\n\nاعرف المزيد من: [Mayo Clinic](https://www.mayoclinic.org/healthy-lifestyle/fitness/expert-answers/heart-rate/faq-20057979).";
+
+"Sleep quality and duration are critical factors in stress recovery. \n\nLearn more from: [Sleep Foundation](https://www.sleephealthfoundation.org.au/sleep-topics/burnout-and-sleep)." =
+"تُعد جودة النوم ومدته من العوامل الأساسية في التعافي من التوتر.\n\nاعرف المزيد من: [Sleep Foundation](https://www.sleephealthfoundation.org.au/sleep-topics/burnout-and-sleep).";
+
+"About HRV"="عن جهد القلب";
+"About RHR"="عن نبض الراحة";
+"About Sleep"="عن جودة النوم";
+
 "Info"="معلومات";
 "Close"="إغلاق";
 
@@ -53,7 +65,12 @@
 "Start Checking"="ابدأ الفحص";
 "Your Reflection"="تدويناتك";
 
-"Sources: This check is based on the Maslach Burnout Inventory (MBI) to ensure scientific accuracy."="المصدر: هذا الفحص يعتمد على استبيان ماسلاش للاحتراق الوظيفي (MBI) لضمان الدقة العلمية.";
+"Source: This assessment is based on the [Maslach Burnout Inventory - General Survey (MBI-GS)](https://www.mindgarden.com/117-maslach-burnout-inventory-mbi) to ensure scientific accuracy." =
+"المصدر: يستند هذا التقييم إلى [مقياس ماسلاش للاحتراق الوظيفي - النسخة العامة (MBI-GS)](https://www.mindgarden.com/117-maslach-burnout-inventory-mbi) لضمان الدقة العلمية.";
+"About the check"="عن الاختبار";
+
+"Disclaimer: " = "تنبيه: ";
+"This tool is for awareness purposes only and does not replace professional medical advice." = "هذه الأداة مخصصة للتوعية فقط ولا تُغني عن الاستشارة الطبية المتخصصة.";
 
 //p2
 
@@ -108,3 +125,29 @@
 "Sleep"="نومك";
 "HRV"="جهد القلب";
 "RHR"="نبض الراحة";
+
+//MARK: - Privacy Policy
+
+"Privacy Policy" = "سياسة الخصوصية";
+"Done" = "تم";
+
+"Your privacy is our priority. Burnex is designed to help you manage burnout while keeping your health data secure and private." = "خصوصيتك هي أولويتنا. تم تصميم Burnex لمساعدتك في إدارة الاحتراق الوظيفي مع الحفاظ على أمان وخصوصية بياناتك الصحية.";
+
+"1. Data Usage" = "1. استخدام البيانات";
+"Burnex analyzes HealthKit metrics, including Heart Rate Variability (HRV), Resting Heart Rate (RHR), and Sleep data. This information is used solely to provide insights into your burnout risk and recovery trends." = "يقوم Burnex بتحليل بيانات HealthKit، بما في ذلك تباين معدل ضربات القلب (HRV)، ومعدل ضربات القلب أثناء الراحة (RHR)، وبيانات النوم. تُستخدم هذه المعلومات فقط لتقديم رؤى حول مخاطر الاحتراق الوظيفي واتجاهات التعافي.";
+
+"2. Local Processing" = "2. المعالجة المحلية";
+"All health data is processed locally on your device. We do not use your health information for any purpose other than providing the core functionality of the app." = "تتم معالجة جميع البيانات الصحية محليًا على جهازك. ولا نستخدم معلوماتك الصحية لأي غرض آخر غير تقديم الوظائف الأساسية للتطبيق.";
+
+"3. Third-Party Sharing" = "3. مشاركة البيانات مع أطراف خارجية";
+"We do not sell, trade, or share your health data with third-party advertisers, data brokers, or any other external entities." = "نحن لا نبيع أو نتبادل أو نشارك بياناتك الصحية مع المعلنين أو وسطاء البيانات أو أي جهات خارجية أخرى.";
+
+"4. Storage & Security" = "4. التخزين والأمان";
+"Burnex does not store your health data on external servers. All information remains securely within Apple’s HealthKit ecosystem on your device." = "لا يقوم Burnex بتخزين بياناتك الصحية على خوادم خارجية. تبقى جميع المعلومات محفوظة بشكل آمن داخل نظام HealthKit الخاص بـ Apple على جهازك.";
+
+"5. User Control" = "5. تحكم المستخدم";
+"You have full authority over your data. You can revoke HealthKit permissions at any time through your iPhone settings under Privacy & Security." = "لديك تحكم كامل في بياناتك. يمكنك إلغاء أذونات HealthKit في أي وقت من خلال إعدادات iPhone ضمن الخصوصية والأمان.";
+
+"6. Contact" = "6. التواصل";
+"For any privacy concerns, feel free to reach out via LinkedIn." = "لأي استفسارات تتعلق بالخصوصية، لا تتردد في التواصل عبر LinkedIn.";
+"Visit LinkedIn Profile" = "زيارة حساب LinkedIn";

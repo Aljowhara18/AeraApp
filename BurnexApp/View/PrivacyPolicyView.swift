@@ -169,6 +169,8 @@ struct PrivacyPolicyView: View {
                     Button("Done") {
                         dismiss()
                     }
+                    .frame(width: 60)
+                    .multilineTextAlignment(.center)
                     .fontWeight(.bold)
                     .foregroundColor(.text)
                 }
@@ -179,7 +181,7 @@ struct PrivacyPolicyView: View {
         .preferredColorScheme(.dark)
     }
     
-    private func privacySection(title: String, content: String) -> some View {
+    private func privacySection(title: LocalizedStringKey, content: LocalizedStringKey) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(title)
                 .font(.headline)

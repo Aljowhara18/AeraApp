@@ -80,7 +80,7 @@ struct BurnoutCheckView: View {
                                 }
                             
                             VStack(spacing: 16) {
-                                Text("Info")
+                                Text("About the check")
                                     .font(.system(size: 22,weight: .bold))
                                     .foregroundColor(.white)
                                 
@@ -251,7 +251,7 @@ struct BurnoutCheckView: View {
                 Button {
                         withAnimation(.spring()) {
                             // هنا نحدد النص العلمي اللي بيظهر في البطاقة
-                            infoText = "Source: This assessment is based on the [Maslach Burnout Inventory - General Survey (MBI-GS)](https://www.mindgarden.com/117-maslach-burnout-inventory-mbi) to ensure scientific accuracy."
+                            infoText = NSLocalizedString("Source: This assessment is based on the [Maslach Burnout Inventory - General Survey (MBI-GS)](https://www.mindgarden.com/117-maslach-burnout-inventory-mbi) to ensure scientific accuracy.", comment: "")
                             showInfoCard = true
                         }
                     } label: {

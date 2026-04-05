@@ -109,7 +109,13 @@ struct AnalysisView: View {
                     .padding(.horizontal, 25)
                     .padding(.top, 25)
                     .animation(.easeInOut, value: viewModel.selectedOption)
-                    
+
+                    Spacer().frame(height: 225)
+                }
+                
+                .onChange(of: viewModel.selectedOption) { _ in
+                    viewModel.fetchChartData()
+
                 }
                 
                 // MARK: - Info Card Overlay
@@ -187,7 +193,7 @@ struct AnalysisView: View {
                     .transition(.scale.combined(with: .opacity))
                     .zIndex(2)
                 }
-            }
+            }//z
         }
         .onAppear { viewModel.fetchChartData() }
     
@@ -356,7 +362,7 @@ struct AnalysisView: View {
     
     private func summaryRow(title: String, info: String, showInfoButton: Bool = true) -> some View {
         let data = viewModel.calculateSummary(for: title)
-        let textColor: Color = data.state == .noData ? .grayApp : .white
+        let textColor: Color = data.state == .noData ? .grayApp : .text2
         
         return VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 6) {
