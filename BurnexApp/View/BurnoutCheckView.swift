@@ -230,28 +230,17 @@ struct BurnoutCheckView: View {
                         .foregroundColor(.white)
                         .padding(.leading, 20)
                 }
+                
                 Spacer()
                 
-                //info
-//                Button {
-//                    withAnimation(.spring()) {
-//                        showInfoCard = true
-//                        infoText = NSLocalizedString(
-//                            "Sources: This check is based on the Maslach Burnout Inventory (MBI) to ensure scientific accuracy.",
-//                            comment: ""
-//                        )
-//                    }
-//                } label: {
-//                    Image(systemName: "exclamationmark.circle")
-//                        .font(.system(size: 24))
-//                        .foregroundColor(.white)
-//                        .padding(.trailing, 20)
-//                }
-                
-                Button {
+                // زر الـ info يظهر فقط في الصفحة الأولى
+                if step == 0 {
+                    Button {
                         withAnimation(.spring()) {
-                            // هنا نحدد النص العلمي اللي بيظهر في البطاقة
-                            infoText = NSLocalizedString("Source: This assessment is based on the [Maslach Burnout Inventory - General Survey (MBI-GS)](https://www.mindgarden.com/117-maslach-burnout-inventory-mbi) to ensure scientific accuracy.", comment: "")
+                            infoText = NSLocalizedString(
+                                "Source: This assessment is based on the [Maslach Burnout Inventory - General Survey (MBI-GS)](https://www.mindgarden.com/117-maslach-burnout-inventory-mbi) to ensure scientific accuracy.",
+                                comment: ""
+                            )
                             showInfoCard = true
                         }
                     } label: {
@@ -260,8 +249,10 @@ struct BurnoutCheckView: View {
                             .foregroundColor(.white)
                             .padding(.trailing, 20)
                     }
-                
-                
+                } else {
+                    // نحافظ على نفس المسافة عشان العنوان يبقى بالمنتصف
+                    Spacer().frame(width: 44)
+                }
             }
             
             Text(LocalizedStringKey(step == 2 ? "Your Result" : "Balance Check"))
